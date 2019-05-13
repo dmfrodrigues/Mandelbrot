@@ -153,7 +153,7 @@ void FractalFrame::FractalPanel::ChangeSettings_origin(mb::ComplexNum origin, mb
 
     totalIterations_ = 0;
 
-    parent_->mymb_ = new mb(origin_, zoom_, this->GetSize(), fractalHeight);
+    parent_->mymb = new mb(origin_, zoom_, this->GetSize(), fractalHeight);
 }
 
 void FractalFrame::FractalPanel::OnPrintscreen(){

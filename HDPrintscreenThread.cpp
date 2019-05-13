@@ -7,24 +7,23 @@
 
 const mb::IterationT itPerUpdate_Printscreen = 100;          ///no. of iterations performed before updating progress bar
 
-HDPrintscreenThread::HDPrintscreenThread(mb::ComplexNum center, mb::ZoomT zoom, wxSize sz, mb::IterationT maxIt, mb::StepT fractalHeight)
-                                    :wxThread(wxTHREAD_DETACHED), center_(center), zoom_ (zoom), sz_ (sz), maxIt_ (maxIt){
-    HDPrintscreenDialog* dialog = new HDPrintscreenDialog(NULL, &center_, &zoom_, &sz_, &maxIt_);
+HDPrintscreenThread::HDPrintscreenThread(mb::ComplexNum center, mb::ZoomT zoom, wxSize sz, mb::IterationT maxIt, mb::StepT fractalHeight):wxThread(wxTHREAD_DETACHED){
+    HDPrintscreenDialog* dialog = new HDPrintscreenDialog(NULL, &center, &zoom, &sz, &maxIt);
     if(dialog->ShowModal() != wxID_OK){
         CancelEverything_ = true;
         return;
     }
     ///ProgressDialog
-    progressDialog_ = new ProgressDialog(NULL, maxIt_, center_, zoom_, sz_);
+    progressDialog_ = new ProgressDialog(NULL, maxIt, center, zoom, sz);
     progressDialog_->Show(true);
     progressDialog_->Update();
     ///Create stuff
     //bmp_       = new wxBitmap(sz_, 24);
     //pixelData_ = nullptr;
     //infoVtr_   = std::vector<mb::Info>(0);
-    step_      = fractalHeight/zoom_/(mb::ZoomT)sz_.y;
-    origin_    = {center_.Re - step_*(mb::StepT)sz_.x/2.0L,
-                  center_.Im + step_*(mb::StepT)sz_.y/2.0L};
+    mb::StepT      step   = fractalHeight/zoom/(mb::ZoomT)sz.y;
+    mb::ComplexNum origin = {center.Re - step*(mb::StepT)sz.x/2.0L,
+                             center.Im + step*(mb::StepT)sz.y/2.0L};
     CreateAllStuff(bmp_, pixelData_, infoVtr_,
                    origin_, zoom_, sz_, fractalHeight);
     ///Adjust maxIt to make it a multiple of itPerUpdate_Printscreenr

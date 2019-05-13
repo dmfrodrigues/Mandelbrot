@@ -48,12 +48,12 @@ FractalFrame::InfoPanel::InfoPanel(FractalFrame* parent):wxPanel(parent), parent
     StatBoxSizer->SetSizeHints(this);
     this->SetSizer(StatBoxSizer);
 }
-void FractalFrame::InfoPanel::SetStatus(const std::vector<mb::Info>& infoVtr, wxSize panelSz, mb::ZoomT zoom, mb::StepT diam,
+void FractalFrame::InfoPanel::SetStatus(const std::vector<mb::ComplexNum>& C, wxSize panelSz, mb::ZoomT zoom, mb::StepT diam,
                                         mb::IterationT totalIt, long double timeIt, wxPoint mousePos){
     ///MousePosition
     if(0 <= mousePos.x && mousePos.x <= panelSz.x &&
        0 <= mousePos.y && mousePos.y <= panelSz.y){
-        mb::ComplexNum mouseComplex = infoVtr[mousePos.x + mousePos.y * panelSz.x].c;
+        mb::ComplexNum mouseComplex = C[mousePos.x + mousePos.y * panelSz.x];
         ReCtrl_->ChangeValue(float2str(mouseComplex.Re, 20));
         ImCtrl_->ChangeValue(float2str(mouseComplex.Im, 20));
     }

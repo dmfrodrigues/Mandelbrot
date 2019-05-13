@@ -24,18 +24,18 @@ public:
     };
 private:
 
-    ComplexNum              center_;
-    ZoomT                   zoom_;
-    wxSize                  sz_;
-    IterationT              maxIt_;
-    wxBitmap                *bmp_;
-    wxNativePixelData       *pixelData_;
+    //ComplexNum              center_;
+    //ZoomT                   zoom_;
+    wxSize                  sz;
+    IterationT              maxIt;
+    wxBitmap                *bmp;
+    wxNativePixelData       *pixelData;
     std::vector<ComplexNum> C, Z;
     std::vector<IterationT> IT;
     std::vector<bool>       Check;
-    StepT                   step_;
-    ComplexNum              origin_;
-    IterationT              numberIt;
+    //StepT                   step_;
+    //ComplexNum              origin_;
+    //IterationT              numberIt;
 
 public:
 
@@ -43,9 +43,11 @@ public:
     ///CALCULATION ==========================================================================
     void GetPixelsThread(unsigned long l, unsigned long r, mb::IterationT numberIt);
     static void GetPixelsThreadPtr(mb *p, unsigned long l, unsigned long r, mb::IterationT numberIt);
-    unsigned long int GetPixels();
+    unsigned long int GetPixels(mb::IterationT numIt);
     void GetColor(const std::deque<unsigned long int>& ChangedPixelsDeque);
 
+    ///'Get' functions
+    const std::vector<ComplexNum>& getC() const{ return C; }
 };
 
 #endif // MANDELBROT_H_INCLUDED

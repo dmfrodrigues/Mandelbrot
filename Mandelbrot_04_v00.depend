@@ -2928,11 +2928,10 @@
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\cocoa\mdi.h
 	"wx/frame.h"
 
-1557845455 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
-	<bits/stdc++.h>
+1557777687 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
+	<vector>
+	<deque>
 	<wx/rawbmp.h>
-	<wx/wx.h>
-	"Mandelbrot.h"
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\rawbmp.h
 	"wx/defs.h"

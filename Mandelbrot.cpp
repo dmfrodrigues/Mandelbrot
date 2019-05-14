@@ -35,10 +35,10 @@ mb::mb(ComplexNum origin, ZoomT zoom, wxSize sz, StepT fractalHeight)
 
 ///COLOR ================================================================================
 inline mb::ColorT cycleFun(mb::ColorT x){
-    x = remainderf(x, mb::pi2);
-    if(x < -mb::pi_2) x = -mb::pi-x;
-    if(+mb::pi_2 < x) x =  mb::pi-x;
-    return x/mb::pi_2;                                ///Linear
+    x = remainderf(x, pi2);
+    if(x < -pi_2) x = -pi-x;
+    if(+pi_2 < x) x =  pi-x;
+    return x/pi_2;                                ///Linear
 }
 
 void mb::GetColor(const std::deque<unsigned long int>& ChangedPixelsDeque){

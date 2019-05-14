@@ -13,12 +13,15 @@ const mb::StepT    fractalHeight = 2.5L;        ///vertical height of the fracta
 class FractalFrame: public wxFrame {
 public:
     FractalFrame();
+
 private:
     class           FractalPanel;
     class           InfoPanel;
     FractalPanel*   fractalPanel_;
     InfoPanel*      infoPanel_;
     mb              *mymb;
+    void OnPrintscreen  (wxCommandEvent& event);
+    void OnHDPrintscreen(wxCommandEvent& event);
     wxDECLARE_EVENT_TABLE();
 };
 ///=========================================================
@@ -45,11 +48,9 @@ private:
     ///Worker thread
     virtual wxThread::ExitCode Entry();
     ///Change settings
-    /*
     void ChangeSettings(mb::ComplexNum center, mb::ZoomT zoom);
     inline void ChangeSettings(){ChangeSettings(this->center_, this->zoom_);}
     void ChangeSettings_origin(mb::ComplexNum origin, mb::ZoomT zoom);
-    */
     ///Painting
     void OnPaintEvent(wxPaintEvent& evt);   ///if a wxPaintEvent is triggered, this function captures it
     void paintNow(wxPoint mousePos); ///if I want to paint, I call this function
@@ -63,10 +64,8 @@ private:
     void OnChangeSizeEvent(mySizeEvent& event); inline void OnChangeSizeEvent(){OnChangeSizeEvent(this->sizeEvent_ );} ///change size: adjust FractalPanel and bitmap
     void OnZoomEvent     (myMouseEvent& event); inline void OnZoomEvent      (){      OnZoomEvent(this->mouseEvent_);} ///left/right click: zoom in/out
     ///Printscreens
-    /*
     void OnPrintscreen  ();
     void OnHDPrintscreen();
-    */
 };
 ///=========================================================
 ///INFOPANEL

@@ -67,9 +67,23 @@
 		</Linker>
 		<Unit filename="FractalFrame.cpp" />
 		<Unit filename="FractalFrame.h" />
+		<Unit filename="FractalPanel.cpp" />
+		<Unit filename="HDPrintscreenDialog.cpp" />
+		<Unit filename="HDPrintscreenDialog.h" />
+		<Unit filename="HDPrintscreenThread.cpp" />
+		<Unit filename="HDPrintscreenThread.h" />
+		<Unit filename="InfoPanel.cpp" />
 		<Unit filename="Mandelbrot.cpp" />
 		<Unit filename="Mandelbrot.h" />
+		<Unit filename="ProgressDialog.cpp" />
+		<Unit filename="ProgressDialog.h" />
+		<Unit filename="SettingsDialog.cpp" />
+		<Unit filename="SettingsDialog.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="menuicons.h" />
+		<Unit filename="myConversions.h" />
+		<Unit filename="myEvents.cpp" />
+		<Unit filename="myEvents.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

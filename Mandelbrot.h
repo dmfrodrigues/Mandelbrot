@@ -23,6 +23,7 @@ public:
                    ((Re+1.0)*(Re+1.0) + Im*Im < 0.0625); ///isPeriod2Bulb
         }
     };
+private:
     ///Constants
     static constexpr ColorT cycle = 100.0; /*100.0*/                 ///number of colors in a cycle (for coloring)
     static constexpr ColorT pi = acos(-1.0L), pi_2 = pi*0.5L, pi2 = 2.0L*pi;
@@ -32,7 +33,6 @@ public:
     static constexpr ComplexT bailout_sqr = bailout*bailout;
     static constexpr ColorT log10N = log10(bailout);
     static constexpr ColorT log2_log10N = std::log2(log10N);
-private:
     ///Variables
     ComplexNum              center;
     ZoomT                   zoom;

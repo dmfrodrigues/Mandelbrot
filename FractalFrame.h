@@ -96,7 +96,7 @@ private:
     wxTextCtrl *ImCtrl_, *DiamCtrl_;
     ///================================
     ///FUNCTIONS
-    void SetStatus(const std::vector<mb::ComplexNum>& C, wxSize panelSz, mb::ZoomT zoom, mb::StepT diam,
+    void SetStatus(const std::vector<mb::Info>& infoVtr, wxSize panelSz, mb::ZoomT zoom, mb::StepT diam,
                    mb::IterationT totalIt, long double timeIt, wxPoint mousePos);
     ///================================
     ///EVENT TABLE

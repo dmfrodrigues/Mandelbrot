@@ -3,7 +3,7 @@
 	"FractalFrame.h"
 	"menuicons.h"
 
-1557846529 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.h
+1557749765 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.h
 	<wx/wx.h>
 	"Mandelbrot.h"
 	"myEvents.h"
@@ -2928,7 +2928,7 @@
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\cocoa\mdi.h
 	"wx/frame.h"
 
-1557846531 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
+1557750261 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
 	<vector>
 	<deque>
 	<wx/rawbmp.h>

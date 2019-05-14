@@ -15,11 +15,11 @@ public:
     FractalFrame();
 
 private:
-    class           FractalPanel;
-    class           InfoPanel;
-    FractalPanel*   fractalPanel_;
-    InfoPanel*      infoPanel_;
-    mb              *mymb;
+    class   FractalPanel;
+    class      InfoPanel;
+    FractalPanel* fractalPanel_;
+    InfoPanel*       infoPanel_;
+    mb      *mymb;
     void OnPrintscreen  (wxCommandEvent& event);
     void OnHDPrintscreen(wxCommandEvent& event);
     wxDECLARE_EVENT_TABLE();
@@ -37,6 +37,17 @@ private:
     ///================================
     ///VARIABLES
     FractalFrame* const parent_;
+
+    wxBitmap*                bmp_ = nullptr;
+    wxNativePixelData* pixelData_ = nullptr;
+
+    mb::ZoomT zoom_;
+    mb::IterationT totalIterations_;
+    mb::StepT step_;
+    mb::ComplexNum center_;
+    mb::ComplexNum origin_;
+
+    //std::vector<mb::Info> infoVtr_;
 
     wxMenu* popupMenu_;
     ///================================

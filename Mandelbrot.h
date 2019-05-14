@@ -22,6 +22,16 @@ public:
                    ((Re+1.0)*(Re+1.0) + Im*Im < 0.0625); ///isPeriod2Bulb
         }
     };
+    /*
+    class Info{
+    public:
+        mb::ComplexNum c, z;
+        mb::IterationT it;
+        bool Check;
+        Info(mb::ComplexNum c_ = {0.0L,0.0L}, mb::ComplexNum z_ = {0.0L,0.0L}, mb::IterationT it_ = 0, bool Check_ = true);
+        void Reset();
+    };
+    */
 private:
 
     ComplexNum              center_;

@@ -18,9 +18,9 @@ private:
     wxSize         sz_;
     mb::IterationT  maxIt_;
     wxBitmap* bmp_;
-    */
+
     bool CancelEverything_ = false;
-    /*
+
     wxNativePixelData* pixelData_;
     std::vector<mb::Info> infoVtr_;
     mb::StepT step_;

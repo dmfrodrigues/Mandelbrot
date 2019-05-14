@@ -33,14 +33,3 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
 
     this->SetBackgroundColour(infoPanel_->GetBackgroundColour());
 }
-/*
-void FractalFrame::OnPrintscreen  (wxCommandEvent& event) {fractalPanel_->OnPrintscreen  ();}
-void FractalFrame::OnHDPrintscreen(wxCommandEvent& event) {fractalPanel_->OnHDPrintscreen();}
-*/
-///MACROS - redirect events to functions
-wxBEGIN_EVENT_TABLE(FractalFrame, wxFrame)
-/*
-    EVT_MENU(ID_PRINTSCREEN  , FractalFrame::OnPrintscreen  )
-    EVT_MENU(ID_HDPRINTSCREEN, FractalFrame::OnHDPrintscreen)
-*/
-wxEND_EVENT_TABLE()

@@ -45,7 +45,7 @@ wxThread::ExitCode FractalFrame::FractalPanel::Entry(){
         QueryPerformanceFrequency(&freq);   ///Time
         QueryPerformanceCounter(&ti);       ///Time
 
-        numberChangedPixels = parent_->mymb->GetPixels(itPerUpdate_dynamic);
+        numberChangedPixels = mb::GetPixels(*pixelData_, bmp_->GetSize(), itPerUpdate_dynamic, infoVtr_);
         totalIterations_ += itPerUpdate_dynamic;
 
         QueryPerformanceCounter(&tf);       ///Time
@@ -55,7 +55,7 @@ wxThread::ExitCode FractalFrame::FractalPanel::Entry(){
         itPerUpdate_dynamic = Update_itPerUpdate_dynamic(numberChangedPixels);
 
         wxPoint mousePos = wxGetMousePosition() - this->GetScreenPosition();
-        parent_->infoPanel_->SetStatus(parent_->mymb->getC(), this->GetSize(), zoom_, step_*(bmp_->GetSize()).x,
+        parent_->infoPanel_->SetStatus(infoVtr_, this->GetSize(), zoom_, step_*(bmp_->GetSize()).x,
                                        totalIterations_, timeIt, mousePos);
         this->paintNow(mousePos);
 
@@ -153,7 +153,9 @@ void FractalFrame::FractalPanel::ChangeSettings_origin(mb::ComplexNum origin, mb
 
     totalIterations_ = 0;
 
-    parent_->mymb_ = new mb(origin_, zoom_, this->GetSize(), fractalHeight);
+    CreateAllStuff(bmp_, pixelData_, infoVtr_,
+                   origin_, zoom_,
+                   this->GetSize(), fractalHeight);
 }
 
 void FractalFrame::FractalPanel::OnPrintscreen(){

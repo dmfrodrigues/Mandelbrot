@@ -16,13 +16,16 @@ FractalFrame::FractalPanel::FractalPanel(FractalFrame* parent, wxSize sz)
                                         :wxPanel(parent, wxID_ANY, wxDefaultPosition, sz, wxBORDER_RAISED),
                                          parent_(parent){
     ///Initial settings
+    //this->SetCursor(wxCursor(wxCURSOR_BLANK));
+    bmp_ = new wxBitmap(this->GetSize(), 24); ///depth 24bits == RGB channels, without alpha channel
+
     popupMenu_ = new wxMenu;
     popupMenu_->Append(ID_ChangeSettings, "Change settings");
+
     ///Thread stuff
     if(CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR) wxLogError("Could not create the worker thread.");
     if(GetThread()->Run()              != wxTHREAD_NO_ERROR) wxLogError("Could not run the worker thread.");
 }
-/*
 ///Worker thread
 inline mb::IterationT Update_itPerUpdate_dynamic(unsigned long int numberChangedPixels){
     return itPerUpdate;
@@ -100,17 +103,14 @@ void FractalFrame::FractalPanel::OnChangeSettings(wxCommandEvent& event){
     dialog->ShowModal();
     ChangeSettings(center, zoom);
 }
-*/
+
 BEGIN_EVENT_TABLE(FractalFrame::FractalPanel, wxPanel)
-/*
     EVT_PAINT     (FractalFrame::FractalPanel::OnPaintEvent)
     EVT_RIGHT_UP  (FractalFrame::FractalPanel::OnRightUp   )
     EVT_SIZE      (FractalFrame::FractalPanel::OnSizeEvent )
     EVT_MOUSEWHEEL(FractalFrame::FractalPanel::OnMouseEvent)
     EVT_MENU      (ID_ChangeSettings, FractalFrame::FractalPanel::OnChangeSettings)
-*/
 END_EVENT_TABLE()
-/*
 ///Secondary event handlers
 void FractalFrame::FractalPanel::OnChangeSizeEvent(mySizeEvent& event){
     while(wxGetMouseState().LeftIsDown()) wxMilliSleep(50);
@@ -131,8 +131,6 @@ void FractalFrame::FractalPanel::OnZoomEvent(myMouseEvent& event){
     ///Reset evtType
     event.SetValid(false);
 }
-*/
-/*
 ///Change settings
 void FractalFrame::FractalPanel::ChangeSettings(mb::ComplexNum center, mb::ZoomT zoom){
     center_ = center;
@@ -171,4 +169,4 @@ void FractalFrame::FractalPanel::OnHDPrintscreen(){
         wxLogError("Could not create HDPrintscreenThread");
     }
 }
-*/
+

@@ -3,7 +3,6 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="Mandelbrot_04_v00" />
-		<Option makefile="makefile" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -84,6 +83,8 @@
 		<Unit filename="myConversions.h" />
 		<Unit filename="myEvents.cpp" />
 		<Unit filename="myEvents.h" />
+		<Unit filename="wxMandelbrot.cpp" />
+		<Unit filename="wxMandelbrot.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

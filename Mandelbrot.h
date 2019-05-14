@@ -4,6 +4,8 @@
 #include <vector>
 #include <deque>
 #include <wx/rawbmp.h>
+#include <wx/wx.h>
+#include "Mandelbrot.h"
 
 class mb{
 public:

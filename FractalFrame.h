@@ -37,14 +37,36 @@ private:
 
     wxMenu* popupMenu_;
     ///================================
+    ///INLINES AND RELATED VARIABLES
+    myMouseEvent mouseEvent_; inline void OnMouseEvent(wxMouseEvent& event){this->mouseEvent_ = myMouseEvent(event, true);}
+    mySizeEvent   sizeEvent_; inline void OnSizeEvent (wxSizeEvent&  event){this->sizeEvent_  =  mySizeEvent(event, true);}
+    ///================================
     ///FUNCTIONS
     ///Worker thread
     virtual wxThread::ExitCode Entry();
     ///Change settings
+    /*
+    void ChangeSettings(mb::ComplexNum center, mb::ZoomT zoom);
+    inline void ChangeSettings(){ChangeSettings(this->center_, this->zoom_);}
+    void ChangeSettings_origin(mb::ComplexNum origin, mb::ZoomT zoom);
+    */
     ///Painting
     void OnPaintEvent(wxPaintEvent& evt);   ///if a wxPaintEvent is triggered, this function captures it
     void paintNow(wxPoint mousePos); ///if I want to paint, I call this function
     void render(wxDC& dc);                  ///the two above functions depend on this one
+    ///Direct event handler
+    void ProcessEvent();
+    void OnRightUp(wxMouseEvent& event);
+    void OnChangeSettings(wxCommandEvent& event);
+    DECLARE_EVENT_TABLE()                   ///event table
+    ///Secondary event handlers
+    void OnChangeSizeEvent(mySizeEvent& event); inline void OnChangeSizeEvent(){OnChangeSizeEvent(this->sizeEvent_ );} ///change size: adjust FractalPanel and bitmap
+    void OnZoomEvent     (myMouseEvent& event); inline void OnZoomEvent      (){      OnZoomEvent(this->mouseEvent_);} ///left/right click: zoom in/out
+    ///Printscreens
+    /*
+    void OnPrintscreen  ();
+    void OnHDPrintscreen();
+    */
 };
 ///=========================================================
 ///INFOPANEL

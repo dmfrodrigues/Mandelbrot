@@ -1,42 +1,28 @@
 #include "Mandelbrot.h"
-#include <iostream>
-#include <numeric>
-#include <thread>
 
-#include "wxMandelbrot.h"
 #include "myConversions.h"
 #include <fstream>
 
-///Constants
-const mb::ColorT cycle = 100.0; /*100.0*/                 ///number of colors in a cycle (for coloring)
-const mb::ColorT pi = acos(-1.0);
-const mb::ColorT pi_2 = pi*0.5;
-const mb::ColorT pi2 = 2.0*pi;
-const mb::ColorT pi2_cycle = pi2/cycle;
-const mb::ColorT& omega = pi2_cycle;
-const mb::ComplexT bailout = 8.0L; // 2.0 // 8.0
-const mb::ComplexT bailout_sqr = bailout*bailout;
-const mb::ColorT log10N = log10(bailout);
-const mb::ColorT log2_log10N = std::log2(log10N);
-
-///Functions
-
 ///Constructor
 
-mb::mb(ComplexNum origin, ZoomT zoom, wxSize sz, StepT fractalHeight):sz(sz){
+mb::mb(ComplexNum origin, ZoomT zoom, wxSize sz, StepT fractalHeight)
+        :sz(sz), C(sz.x*sz.y, {0.0L,0.0L}), Z(sz.x*sz.y, {0.0L, 0.0L}),
+        IT(sz.x*sz.y, 0), Check(sz.x*sz.y, true){
     ///Get step to make some operations quicker
     mb::StepT step = fractalHeight/zoom/(ZoomT)sz.y;
+    /*
     ///Reset infoVtr and resize
     C       = std::vector<ComplexNum>(sz.x*sz.y, {0.0L,0.0L});
     Z       = std::vector<ComplexNum>(sz.x*sz.y, {0.0L,0.0L});
     IT      = std::vector<IterationT>(sz.x*sz.y,           0);
     Check   = std::vector<bool      >(sz.x*sz.y,        true);
+    */
     ///Fill infoVtr with new information
     size_t i = 0;
     ComplexNum c = origin;
-    for(int ImIndex = 0; ImIndex < sz.y; ++ImIndex, c.Im -= step){
+    for(int y = 0; y < sz.y; ++y, c.Im -= step){
         c.Re = origin.Re;
-        for(int ReIndex = 0; ReIndex < sz.x; ++ReIndex, c.Re += step, ++i){
+        for(int x = 0; x < sz.x; ++x, c.Re += step, ++i){
             C[i] = c;
             Check[i] = !c.isCardioid_isPeriod2Bulb();
         }
@@ -54,6 +40,7 @@ inline mb::ColorT cycleFun(mb::ColorT x){
     if(+pi_2 < x) x =  pi-x;
     return x/pi_2;                                ///Linear
 }
+
 void mb::GetColor(const std::deque<unsigned long int>& ChangedPixelsDeque){
     const mb::ColorT    phi = 1.2L*pi_2; //pi_2
     ///RED&WHITE

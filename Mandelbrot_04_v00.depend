@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1551644595 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.cpp
+1557777687 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.cpp
 	"FractalFrame.h"
 	"menuicons.h"
 
-1557763732 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.h
+1557777860 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.h
 	<wx/wx.h>
 	"Mandelbrot.h"
 	"myEvents.h"
@@ -2928,7 +2928,7 @@
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\cocoa\mdi.h
 	"wx/frame.h"
 
-1557763901 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
+1557777687 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
 	<vector>
 	<deque>
 	<wx/rawbmp.h>
@@ -2951,7 +2951,7 @@
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\art\filesaveas.xpm
 
-1557764102 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalpanel.cpp
+1557777687 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalpanel.cpp
 	"FractalFrame.h"
 	"SettingsDialog.h"
 	"wxMandelbrot.h"
@@ -2980,7 +2980,7 @@
 	<wx/wx.h>
 	"FractalFrame.h"
 
-1557763601 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.cpp
+1557777687 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.cpp
 	"Mandelbrot.h"
 	<iostream>
 	<numeric>
@@ -3019,14 +3019,14 @@
 	"Mandelbrot.h"
 	"wxMandelbrot.h"
 
-1557764223 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\hdprintscreenthread.h
+1557777687 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\hdprintscreenthread.h
 	"ProgressDialog.h"
 
-1557749860 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\wxmandelbrot.h
+1557777687 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\wxmandelbrot.h
 	<wx/wx.h>
 	"Mandelbrot.h"
 
-1557750440 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\wxmandelbrot.cpp
+1557777687 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\wxmandelbrot.cpp
 	"wxMandelbrot.h"
 	"myConversions.h"
 	<fstream>

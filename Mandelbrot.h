@@ -1,7 +1,8 @@
 #ifndef MANDELBROT_H_INCLUDED
 #define MANDELBROT_H_INCLUDED
 
-#include <bits/stdc++.h>
+#include <vector>
+#include <deque>
 #include <wx/rawbmp.h>
 #include <wx/wx.h>
 #include "Mandelbrot.h"
@@ -24,39 +25,28 @@ public:
         }
     };
 private:
-    ///Constants
-    static constexpr ColorT cycle = 100.0; /*100.0*/                 ///number of colors in a cycle (for coloring)
-    static constexpr ColorT pi = acos(-1.0L), pi_2 = pi*0.5L, pi2 = 2.0L*pi;
-    static constexpr ColorT pi2_cycle = pi2/cycle;
-    static constexpr ColorT omega = pi2_cycle;
-    static constexpr ComplexT bailout = 8.0L; // 2.0 // 8.0
-    static constexpr ComplexT bailout_sqr = bailout*bailout;
-    static constexpr ColorT log10N = log10(bailout);
-    static constexpr ColorT log2_log10N = std::log2(log10N);
-    ///Variables
-    ComplexNum              center;
-    ZoomT                   zoom;
+
+    //ComplexNum              center_;
+    //ZoomT                   zoom_;
     wxSize                  sz;
+    IterationT              maxIt;
     wxBitmap                *bmp;
     wxNativePixelData       *pixelData;
     std::vector<ComplexNum> C, Z;
     std::vector<IterationT> IT;
     std::vector<bool>       Check;
-    //StepT                   step;
-    ComplexNum              origin;
-    IterationT              numIt;
+    //StepT                   step_;
+    //ComplexNum              origin_;
+    //IterationT              numberIt;
 
 public:
-    /**
-     * Constructor
-     */
-    mb(ComplexNum origin, ZoomT zoom, wxSize sz, StepT fractalHeight);
 
+    mb(ComplexNum origin, ZoomT zoom, wxSize sz, StepT fractalHeight);
     ///CALCULATION ==========================================================================
-    void GetColor(const std::deque<unsigned long int>& ChangedPixelsDeque);
     void GetPixelsThread(unsigned long l, unsigned long r, mb::IterationT numberIt);
     static void GetPixelsThreadPtr(mb *p, unsigned long l, unsigned long r, mb::IterationT numberIt);
     unsigned long int GetPixels(mb::IterationT numIt);
+    void GetColor(const std::deque<unsigned long int>& ChangedPixelsDeque);
 
     ///'Get' functions
     const std::vector<ComplexNum>& getC() const{ return C; }

@@ -22,7 +22,6 @@ public:
                    ((Re+1.0)*(Re+1.0) + Im*Im < 0.0625); ///isPeriod2Bulb
         }
     };
-    /*
     class Info{
     public:
         mb::ComplexNum c, z;
@@ -31,21 +30,17 @@ public:
         Info(mb::ComplexNum c_ = {0.0L,0.0L}, mb::ComplexNum z_ = {0.0L,0.0L}, mb::IterationT it_ = 0, bool Check_ = true);
         void Reset();
     };
-    */
 private:
-
-    ComplexNum              center_;
-    ZoomT                   zoom_;
-    wxSize                  sz_;
-    IterationT              maxIt_;
-    wxBitmap                *bmp_;
-    wxNativePixelData       *pixelData_;
-    std::vector<ComplexNum> C, Z;
-    std::vector<IterationT> IT;
-    std::vector<bool>       Check;
-    StepT                   step_;
-    ComplexNum              origin_;
-    IterationT              numberIt;
+    ComplexNum          center_;
+    ZoomT               zoom_;
+    wxSize              sz_;
+    IterationT          maxIt_;
+    wxBitmap            *bmp_;
+    wxNativePixelData   *pixelData_;
+    std::vector<Info>   infoVtr_;
+    StepT               step_;
+    ComplexNum          origin_;
+    IterationT numberIt;
 
 public:
 

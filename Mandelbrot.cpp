@@ -16,8 +16,12 @@ const mb::ColorT log2_log10N = std::log2(log10N);
 ///Function
 ///Constructor
 
-mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter): zoom(z), sz(s), step(H/zoom/(ZoomT)sz.y),
-    C(s.x*s.y), Z(s.x*s.y,{0.0L,0.0L}), IT(s.x*s.y,0), Check(s.x*s.y,true){
+mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter):
+        zoom(z), sz(s), N(s.x*s.y), step(H/zoom/(ZoomT)sz.y){
+    C     = new ComplexNum[N];
+    Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(0.0L,0.0L));
+    IT    = new IterationT[N]; std::fill(IT,IT+N,0);
+    Check = new bool[N]; std::fill(Check,Check+N,true);
     ///Get step to make some operations quicker
     step = H/zoom/(ZoomT)sz.y;
     ///Assign origin and center
@@ -40,7 +44,6 @@ mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter): zoom(z), sz(s),
 
 const unsigned NThreads = 8;
 void mb::UpdateMath(IterationT addIt){
-    unsigned long N = C.size();
     std::thread *ArrThreads[NThreads];
     for(unsigned long L, R, i = 0; i < NThreads; ++i){
         L =  i   *N/NThreads;

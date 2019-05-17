@@ -26,11 +26,12 @@ private:
     ComplexNum          center; ///Center of the fractal
     ZoomT               zoom;   ///Relative measure of zoom, 1 for initial zoom
     wxSize              sz;     ///Size of the fractal
+    unsigned long long  N;      ///Total size of the fractal (=sz.x*sz.y)
     StepT               step;   ///Difference between consecutive pixels
     IterationT          numIt=0;///Total number of iterations performed over the fractal
-    vector<ComplexNum>  C, Z;   ///Point in complex space, current value of z
-    vector<IterationT>  IT;     ///Number of iterations
-    vector<bool>        Check;  ///True if more iterations should be performed (not diverged yet)
+    ComplexNum          *C, *Z; ///Point in complex space, current value of z
+    IterationT          *IT;    ///Number of iterations
+    bool                *Check; ///True if more iterations should be performed (not diverged yet)
     wxBitmap            *bmp;   ///Bitmap
     wxNativePixelData   *px;    ///PixelData, to access bmp
 public:

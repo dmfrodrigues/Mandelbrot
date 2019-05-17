@@ -1,12 +1,12 @@
 # depslib dependency file v1.0
-1551644595 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.cpp
+1558053976 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.cpp
 	"FractalFrame.h"
 	"menuicons.h"
 
-1557749765 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.h
+1558046843 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalframe.h
+	<bits/stdc++.h>
 	<wx/wx.h>
 	"Mandelbrot.h"
-	"myEvents.h"
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\wx.h
 	"wx/defs.h"
@@ -123,7 +123,7 @@
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\compiler.h
 
-1520441738 d:\_programminglibraries\wxwidgets-3.0.4\lib\gcc_dll_shared_debug_monolithic_unicode\mswud\wx\setup.h
+1520445338 d:\_programminglibraries\wxwidgets-3.0.4\lib\gcc_dll_shared_debug_monolithic_unicode\mswud\wx\setup.h
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\msw\wince\libraries.h
 
@@ -2928,9 +2928,8 @@
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\cocoa\mdi.h
 	"wx/frame.h"
 
-1557750261 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
-	<vector>
-	<deque>
+1558049668 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.h
+	<bits/stdc++.h>
 	<wx/rawbmp.h>
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\include\wx\rawbmp.h
@@ -2951,11 +2950,9 @@
 
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\art\filesaveas.xpm
 
-1551644828 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalpanel.cpp
+1558044491 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\fractalpanel.cpp
 	"FractalFrame.h"
-	"SettingsDialog.h"
-	"wxMandelbrot.h"
-	"HDPrintscreenThread.h"
+	"CURSOR_CROSS.h"
 
 1551641929 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\myconversions.h
 	<sstream>
@@ -2972,7 +2969,7 @@
 	<wx/wx.h>
 	"Mandelbrot.h"
 
-1551642220 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\infopanel.cpp
+1558046835 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\infopanel.cpp
 	"FractalFrame.h"
 	"myConversions.h"
 
@@ -2980,11 +2977,9 @@
 	<wx/wx.h>
 	"FractalFrame.h"
 
-1557749395 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.cpp
+1558055073 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\mandelbrot.cpp
 	"Mandelbrot.h"
-	<iostream>
-	<numeric>
-	<thread>
+	<bits/stdc++.h>
 
 1551642199 source:d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\myevents.cpp
 	"myEvents.h"
@@ -3034,4 +3029,7 @@
 1520445338 d:\_programminglibraries\wxwidgets-3.0.4\lib\gcc_dll_shared_release_monolithic_unicode\mswu\wx\setup.h
 
 1520441738 d:\_programminglibraries\wxwidgets-3.0.4\lib\gcc_dll_ud\mswud\wx\setup.h
+
+1558046166 d:\dmfro\progprojects\cpp\mandelbrot\serie4\mandelbrot_04_v00\cursor_cross.h
+	<wx/bitmap.h>
 

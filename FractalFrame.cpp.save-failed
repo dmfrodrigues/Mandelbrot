@@ -34,7 +34,7 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
         this->SetSizer(sizer);
     }
     /**Create fractal*/{
-        f = new mb({-1.25L,0.0L}, 32.0L, fpanel->GetSize(), FractalHeight, true);
+        f = new mb({0.0L,0.0L}, 1.0L, fpanel->GetSize(), FractalHeight, true);
     }
     /**Create fractal thread*/{
         fthread = new std::thread(Run_fthread, this);
@@ -43,11 +43,12 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
 
 typedef std::chrono::high_resolution_clock hrclock;
 void FractalFrame::Run_fthread(){
-    const mb::IterationT addIt = 200;
+    const mb::IterationT addIt = 50;
     while(true){
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         ///Update the fractal
         auto t1 = hrclock::now();
-        f->UpdateMath(addIt);
+        f->UpdateMath(0, fpanel->GetSize().x*fpanel->GetSize().y, addIt);
         auto t2 = hrclock::now();
         ///Update the screen
         wxClientDC dc(fpanel);
@@ -55,9 +56,7 @@ void FractalFrame::Run_fthread(){
         ///Update the InfoPanel
         auto dt = std::chrono::duration<long double>(t2-t1);
 
-        wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
-        mb::ComplexNum c = f->GetOrigin() + mb::ComplexNum(+(mb::StepT)p.x*f->GetStep(),-(mb::StepT)p.y*f->GetStep());
-        ipanel->Update(c, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, f->GetHorizontalSize());
+        ipanel->Update({0.0L,0.0L}, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, 0.0L);
     }
 }
 

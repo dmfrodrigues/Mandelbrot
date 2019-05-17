@@ -74,6 +74,7 @@
 		<Unit filename="Mandelbrot.cpp" />
 		<Unit filename="Mandelbrot.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="makefile" />
 		<Unit filename="myConversions.h" />
 		<Extensions>
 			<code_completion />

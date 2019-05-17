@@ -5,9 +5,12 @@ CFLAGS =-std=c++11 -ffast-math -pipe -mthreads -D__GNUWIN32__ -D__WXMSW__ -DWXUS
 ODIR   =./build/obj
 BDIR   =./build/bin
 
+#LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4\lib\gcc_dll_SHARED_RELEASE_MONOLITHIC_UNICODE"
 LFLAGS =-L"..\..\..\..\..\..\_ProgrammingLibraries\wxWidgets-3.0.4\lib\gcc_dll_SHARED_RELEASE_MONOLITHIC_UNICODE"
 
-Linkmake:         Mandelbrot.o FractalFrame.o FractalPanel.o InfoPanel.o main.o
+all: Linkmake
+
+Linkmake:       Mandelbrot.o FractalFrame.o FractalPanel.o InfoPanel.o main.o
     $(CC) $(LFLAGS) -o $(BDIR)/main.exe Mandelbrot.o FractalFrame.o FractalPanel.o InfoPanel.o main.o
 Mandelbrot.o:   Mandelbrot.cpp
 	$(CC) $(CFLAGS) Mandelbrot.cpp   -o $(ODIR)/Mandelbrot.o

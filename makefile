@@ -6,19 +6,19 @@ ODIR   =./build/obj
 BDIR   =./build/bin
 
 #LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4\lib\gcc_dll_SHARED_RELEASE_MONOLITHIC_UNICODE"
-LFLAGS =-L"..\..\..\..\..\..\_ProgrammingLibraries\wxWidgets-3.0.4\lib\gcc_dll_SHARED_RELEASE_MONOLITHIC_UNICODE"
+LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4\lib\gcc_dll_SHARED_RELEASE_MONOLITHIC_UNICODE"
 
-all: Linkmake
+all: $(BDIR)\main.exe
 
-Linkmake:       Mandelbrot.o FractalFrame.o FractalPanel.o InfoPanel.o main.o
-    $(CC) $(LFLAGS) -o $(BDIR)/main.exe Mandelbrot.o FractalFrame.o FractalPanel.o InfoPanel.o main.o
-Mandelbrot.o:   Mandelbrot.cpp
-	$(CC) $(CFLAGS) Mandelbrot.cpp   -o $(ODIR)/Mandelbrot.o
-FractalFrame.o: FractalFrame.cpp
-	$(CC) $(CFLAGS) FractalFrame.cpp -o $(ODIR)/FractalFrame.o
-FractalPanel.o: FractalPanel.cpp
-	$(CC) $(CFLAGS) FractalPanel.cpp -o $(ODIR)/FractalPanel.o
-InfoPanel.o:    InfoPanel.cpp
-	$(CC) $(CFLAGS) InfoPanel.cpp    -o $(ODIR)/InfoPanel.o
-main.o:         main.cpp
-	$(CC) $(CFLAGS) main.cpp         -o $(ODIR)/main.o
+$(BDIR)\main.exe: $(ODIR)\Mandelbrot.o $(ODIR)\FractalFrame.o $(ODIR)\FractalPanel.o $(ODIR)\InfoPanel.o $(ODIR)\main.o
+	$(CC) $(LFLAGS) -o $(BDIR)\main.exe $(ODIR)\Mandelbrot.o $(ODIR)\FractalFrame.o $(ODIR)\FractalPanel.o $(ODIR)\InfoPanel.o $(ODIR)\main.o -s -mthreads -lwxmsw30u -mwindows
+$(ODIR)\Mandelbrot.o: Mandelbrot.cpp
+	$(CC) $(CFLAGS) Mandelbrot.cpp   -o $(ODIR)\Mandelbrot.o
+$(ODIR)\FractalFrame.o: FractalFrame.cpp
+	$(CC) $(CFLAGS) FractalFrame.cpp -o $(ODIR)\FractalFrame.o
+$(ODIR)\FractalPanel.o: FractalPanel.cpp
+	$(CC) $(CFLAGS) FractalPanel.cpp -o $(ODIR)\FractalPanel.o
+$(ODIR)\InfoPanel.o: InfoPanel.cpp
+	$(CC) $(CFLAGS) InfoPanel.cpp    -o $(ODIR)\InfoPanel.o
+$(ODIR)\main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp         -o $(ODIR)\main.o

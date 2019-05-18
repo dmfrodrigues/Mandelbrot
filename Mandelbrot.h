@@ -22,23 +22,24 @@ public:
     }
 private:
     ///Variables
-    ComplexNum          origin; ///Upper-left corner
-    ComplexNum          center; ///Center of the fractal
-    ZoomT               zoom;   ///Relative measure of zoom, 1 for initial zoom
-    wxSize              sz;     ///Size of the fractal
-    unsigned long long  N;      ///Total size of the fractal (=sz.x*sz.y)
-    StepT               step;   ///Difference between consecutive pixels
-    IterationT          numIt=0;///Total number of iterations performed over the fractal
-    ComplexNum          *C, *Z; ///Point in complex space, current value of z
-    IterationT          *IT;    ///Number of iterations
-    bool                *Check; ///True if more iterations should be performed (not diverged yet)
-    wxBitmap            *bmp;   ///Bitmap
-    wxNativePixelData   *px;    ///PixelData, to access bmp
+    const ZoomT                 zoom;   ///Relative measure of zoom, 1 for initial zoom
+    const wxSize                sz;     ///Size of the fractal
+    const unsigned long long    N;      ///Total size of the fractal (=sz.x*sz.y)
+    const StepT                 step;   ///Difference between consecutive pixels
+    const ComplexNum            origin; ///Upper-left corner
+    const ComplexNum            center; ///Center of the fractal
+    IterationT                  numIt=0;///Total number of iterations performed over the fractal
+    ComplexNum                  *C, *Z; ///Point in complex space, current value of z
+    IterationT                  *IT;    ///Number of iterations
+    bool                        *Check; ///True if more iterations should be performed (not diverged yet)
+    wxBitmap                    *bmp;   ///Bitmap
+    wxNativePixelData           *px;    ///PixelData, to access bmp
 public:
     /**
      * Constructor
      */
     mb(ComplexNum origin, ZoomT zoom, wxSize sz, StepT fractalHeight, bool IsCenter = false);
+    ~mb();
     ///CALCULATIONS ==================================================
     /**
      * Update all pixels by making an additional addIt iterations

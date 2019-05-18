@@ -17,16 +17,13 @@ const mb::ColorT log2_log10N = std::log2(log10N);
 ///Constructor
 
 mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter):
-        zoom(z), sz(s), N(s.x*s.y), step(H/zoom/(ZoomT)sz.y){
+        zoom(z), sz(s), N(s.x*s.y), step(H/zoom/(ZoomT)sz.y),
+        origin(IsCenter? GetOriginFromCenter(o, zoom, sz, H) : o),
+        center(GetCenterFromOrigin(origin, zoom, sz, H)){
     C     = new ComplexNum[N];
     Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(0.0L,0.0L));
     IT    = new IterationT[N]; std::fill(IT,IT+N,0);
     Check = new bool[N]; std::fill(Check,Check+N,true);
-    ///Get step to make some operations quicker
-    step = H/zoom/(ZoomT)sz.y;
-    ///Assign origin and center
-    origin = (IsCenter? GetOriginFromCenter(o, zoom, sz, H) : o);
-    center = GetCenterFromOrigin(origin, zoom, sz, H);
     ///Fill 'C', 'Check' with new information
     unsigned long i = 0;
     ComplexNum c = origin;
@@ -40,6 +37,14 @@ mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter):
     ///Clear bmp and px
     bmp = new wxBitmap(sz, 24);
     px  = new wxNativePixelData(*bmp);
+}
+mb::~mb(){
+    delete[] C;
+    delete[] Z;
+    delete[] IT;
+    delete[] Check;
+    delete bmp;
+    delete px;
 }
 
 const unsigned NThreads = 8;
@@ -75,8 +80,6 @@ void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
     }
     UpdatePixels(changed);
 }
-
-
 
 inline mb::ColorT cycleFun(mb::ColorT x){
     x = remainderf(x, pi2);

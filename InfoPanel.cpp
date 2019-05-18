@@ -52,32 +52,13 @@ InfoPanel::InfoPanel(FractalFrame* p):wxPanel(p), parent(p){
 
 void InfoPanel::Update(const mb::ComplexNum& MousePosC, const mb::ZoomT& zoom,
                        const mb::IterationT& numIt    , const long double& secPerIt, const mb::StepT& W){
-    ReCtrl  ->ChangeValue(mysprintf((long double) MousePosC.real()  , "%+.20lle"));
-    ImCtrl  ->ChangeValue(mysprintf((long double) MousePosC.imag()  , "%+.20lle"));
-    ZoomCtrl->ChangeValue(mysprintf((long double) zoom              , "%.8lg"   ));
-    ItCtrl  ->ChangeValue(mysprintf((unsigned long long) numIt      , "%llu"    ));
-    TimeCtrl->ChangeValue(mysprintf((long double) secPerIt          , "%.12lf"  ));
-    DiamCtrl->ChangeValue(mysprintf((long double) W                 , "%.6lg"   ));
+    ReCtrl  ->ChangeValue(mysprintf((long double) MousePosC.real()  , "%+.20Le"));
+    ImCtrl  ->ChangeValue(mysprintf((long double) MousePosC.imag()  , "%+.20Le"));
+    ZoomCtrl->ChangeValue(mysprintf((long double) zoom              , "%.8Lg"  ));
+    ItCtrl  ->ChangeValue(mysprintf((unsigned long long) numIt      , "%llu"   ));
+    TimeCtrl->ChangeValue(mysprintf((long double) secPerIt          , "%.12Lf" ));
+    DiamCtrl->ChangeValue(mysprintf((long double) W                 , "%.6Lg"  ));
 }
-
-/*
-void FractalFrame::InfoPanel::SetStatus(const std::vector<mb::Info>& infoVtr, wxSize panelSz, mb::ZoomT zoom, mb::StepT diam,
-                                        mb::IterationT totalIt, long double timeIt, wxPoint mousePos){
-    ///MousePosition
-    if(0 <= mousePos.x && mousePos.x <= panelSz.x &&
-       0 <= mousePos.y && mousePos.y <= panelSz.y){
-        mb::ComplexNum mouseComplex = infoVtr[mousePos.x + mousePos.y * panelSz.x].c;
-        ReCtrl_->ChangeValue(float2str(mouseComplex.Re, 20));
-        ImCtrl_->ChangeValue(float2str(mouseComplex.Im, 20));
-    }
-    ZoomCtrl_->ChangeValue(mysprintf( (long double)   zoom,  "%.8lg"));
-    ItCtrl_  ->ChangeValue(mysprintf((unsigned int)totalIt,     "%u"));
-    DiamCtrl_->ChangeValue(mysprintf( (long double)   diam,  "%.6lg"));
-    TimeCtrl_->ChangeValue(mysprintf( (long double) timeIt, "%.12lf"));
-}
-*/
 
 BEGIN_EVENT_TABLE(InfoPanel, wxPanel)
-
 END_EVENT_TABLE()
-

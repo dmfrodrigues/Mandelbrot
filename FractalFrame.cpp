@@ -34,7 +34,7 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
         this->SetSizer(sizer);
     }
     /**Create fractal*/{
-        f = new mb({-1.25L,0.0L}, 2.0L, fpanel->GetSize(), FractalHeight, true);
+        f = new mb({-1.25L,0.0L}, 1.0L, fpanel->GetSize(), FractalHeight, true);
     }
     /**Create fractal thread*/{
         fthread = new std::thread(Run_fthread, this);
@@ -43,7 +43,7 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
 
 typedef std::chrono::high_resolution_clock hrclock;
 void FractalFrame::Run_fthread(){
-    const mb::IterationT addIt = 200;
+    const mb::IterationT addIt = 100;
     while(true){
         ///Update the fractal
         auto t1 = hrclock::now();
@@ -59,15 +59,30 @@ void FractalFrame::Run_fthread(){
         ipanel->Update(c, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, f->GetHorizontalSize());
         ///Process events
         if(!fpanel->is_mouseevt_handled){
-            ChangeZoom(fpanel->mouseevt.GetWheelRotation(), fpanel->mouseevt.GetWheelDelta());
+            OnZoomEvent(fpanel->mouseevt);
             fpanel->is_mouseevt_handled = true;
+        }
+        if(!fpanel->is_sizeevt_handled){
+            OnSizeEvent();
+            fpanel->is_sizeevt_handled = true;
         }
     }
 }
 
-void FractalFrame::ChangeZoom(const int& rot, const int& delta){
+void FractalFrame::OnZoomEvent(const wxMouseEvent& evt){
+    wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
+    mb::ComplexNum newcenter = f->GetOrigin() + mb::ComplexNum(
+        p.x*f->GetStep(), -p.y*f->GetStep()
+    );
+    mb::ZoomT newzoom = f->GetZoom()*std::pow(3.16227766017L, (long double)evt.GetWheelRotation()/evt.GetWheelDelta());
+    delete f;
+    f = new mb(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
+}
+
+void FractalFrame::OnSizeEvent(){
+    wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
     mb::ComplexNum newcenter = f->GetCenter();
-    mb::ZoomT newzoom = f->GetZoom()*std::pow(2.0L, (long double)rot/delta);
+    mb::ZoomT newzoom = f->GetZoom();
     delete f;
     f = new mb(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
 }

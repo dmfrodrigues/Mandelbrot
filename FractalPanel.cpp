@@ -17,6 +17,7 @@ FractalPanel::FractalPanel(FractalFrame* p, wxSize s)
 
 BEGIN_EVENT_TABLE(FractalPanel, wxPanel)
     EVT_MOUSEWHEEL(FractalPanel::OnMouseEvent)
+    EVT_SIZE      (FractalPanel::OnSizeEvent )
 /*
     EVT_PAINT     (FractalFrame::FractalPanel::OnPaintEvent)
     EVT_RIGHT_UP  (FractalFrame::FractalPanel::OnRightUp   )

@@ -25,7 +25,8 @@ private:
 
     mb *f;
 
-    void ChangeZoom(const int& rot, const int& delta);
+    void OnZoomEvent(const wxMouseEvent& evt);
+    void OnSizeEvent();
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -37,12 +38,11 @@ public:
 private:
     FractalFrame    *parent;
 
-    wxMouseEvent mouseevt;
-    bool is_mouseevt_handled = true;
-    void OnMouseEvent(wxMouseEvent& evt){
-        mouseevt = evt;
-        is_mouseevt_handled = false;
-    };
+    wxMouseEvent mouseevt; bool is_mouseevt_handled = true;
+    void OnMouseEvent(wxMouseEvent& evt){ mouseevt = evt; is_mouseevt_handled = false; };
+    bool is_sizeevt_handled = true;
+    void OnSizeEvent(wxSizeEvent& evt){ is_sizeevt_handled = false; };
+
 
     wxDECLARE_EVENT_TABLE();
 };

@@ -52,7 +52,7 @@ public:
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
-    void UpdatePixels(const std::deque<unsigned long>& q);
+    inline void UpdatePixel(const unsigned long& i);
 
     ///GET FUNCTION ==================================================
     const ComplexNum&   GetOrigin() const{ return origin; }

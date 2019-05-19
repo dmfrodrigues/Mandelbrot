@@ -34,7 +34,7 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
         this->SetSizer(sizer);
     }
     /**Create fractal*/{
-        f = new mb({-1.25L,0.0L}, 32.0L, fpanel->GetSize(), FractalHeight, true);
+        f = new mb({-1.25L,0.0L}, 2.0L, fpanel->GetSize(), FractalHeight, true);
     }
     /**Create fractal thread*/{
         fthread = new std::thread(Run_fthread, this);
@@ -54,11 +54,22 @@ void FractalFrame::Run_fthread(){
         dc.DrawBitmap(f->GetBmp(), 0, 0, true);
         ///Update the InfoPanel
         auto dt = std::chrono::duration<long double>(t2-t1);
-
         wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
         mb::ComplexNum c = f->GetOrigin() + mb::ComplexNum(+(mb::StepT)p.x*f->GetStep(),-(mb::StepT)p.y*f->GetStep());
         ipanel->Update(c, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, f->GetHorizontalSize());
+        ///Process events
+        if(!fpanel->is_mouseevt_handled){
+            ChangeZoom(fpanel->mouseevt.GetWheelRotation(), fpanel->mouseevt.GetWheelDelta());
+            fpanel->is_mouseevt_handled = true;
+        }
     }
+}
+
+void FractalFrame::ChangeZoom(const int& rot, const int& delta){
+    mb::ComplexNum newcenter = f->GetCenter();
+    mb::ZoomT newzoom = f->GetZoom()*std::pow(2.0L, (long double)rot/delta);
+    delete f;
+    f = new mb(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
 }
 
 /*

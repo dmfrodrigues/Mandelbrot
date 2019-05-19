@@ -12,6 +12,12 @@ const mb::ComplexT bailout = 8.0L; // 2.0 // 8.0
 const mb::ComplexT bailout_sqr = bailout*bailout;
 const mb::ColorT log10N = log10(bailout);
 const mb::ColorT log2_log10N = std::log2(log10N);
+const mb::ColorT phi = 1.2L*pi_2;
+const mb::ColorT AMP[] = {+ 27.5, +110.0, +110.0}, INIT[] = {+227.5, +110.0, +110.0}; ///RED&WHITE
+//const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
+//const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
+//const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
+
 
 ///Function
 ///Constructor
@@ -88,11 +94,6 @@ inline mb::ColorT cycleFun(mb::ColorT x){
     return x/pi_2;                                ///Linear
 }
 void mb::UpdatePixels(const std::deque<unsigned long>& q){
-    const ColorT phi = 1.2L*pi_2;
-    const ColorT AMP[] = {+ 27.5, +110.0, +110.0}, INIT[] = {+227.5, +110.0, +110.0}; ///RED&WHITE
-    //const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
-    //const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
-    //const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
     ColorT x, y;
     wxNativePixelData::Iterator p(*px);
     for(const auto& i:q){

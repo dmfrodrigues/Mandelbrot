@@ -25,14 +25,24 @@ private:
 
     mb *f;
 
+    void ChangeZoom(const int& rot, const int& delta);
+
     wxDECLARE_EVENT_TABLE();
 };
 
 class FractalPanel: public wxPanel {
+friend class FractalFrame;
 public:
     FractalPanel(FractalFrame* p, wxSize s);
 private:
     FractalFrame    *parent;
+
+    wxMouseEvent mouseevt;
+    bool is_mouseevt_handled = true;
+    void OnMouseEvent(wxMouseEvent& evt){
+        mouseevt = evt;
+        is_mouseevt_handled = false;
+    };
 
     wxDECLARE_EVENT_TABLE();
 };

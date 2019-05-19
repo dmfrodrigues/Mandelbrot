@@ -12,6 +12,12 @@ const mb::ComplexT bailout = 8.0L; // 2.0 // 8.0
 const mb::ComplexT bailout_sqr = bailout*bailout;
 const mb::ColorT log10N = log10(bailout);
 const mb::ColorT log2_log10N = std::log2(log10N);
+const mb::ColorT phi = 1.2L*pi_2;
+const mb::ColorT AMP[] = {+ 27.5, +110.0, +110.0}, INIT[] = {+227.5, +110.0, +110.0}; ///RED&WHITE
+//const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
+//const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
+//const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
+
 
 ///Function
 ///Constructor
@@ -62,7 +68,6 @@ void mb::UpdateMath(IterationT addIt){
 }
 
 void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
-    std::deque<unsigned long> changed;
     for(unsigned long i = L; i < R; ++i){
         if(!Check[i]) continue;
         IterationT it;
@@ -70,15 +75,17 @@ void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
         for(it = 0; it < addIt; ++it){
             z = z*z + c;
             if(std::norm(z) > bailout_sqr){
-                changed.push_back(i);
+                Z[i] = z; IT[i] += it;
                 Check[i] = false;
+                UpdatePixel(i);
                 break;
             }
         }
-        Z[i] = z; C[i] = c;
-        IT[i] += it;
+        if(Check[i]){
+            Z[i] = z;
+            IT[i] += it;
+        }
     }
-    UpdatePixels(changed);
 }
 
 inline mb::ColorT cycleFun(mb::ColorT x){
@@ -87,27 +94,20 @@ inline mb::ColorT cycleFun(mb::ColorT x){
     if(+pi_2 < x) x =  pi-x;
     return x/pi_2;                                ///Linear
 }
-void mb::UpdatePixels(const std::deque<unsigned long>& q){
-    const ColorT phi = 1.2L*pi_2;
-    const ColorT AMP[] = {+ 27.5, +110.0, +110.0}, INIT[] = {+227.5, +110.0, +110.0}; ///RED&WHITE
-    //const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
-    //const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
-    //const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
-    ColorT x, y;
-    wxNativePixelData::Iterator p(*px);
-    for(const auto& i:q){
-        p.MoveTo(*px, i%sz.x, i/sz.x);
 
-        //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
-        //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
-        x = (ColorT)IT[i]-(0.5L*log10(std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
-        //x = (ColorT)IT[i]; ///discrete pattern
+wxNativePixelData::Iterator pxit;
+void mb::UpdatePixel(const unsigned long& i){
+    pxit.MoveTo(*px, i%sz.x, i/sz.x);
 
-        y = cycleFun(omega*x + phi);
-        p.Red()   = AMP[0]*y + INIT[0];
-        p.Green() = AMP[1]*y + INIT[1];
-        p.Blue()  = AMP[2]*y + INIT[2];
-    }
+    //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
+    //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
+    ColorT x = (ColorT)IT[i]-(0.5L*log10(std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
+    //x = (ColorT)IT[i]; ///discrete pattern
+
+    ColorT y = cycleFun(omega*x + phi);
+    pxit.Red()   = AMP[0]*y + INIT[0];
+    pxit.Green() = AMP[1]*y + INIT[1];
+    pxit.Blue()  = AMP[2]*y + INIT[2];
 }
 
 mb::ComplexNum mb::GetOriginFromCenter(ComplexNum cent, ZoomT z, wxSize s, StepT H){
@@ -118,94 +118,3 @@ mb::ComplexNum mb::GetCenterFromOrigin(ComplexNum orig, ZoomT z, wxSize s, StepT
     StepT st = H/z/(ZoomT)s.y;
     return orig + ComplexNum(+0.5L*(ComplexT)s.x*st, -0.5L*(ComplexT)s.y*st);
 }
-
-/*
-///COLOR ================================================================================
-inline mb::ColorT cycleFun(mb::ColorT x){
-    x = remainderf(x, pi2);
-    if(x < -pi_2) x = -pi-x;
-    if(+pi_2 < x) x =  pi-x;
-    return x/pi_2;                                ///Linear
-}
-
-void mb::GetColor(const std::deque<unsigned long int>& ChangedPixelsDeque){
-    const mb::ColorT    phi = 1.2L*pi_2; //pi_2
-    ///RED&WHITE
-    const mb::ColorT  Amp[] = {+ 27.5, +110.0, +110.0};
-    const mb::ColorT Init[] = {+227.5, +110.0, +110.0};
-    ///YELLOW&BLACK
-//    const mb::ColorT  Amp[] = {-100.0, -100.0, +  0.0};
-//    const mb::ColorT Init[] = {+101.0, +101.0, +  0.0};
-    ///RED&BLACK
-//    const mb::ColorT  Amp[] = {-107.0, +  0.0, +  0.0};
-//    const mb::ColorT Init[] = {+128.0, + 10.0, + 10.0};
-    ///BLACK&WHITE
-//    const mb::ColorT  Amp[] = {-113.0, -113.0, -113.0};
-//    const mb::ColorT Init[] = {+140.0, +140.0, +140.0};
-
-    mb::ColorT x, y;
-    wxNativePixelData::Iterator p(pixelData_);
-    for(const auto& index:ChangedPixelsDeque){
-        p.MoveTo(pixelData, index%sz.x, index/sz.x);
-
-        ///continuous/wavy pattern
-        //x = (mb::ColorT)infoVtr[index].it-3.0*(log2(0.5*log10(infoVtr[index].z.absSqr()))-log2_log10N);
-        ///continuous pattern, modified formula
-        //x = (mb::ColorT)infoVtr[index].it-1.0L*(log2(0.5*log10(infoVtr[index].z.absSqr()))-log2_log10N);
-        ///continuous pattern, original formula
-        x = (mb::ColorT)infoVtr[index].it-(0.5L*log10(infoVtr[index].z.absSqr())/log10N-1.0L);
-        ///discrete pattern
-        //x = (mb::ColorT)infoVtr[index].it;
-        ///
-        y = cycleFun(omega*x + phi);
-        p.Red()   = Amp[0]*y + Init[0];
-        p.Green() = Amp[1]*y + Init[1];
-        p.Blue()  = Amp[2]*y + Init[2];
-    }
-}
-*/
-/*
-///CALCULATION ==========================================================================
-void mb::GetPixelsThread(unsigned long l, unsigned long r, mb::IterationT numberIt){
-    std::deque<unsigned long> ChangedPixelsDeque;
-    mb::IterationT it;
-    for(unsigned long int i = l; i < r; ++i){
-        auto& info = infoVtr[i];
-        if(info.Check){
-            for (it = 0; it < numberIt; ++it){
-                info.z = {     info.z.Re*info.z.Re - info.z.Im*info.z.Im + info.c.Re,
-                          2.0L*info.z.Re*info.z.Im                       + info.c.Im};
-                if (info.z.absSqr() > bailout_sqr){
-                    ChangedPixelsDeque.push_back(i);
-                    info.Check = false;
-                    break;
-                }
-            }
-            info.it += it;
-        }
-    }
-
-    GetColor(ChangedPixelsDeque);
-
-    //ret = ChangedPixelsDeque.size();
-}
-
-void mb::GetPixelsThreadPtr(mb *p, unsigned long l, unsigned long r, mb::IterationT numberIt){
-    p->GetPixelsThread(l, r, numberIt);
-}
-
-
-unsigned long int  mb::GetPixels(){
-    const unsigned long NThreads = 8;
-    unsigned long ret = 0;
-    const unsigned long N = infoVtr.size();
-    std::vector<unsigned long> r(NThreads);
-    std::vector<std::thread> vthreads(NThreads);
-    for(unsigned long i = 0; i < NThreads; ++i){
-        vthreads[i] = std::thread(mb::GetPixelsThreadPtr, this, N*i/NThreads, N*(i+1)/NThreads, numberIt);
-        //GetPixelsThread(pixelData, sz, numberIt, infoVtr, N*i/NThreads, N*(i+1)/NThreads);
-    }
-    for(auto& t:vthreads) t.join();
-    return std::accumulate(r.begin(), r.end(), 0);
-}
-*/

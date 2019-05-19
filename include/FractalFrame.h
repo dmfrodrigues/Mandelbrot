@@ -5,7 +5,7 @@
 #include <wx/wx.h>
 #include "Mandelbrot.h"
 
-const mb::StepT    FractalHeight = 2.5L;        ///vertical height of the fractal at zoom==1
+const mb::ComplexT    FractalHeight = 2.5L;        ///vertical height of the fractal at zoom==1
 
 ///=========================================================
 ///FRACTALFRAME
@@ -29,7 +29,7 @@ private:
     void OnSizeEvent();
 
     bool is_prtscevt_handled = true;
-    void OnPrintscreenCallback(wxCommandEvent& event){ is_prtscevt_handled = true; }
+    void OnPrintscreenCallback(wxCommandEvent& event){ is_prtscevt_handled = false; }
     void OnPrintscreenEvent() const;
 
     wxDECLARE_EVENT_TABLE();
@@ -56,8 +56,8 @@ private:
     FractalFrame *parent;
     wxTextCtrl *ReCtrl, *ImCtrl, *ZoomCtrl, *ItCtrl, *TimeCtrl, *DiamCtrl;
     InfoPanel(FractalFrame *p);
-    void Update(const mb::ComplexNum& MousePosC, const mb::ZoomT& zoom      ,
-                const mb::IterationT& numIt    , const long double& secPerIt, const mb::StepT& W);
+    void Update(const mb::ComplexNum& MousePosC, const mb::ComplexT& zoom      ,
+                const mb::IterationT& numIt    , const long double& secPerIt, const mb::ComplexT& W);
 
     wxDECLARE_EVENT_TABLE();
 };

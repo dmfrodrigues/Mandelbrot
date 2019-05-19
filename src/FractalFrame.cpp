@@ -58,7 +58,7 @@ void FractalFrame::Run_fthread(){
         ///Update the InfoPanel
         auto dt = std::chrono::duration<long double>(t2-t1);
         wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
-        mb::ComplexNum c = f->GetOrigin() + mb::ComplexNum(+(mb::StepT)p.x*f->GetStep(),-(mb::StepT)p.y*f->GetStep());
+        mb::ComplexNum c = f->GetOrigin() + mb::ComplexNum(+(mb::ComplexT)p.x*f->GetStep(),-(mb::ComplexT)p.y*f->GetStep());
         ipanel->Update(c, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, f->GetHorizontalSize());
         ///Process events
         if(!fpanel->is_mouseevt_handled){ OnZoomEvent(fpanel->mouseevt); fpanel->is_mouseevt_handled = true; }
@@ -72,7 +72,7 @@ void FractalFrame::OnZoomEvent(const wxMouseEvent& evt){
     mb::ComplexNum newcenter = f->GetOrigin() + mb::ComplexNum(
         p.x*f->GetStep(), -p.y*f->GetStep()
     );
-    mb::ZoomT newzoom = f->GetZoom()*std::pow(3.16227766017L, (long double)evt.GetWheelRotation()/evt.GetWheelDelta());
+    mb::ComplexT newzoom = f->GetZoom()*std::pow(3.16227766017L, (long double)evt.GetWheelRotation()/evt.GetWheelDelta());
     delete f;
     f = new mb(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
 }
@@ -80,13 +80,24 @@ void FractalFrame::OnZoomEvent(const wxMouseEvent& evt){
 void FractalFrame::OnSizeEvent(){
     wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
     mb::ComplexNum newcenter = f->GetCenter();
-    mb::ZoomT newzoom = f->GetZoom();
+    mb::ComplexT newzoom = f->GetZoom();
     delete f;
     f = new mb(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
 }
 
+
+void NewImageName(const char* format, char* name){
+    const unsigned long N = 100000;
+    for(unsigned long i = 0; i < N; ++i){
+        sprintf(name, format, i);
+        if(!std::ifstream(name)) return;
+    }
+    throw std::logic_error("no available names");
+}
 void FractalFrame::OnPrintscreenEvent() const{
-    //f->SaveAs
+    char new_path[256];
+    NewImageName(".\\Printscreens\\Image_%04d.png", new_path);
+    f->SaveFile(new_path, wxBITMAP_TYPE_PNG);
 }
 
 /*
@@ -96,8 +107,5 @@ void FractalFrame::OnHDPrintscreen(wxCommandEvent& event) {fractalPanel_->OnHDPr
 ///MACROS - redirect events to functions
 wxBEGIN_EVENT_TABLE(FractalFrame, wxFrame)
     EVT_MENU(ID_PRINTSCREEN  , FractalFrame::OnPrintscreenCallback  )
-/*
-
-    EVT_MENU(ID_HDPRINTSCREEN, FractalFrame::OnHDPrintscreen)
-*/
+    //EVT_MENU(ID_HDPRINTSCREEN, FractalFrame::OnHDPrintscreenCallback)
 wxEND_EVENT_TABLE()

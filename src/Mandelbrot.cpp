@@ -1,27 +1,10 @@
 #include "Mandelbrot.h"
-#include <bits/stdc++.h>
-
-///Constants
-const mb::ColorT cycle = 100.0; /*100.0*/                 ///number of colors in a cycle (for coloring)
-const mb::ColorT pi = acos(-1.0);
-const mb::ColorT pi_2 = pi*0.5;
-const mb::ColorT pi2 = 2.0*pi;
-const mb::ColorT pi2_cycle = pi2/cycle;
-const mb::ColorT omega = pi2_cycle;
-const mb::ComplexT bailout = 8.0L; // 2.0 // 8.0
-const mb::ComplexT bailout_sqr = bailout*bailout;
-const mb::ColorT log10N = log10(bailout);
-const mb::ColorT log2_log10N = std::log2(log10N);
-const mb::ColorT phi = 1.2L*pi_2;
-const mb::ColorT AMP[] = {+ 27.5, +110.0, +110.0}, INIT[] = {+227.5, +110.0, +110.0}; ///RED&WHITE
-//const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
-//const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
-//const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
+#include <wx/log.h>
 
 ///Constructor
-mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter):
+mb::mb(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter):
         wxBitmap(s, 24), px(*((wxBitmap*)this)),
-        zoom(z), N(GetSize().x*GetSize().y), step(H/zoom/(ZoomT)GetSize().y),
+        zoom(z), N(GetSize().x*GetSize().y), step(H/zoom/(ComplexT)GetSize().y),
         origin(IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o),
         center(GetCenterFromOrigin(origin, zoom, GetSize(), H)){
     C     = new ComplexNum[N];
@@ -81,7 +64,7 @@ void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
     }
 }
 
-inline mb::ColorT cycleFun(mb::ColorT x){
+mb::ColorT mb::CycleFun(mb::ColorT x){
     x = remainderf(x, pi2);
     if(x < -pi_2) x = -pi-x;
     if(+pi_2 < x) x =  pi-x;
@@ -96,17 +79,32 @@ void mb::UpdatePixel(const unsigned long& i){
     ColorT x = (ColorT)IT[i]-(0.5L*log10(std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
     //x = (ColorT)IT[i]; ///discrete pattern
 
-    ColorT y = cycleFun(omega*x + phi);
+    ColorT y = CycleFun(omega*x + phi);
     p.Red()   = AMP[0]*y + INIT[0];
     p.Green() = AMP[1]*y + INIT[1];
     p.Blue()  = AMP[2]*y + INIT[2];
 }
 
-mb::ComplexNum mb::GetOriginFromCenter(ComplexNum cent, ZoomT z, wxSize s, StepT H){
-    StepT st = H/z/(ZoomT)s.y;
+mb::ComplexNum mb::GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H){
+    ComplexT st = H/z/(ComplexT)s.y;
     return cent + ComplexNum(-0.5L*(ComplexT)s.x*st, +0.5L*(ComplexT)s.y*st);
 }
-mb::ComplexNum mb::GetCenterFromOrigin(ComplexNum orig, ZoomT z, wxSize s, StepT H){
-    StepT st = H/z/(ZoomT)s.y;
+mb::ComplexNum mb::GetCenterFromOrigin(ComplexNum orig, ComplexT z, wxSize s, ComplexT H){
+    ComplexT st = H/z/(ComplexT)s.y;
     return orig + ComplexNum(+0.5L*(ComplexT)s.x*st, -0.5L*(ComplexT)s.y*st);
+}
+
+bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
+    wxBitmap::SaveFile(name, type, palette);
+    std::ofstream ostrm(name + ".txt");
+    ostrm << "timedate\t"    << wxDateTime::Now().Format("%d-%b-%Y %H:%M:%S").c_str() << "\n"
+          << "timeelapsed\t" << std::setprecision( 8) << 0.0                          << "\n"
+          << "re(c)\t"       << std::setprecision(20) << center.real()                << "\n"
+          << "im(c)\t"       << std::setprecision(20) << center.imag()                << "\n"
+          << "zoom\t"        << std::setprecision(20) << zoom                         << "\n"
+          << "size.x\t"      << GetSize().x                                           << "\n"
+          << "size.y\t"      << GetSize().y                                           << "\n"
+          << "NumIt\t"       << numIt                                                 << "\n" << std::flush;
+    ostrm.close();
+    wxLogMessage("Printscreen saved as " + name);
 }

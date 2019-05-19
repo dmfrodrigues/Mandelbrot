@@ -1,6 +1,6 @@
 #include "FractalFrame.h"
 
-#include "menuicons.h"
+//#include "menuicons.h"
 
 ///Event enumeration
 enum{
@@ -12,9 +12,9 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
     /**Menu*/{
         wxMenu* menuFile      = new wxMenu;
         wxMenuItem* menuItem_Printscreen   = new wxMenuItem(menuFile, ID_PRINTSCREEN  , wxT("Save printscreen\tCtrl+S"));
-                    menuItem_Printscreen  ->SetBitmap(FILESAVEAS);
+                    //menuItem_Printscreen  ->SetBitmap(FILESAVEAS);
         wxMenuItem* menuItem_HDPrintscreen = new wxMenuItem(menuFile, ID_HDPRINTSCREEN, wxT("Save HD printscreen"));
-                    menuItem_HDPrintscreen->SetBitmap(FILESAVEAS);
+                    //menuItem_HDPrintscreen->SetBitmap(FILESAVEAS);
         menuFile->Append(menuItem_Printscreen  );
         menuFile->Append(menuItem_HDPrintscreen);
 
@@ -25,6 +25,9 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
     /**Panels*/{
         fpanel = new FractalPanel(this, wxSize(1150, 500));
         ipanel = new InfoPanel   (this);
+    }
+    /**Background color*/{
+        SetBackgroundColour(ipanel->GetBackgroundColour());
     }
     /**Sizers*/{
         wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
@@ -51,21 +54,16 @@ void FractalFrame::Run_fthread(){
         auto t2 = hrclock::now();
         ///Update the screen
         wxClientDC dc(fpanel);
-        dc.DrawBitmap(f->GetBmp(), 0, 0, true);
+        dc.DrawBitmap(*((wxBitmap*)f), 0, 0, true);
         ///Update the InfoPanel
         auto dt = std::chrono::duration<long double>(t2-t1);
         wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
         mb::ComplexNum c = f->GetOrigin() + mb::ComplexNum(+(mb::StepT)p.x*f->GetStep(),-(mb::StepT)p.y*f->GetStep());
         ipanel->Update(c, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, f->GetHorizontalSize());
         ///Process events
-        if(!fpanel->is_mouseevt_handled){
-            OnZoomEvent(fpanel->mouseevt);
-            fpanel->is_mouseevt_handled = true;
-        }
-        if(!fpanel->is_sizeevt_handled){
-            OnSizeEvent();
-            fpanel->is_sizeevt_handled = true;
-        }
+        if(!fpanel->is_mouseevt_handled){ OnZoomEvent(fpanel->mouseevt); fpanel->is_mouseevt_handled = true; }
+        if(!fpanel->is_sizeevt_handled ){ OnSizeEvent();                 fpanel->is_sizeevt_handled  = true; }
+        if(!is_prtscevt_handled){ OnPrintscreenEvent(); is_prtscevt_handled = true; }
     }
 }
 
@@ -87,14 +85,19 @@ void FractalFrame::OnSizeEvent(){
     f = new mb(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
 }
 
+void FractalFrame::OnPrintscreenEvent() const{
+    //f->SaveAs
+}
+
 /*
 void FractalFrame::OnPrintscreen  (wxCommandEvent& event) {fractalPanel_->OnPrintscreen  ();}
 void FractalFrame::OnHDPrintscreen(wxCommandEvent& event) {fractalPanel_->OnHDPrintscreen();}
 */
 ///MACROS - redirect events to functions
 wxBEGIN_EVENT_TABLE(FractalFrame, wxFrame)
+    EVT_MENU(ID_PRINTSCREEN  , FractalFrame::OnPrintscreenCallback  )
 /*
-    EVT_MENU(ID_PRINTSCREEN  , FractalFrame::OnPrintscreen  )
+
     EVT_MENU(ID_HDPRINTSCREEN, FractalFrame::OnHDPrintscreen)
 */
 wxEND_EVENT_TABLE()

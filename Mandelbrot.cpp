@@ -7,7 +7,7 @@ const mb::ColorT pi = acos(-1.0);
 const mb::ColorT pi_2 = pi*0.5;
 const mb::ColorT pi2 = 2.0*pi;
 const mb::ColorT pi2_cycle = pi2/cycle;
-const mb::ColorT& omega = pi2_cycle;
+const mb::ColorT omega = pi2_cycle;
 const mb::ComplexT bailout = 8.0L; // 2.0 // 8.0
 const mb::ComplexT bailout_sqr = bailout*bailout;
 const mb::ColorT log10N = log10(bailout);
@@ -18,14 +18,12 @@ const mb::ColorT AMP[] = {+ 27.5, +110.0, +110.0}, INIT[] = {+227.5, +110.0, +11
 //const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
 //const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
 
-
-///Function
 ///Constructor
-
 mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter):
-        zoom(z), sz(s), N(s.x*s.y), step(H/zoom/(ZoomT)sz.y),
-        origin(IsCenter? GetOriginFromCenter(o, zoom, sz, H) : o),
-        center(GetCenterFromOrigin(origin, zoom, sz, H)){
+        wxBitmap(s, 24), px(*((wxBitmap*)this)),
+        zoom(z), N(GetSize().x*GetSize().y), step(H/zoom/(ZoomT)GetSize().y),
+        origin(IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o),
+        center(GetCenterFromOrigin(origin, zoom, GetSize(), H)){
     C     = new ComplexNum[N];
     Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(0.0L,0.0L));
     IT    = new IterationT[N]; std::fill(IT,IT+N,0);
@@ -33,24 +31,19 @@ mb::mb(ComplexNum o, ZoomT z, wxSize s, StepT H, bool IsCenter):
     ///Fill 'C', 'Check' with new information
     unsigned long i = 0;
     ComplexNum c = origin;
-    for(unsigned y = 0; y < sz.y; ++y, c.imag(c.imag()-step)){
+    for(unsigned y = 0; y < GetSize().y; ++y, c.imag(c.imag()-step)){
         c.real(origin.real());
-        for(unsigned x = 0; x < sz.x; ++x, c.real(c.real()+step), ++i){
+        for(unsigned x = 0; x < GetSize().x; ++x, c.real(c.real()+step), ++i){
             C[i] = c;
             Check[i] = !isCardioid_isPeriod2Bulb(c);
         }
     }
-    ///Clear bmp and px
-    bmp = new wxBitmap(sz, 24);
-    px  = new wxNativePixelData(*bmp);
 }
 mb::~mb(){
     delete[] C;
     delete[] Z;
     delete[] IT;
     delete[] Check;
-    delete bmp;
-    delete px;
 }
 
 const unsigned NThreads = 8;
@@ -95,8 +88,8 @@ inline mb::ColorT cycleFun(mb::ColorT x){
     return x/pi_2;                                ///Linear
 }
 void mb::UpdatePixel(const unsigned long& i){
-    wxNativePixelData::Iterator p(*px);
-    p.MoveTo(*px, i%sz.x, i/sz.x);
+    wxNativePixelData::Iterator p(px);
+    p.MoveTo(px, i%GetSize().x, i/GetSize().x);
 
     //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
     //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula

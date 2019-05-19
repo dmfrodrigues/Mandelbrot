@@ -28,6 +28,10 @@ private:
     void OnZoomEvent(const wxMouseEvent& evt);
     void OnSizeEvent();
 
+    bool is_prtscevt_handled = true;
+    void OnPrintscreenCallback(wxCommandEvent& event){ is_prtscevt_handled = true; }
+    void OnPrintscreenEvent() const;
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -39,10 +43,9 @@ private:
     FractalFrame    *parent;
 
     wxMouseEvent mouseevt; bool is_mouseevt_handled = true;
-    void OnMouseEvent(wxMouseEvent& evt){ mouseevt = evt; is_mouseevt_handled = false; };
+    void OnMouseCallback(wxMouseEvent& evt){ mouseevt = evt; is_mouseevt_handled = false; };
     bool is_sizeevt_handled = true;
-    void OnSizeEvent(wxSizeEvent& evt){ is_sizeevt_handled = false; };
-
+    void OnSizeCallback(wxSizeEvent& evt){ is_sizeevt_handled = false; };
 
     wxDECLARE_EVENT_TABLE();
 };

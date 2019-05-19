@@ -94,18 +94,9 @@ inline mb::ColorT cycleFun(mb::ColorT x){
     if(+pi_2 < x) x =  pi-x;
     return x/pi_2;                                ///Linear
 }
-<<<<<<< HEAD
-void mb::UpdatePixels(const std::deque<unsigned long>& q){
-    ColorT x, y;
-    wxNativePixelData::Iterator p(*px);
-    for(const auto& i:q){
-        p.MoveTo(*px, i%sz.x, i/sz.x);
-=======
->>>>>>> 393d4ae3561b1f60d7d026109504211a12883270
-
-wxNativePixelData::Iterator pxit;
 void mb::UpdatePixel(const unsigned long& i){
-    pxit.MoveTo(*px, i%sz.x, i/sz.x);
+    wxNativePixelData::Iterator p(*px);
+    p.MoveTo(*px, i%sz.x, i/sz.x);
 
     //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
     //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
@@ -113,9 +104,9 @@ void mb::UpdatePixel(const unsigned long& i){
     //x = (ColorT)IT[i]; ///discrete pattern
 
     ColorT y = cycleFun(omega*x + phi);
-    pxit.Red()   = AMP[0]*y + INIT[0];
-    pxit.Green() = AMP[1]*y + INIT[1];
-    pxit.Blue()  = AMP[2]*y + INIT[2];
+    p.Red()   = AMP[0]*y + INIT[0];
+    p.Green() = AMP[1]*y + INIT[1];
+    p.Blue()  = AMP[2]*y + INIT[2];
 }
 
 mb::ComplexNum mb::GetOriginFromCenter(ComplexNum cent, ZoomT z, wxSize s, StepT H){

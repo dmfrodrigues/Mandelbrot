@@ -1,7 +1,9 @@
 #include "FractalFrame.h"
 
-//#include "menuicons.h"
 #include "HDPrintscreenDialog.h"
+
+#include <chrono>
+#include <fstream>
 
 ///Constants
 const mb::IterationT addIt = 100;

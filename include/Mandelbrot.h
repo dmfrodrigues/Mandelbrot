@@ -1,7 +1,7 @@
 #ifndef MANDELBROT_H_INCLUDED
 #define MANDELBROT_H_INCLUDED
 
-#include <bits/stdc++.h>
+#include <complex>
 #include <wx/rawbmp.h>
 
 using namespace std;

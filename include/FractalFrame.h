@@ -1,7 +1,6 @@
 #ifndef FRACTALFRAME_H_INCLUDED
 #define FRACTALFRAME_H_INCLUDED
 
-#include <bits/stdc++.h>
 #include <wx/wx.h>
 #include "Mandelbrot.h"
 
@@ -19,7 +18,6 @@ private:
     FractalPanel* fpanel;
     InfoPanel*    ipanel;
 
-    std::thread *fthread;
     wxThread::ExitCode Entry();
 
     mb *f;

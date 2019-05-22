@@ -125,9 +125,7 @@ void FractalFrame::OnHDPrintscreenEvent(){
     mb *g = new mb(center, zoom, sz, FractalHeight, true);
 
     numIt = (numIt/addIt)*addIt + (numIt%addIt? addIt : 0);
-    for(mb::IterationT i = 0; i < numIt; i += addIt){
-        g->UpdateMath(addIt);
-    }
+    g->UpdateMath(numIt);
     if(g->SaveFile(new_path, wxBITMAP_TYPE_PNG))
         wxLogMessage("Printscreen saved as " + wxString(new_path));
 }

@@ -67,7 +67,7 @@ public:
     /**
      * Constructor
      */
-    mb(ComplexNum origin, ComplexT zoom, wxSize sz, ComplexT fractalHeight, bool IsCenter = false);
+    mb(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
     /**
      * Destructor
      */

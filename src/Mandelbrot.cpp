@@ -106,5 +106,5 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
           << "size.y\t"      << GetSize().y                                           << "\n"
           << "NumIt\t"       << numIt                                                 << "\n" << std::flush;
     ostrm.close();
-    wxLogMessage("Printscreen saved as " + name);
+    return true;
 }

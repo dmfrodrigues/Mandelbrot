@@ -1,7 +1,10 @@
 #include "FractalFrame.h"
 
 //#include "menuicons.h"
+#include "HDPrintscreenDialog.h"
 
+///Constants
+const mb::IterationT addIt = 100;
 ///Event enumeration
 enum{
     ID_PRINTSCREEN    = 1,
@@ -40,13 +43,20 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
         f = new mb({-1.25L,0.0L}, 1.0L, fpanel->GetSize(), FractalHeight, true);
     }
     /**Create fractal thread*/{
-        fthread = new std::thread(Run_fthread, this);
+        if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR){
+            wxLogError("Could not create main thread");
+            return;
+        }
+        if (GetThread()->Run() != wxTHREAD_NO_ERROR){
+            wxLogError("Could not run main thread");
+            return;
+        }
+        //fthread = new std::thread(Entry, this);
     }
 }
 
 typedef std::chrono::high_resolution_clock hrclock;
-void FractalFrame::Run_fthread(){
-    const mb::IterationT addIt = 100;
+wxThread::ExitCode FractalFrame::Entry(){
     while(true){
         ///Update the fractal
         auto t1 = hrclock::now();
@@ -63,8 +73,10 @@ void FractalFrame::Run_fthread(){
         ///Process events
         if(!fpanel->is_mouseevt_handled){ OnZoomEvent(fpanel->mouseevt); fpanel->is_mouseevt_handled = true; }
         if(!fpanel->is_sizeevt_handled ){ OnSizeEvent();                 fpanel->is_sizeevt_handled  = true; }
-        if(!is_prtscevt_handled){ OnPrintscreenEvent(); is_prtscevt_handled = true; }
+        if(!is_prtscevt_handled  ){ OnPrintscreenEvent();   is_prtscevt_handled   = true; }
+        if(!is_hdprtscevt_handled){ CallAfter(OnHDPrintscreenEvent); is_hdprtscevt_handled = true; }
     }
+    return (wxThread::ExitCode)0;
 }
 
 void FractalFrame::OnZoomEvent(const wxMouseEvent& evt){
@@ -97,15 +109,31 @@ void NewImageName(const char* format, char* name){
 void FractalFrame::OnPrintscreenEvent() const{
     char new_path[256];
     NewImageName(".\\Printscreens\\Image_%04d.png", new_path);
-    f->SaveFile(new_path, wxBITMAP_TYPE_PNG);
+    if(f->SaveFile(new_path, wxBITMAP_TYPE_PNG))
+        wxLogMessage("Printscreen saved as " + wxString(new_path));
+}
+void FractalFrame::OnHDPrintscreenEvent(){
+    char new_path[256];
+    NewImageName(".\\Printscreens\\Image_%04d.png", new_path);
+
+    mb::ComplexNum center = f->GetCenter();
+    mb::ComplexT zoom = f->GetZoom();
+    wxSize sz = f->GetSize();
+    mb::IterationT numIt = f->GetNumIt();
+    HDPrintscreenDialog *dialog = new HDPrintscreenDialog(this, &center, &zoom, &sz, &numIt);
+    if(dialog->ShowModal() != wxID_OK) return;
+    mb *g = new mb(center, zoom, sz, FractalHeight, true);
+
+    numIt = (numIt/addIt)*addIt + (numIt%addIt? addIt : 0);
+    for(mb::IterationT i = 0; i < numIt; i += addIt){
+        g->UpdateMath(addIt);
+    }
+    if(g->SaveFile(new_path, wxBITMAP_TYPE_PNG))
+        wxLogMessage("Printscreen saved as " + wxString(new_path));
 }
 
-/*
-void FractalFrame::OnPrintscreen  (wxCommandEvent& event) {fractalPanel_->OnPrintscreen  ();}
-void FractalFrame::OnHDPrintscreen(wxCommandEvent& event) {fractalPanel_->OnHDPrintscreen();}
-*/
 ///MACROS - redirect events to functions
 wxBEGIN_EVENT_TABLE(FractalFrame, wxFrame)
     EVT_MENU(ID_PRINTSCREEN  , FractalFrame::OnPrintscreenCallback  )
-    //EVT_MENU(ID_HDPRINTSCREEN, FractalFrame::OnHDPrintscreenCallback)
+    EVT_MENU(ID_HDPRINTSCREEN, FractalFrame::OnHDPrintscreenCallback)
 wxEND_EVENT_TABLE()

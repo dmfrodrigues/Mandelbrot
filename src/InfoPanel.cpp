@@ -52,12 +52,12 @@ InfoPanel::InfoPanel(FractalFrame* p):wxPanel(p), parent(p){
 
 void InfoPanel::Update(const mb::ComplexNum& MousePosC, const mb::ComplexT& zoom,
                        const mb::IterationT& numIt    , const long double& secPerIt, const mb::ComplexT& W){
-    ReCtrl  ->ChangeValue(mysprintf((long double) MousePosC.real()  , "%+.20Le"));
-    ImCtrl  ->ChangeValue(mysprintf((long double) MousePosC.imag()  , "%+.20Le"));
-    ZoomCtrl->ChangeValue(mysprintf((long double) zoom              , "%.8Lg"  ));
-    ItCtrl  ->ChangeValue(mysprintf((unsigned long long) numIt      , "%llu"   ));
-    TimeCtrl->ChangeValue(mysprintf((long double) secPerIt          , "%.12Lf" ));
-    DiamCtrl->ChangeValue(mysprintf((long double) W                 , "%.6Lg"  ));
+    ReCtrl  ->ChangeValue(float2str(MousePosC.real(), 20));
+    ImCtrl  ->ChangeValue(float2str(MousePosC.imag(), 20));
+    ZoomCtrl->ChangeValue(mysprintf((long double) zoom    , "%.8Lg"  ));
+    ItCtrl  ->ChangeValue(std::to_string(numIt));
+    TimeCtrl->ChangeValue(mysprintf((long double) secPerIt, "%.12Lf" ));
+    DiamCtrl->ChangeValue(mysprintf((long double) W       , "%.6Lg"  ));
 }
 
 BEGIN_EVENT_TABLE(InfoPanel, wxPanel)

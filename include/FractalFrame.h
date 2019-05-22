@@ -5,15 +5,14 @@
 #include <wx/wx.h>
 #include "Mandelbrot.h"
 
+#include "FractalPanel.h"
+#include "InfoPanel.h"
+
 const mb::ComplexT    FractalHeight = 2.5L;        ///vertical height of the fractal at zoom==1
 
 ///=========================================================
 ///FRACTALFRAME
-class FractalFrame;
-class FractalPanel;
-class InfoPanel;
-
-class FractalFrame: public wxFrame {
+class FractalFrame: public wxFrame, public wxThreadHelper {
 public:
     FractalFrame();
 private:
@@ -21,7 +20,7 @@ private:
     InfoPanel*    ipanel;
 
     std::thread *fthread;
-    void Run_fthread();
+    wxThread::ExitCode Entry();
 
     mb *f;
 
@@ -31,35 +30,12 @@ private:
     bool is_prtscevt_handled = true;
     void OnPrintscreenCallback(wxCommandEvent& event){ is_prtscevt_handled = false; }
     void OnPrintscreenEvent() const;
+    bool is_hdprtscevt_handled = true;
+    void OnHDPrintscreenCallback(wxCommandEvent& event){ is_hdprtscevt_handled = false; }
+    void OnHDPrintscreenEvent();
 
     wxDECLARE_EVENT_TABLE();
 };
 
-class FractalPanel: public wxPanel {
-friend class FractalFrame;
-public:
-    FractalPanel(FractalFrame* p, wxSize s);
-private:
-    FractalFrame    *parent;
-
-    wxMouseEvent mouseevt; bool is_mouseevt_handled = true;
-    void OnMouseCallback(wxMouseEvent& evt){ mouseevt = evt; is_mouseevt_handled = false; };
-    bool is_sizeevt_handled = true;
-    void OnSizeCallback(wxSizeEvent& evt){ is_sizeevt_handled = false; };
-
-    wxDECLARE_EVENT_TABLE();
-};
-
-class InfoPanel: public wxPanel {
-friend class FractalFrame;
-private:
-    FractalFrame *parent;
-    wxTextCtrl *ReCtrl, *ImCtrl, *ZoomCtrl, *ItCtrl, *TimeCtrl, *DiamCtrl;
-    InfoPanel(FractalFrame *p);
-    void Update(const mb::ComplexNum& MousePosC, const mb::ComplexT& zoom      ,
-                const mb::IterationT& numIt    , const long double& secPerIt, const mb::ComplexT& W);
-
-    wxDECLARE_EVENT_TABLE();
-};
 
 #endif

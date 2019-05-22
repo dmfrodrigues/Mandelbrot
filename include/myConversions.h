@@ -11,6 +11,7 @@ inline std::string float2str(T n, int no_digits){
     convert << n;
     return convert.str();
 }
+
 template<class T>
 inline long double str2float(const std::string& in){
     T ret;
@@ -19,10 +20,11 @@ inline long double str2float(const std::string& in){
     convert >> ret;
     return ret;
 }
+
 template<class T>
-inline std::string mysprintf(T n, const std::string& fmt){
+inline std::string mysprintf(T n, const char* fmt){
     char retBuffer[50];
-    sprintf(retBuffer, fmt.c_str(), n);
+    sprintf(retBuffer, fmt, n);
     return std::string(retBuffer);
 }
 

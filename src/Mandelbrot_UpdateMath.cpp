@@ -3,12 +3,12 @@
 #include <thread>
 
 const unsigned NThreads = 8;
-void mb::UpdateMath(IterationT addIt){
+void FractalBitmap::UpdateMath(IterationT addIt){
     std::thread *ArrThreads[NThreads];
     for(unsigned long L, R, i = 0; i < NThreads; ++i){
         L =  i   *N/NThreads;
         R = (i+1)*N/NThreads;
-        ArrThreads[i] = new std::thread(&mb::UpdateMathLim, this, L, R, addIt);
+        ArrThreads[i] = new std::thread(&FractalBitmap::UpdateMathLim, this, L, R, addIt);
     }
     for(unsigned long i = 0; i < NThreads; ++i){
         ArrThreads[i]->join();
@@ -16,7 +16,7 @@ void mb::UpdateMath(IterationT addIt){
     numIt += addIt;
 }
 
-void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
+void FractalBitmap::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
     for(unsigned long i = L; i < R; ++i){
         if(!Check[i]) continue;
         IterationT it;

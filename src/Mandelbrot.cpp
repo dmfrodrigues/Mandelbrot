@@ -6,7 +6,7 @@
 #include <wx/log.h>
 
 ///Constructor
-mb::mb(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter):
+FractalBitmap::FractalBitmap(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter):
         wxBitmap(s, 24), px(*((wxBitmap*)this)),
         zoom(z), N(GetSize().x*GetSize().y), step(H/zoom/(ComplexT)GetSize().y),
         origin(IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o),
@@ -26,20 +26,20 @@ mb::mb(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter):
         }
     }
 }
-mb::~mb(){
+FractalBitmap::~FractalBitmap(){
     delete[] C;
     delete[] Z;
     delete[] IT;
     delete[] Check;
 }
 
-mb::ColorT mb::CycleFun(mb::ColorT x){
+FractalBitmap::ColorT FractalBitmap::CycleFun(FractalBitmap::ColorT x){
     x = remainderf(x, pi2);
     if(x < -pi_2) x = -pi-x;
     if(+pi_2 < x) x =  pi-x;
     return x/pi_2;                                ///Linear
 }
-void mb::UpdatePixel(const unsigned long& i){
+void FractalBitmap::UpdatePixel(const unsigned long& i){
     wxNativePixelData::Iterator p(px);
     p.MoveTo(px, i%GetSize().x, i/GetSize().x);
 
@@ -54,16 +54,16 @@ void mb::UpdatePixel(const unsigned long& i){
     p.Blue()  = AMP[2]*y + INIT[2];
 }
 
-mb::ComplexNum mb::GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H){
+FractalBitmap::ComplexNum FractalBitmap::GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H){
     ComplexT st = H/z/(ComplexT)s.y;
     return cent + ComplexNum(-0.5L*(ComplexT)s.x*st, +0.5L*(ComplexT)s.y*st);
 }
-mb::ComplexNum mb::GetCenterFromOrigin(ComplexNum orig, ComplexT z, wxSize s, ComplexT H){
+FractalBitmap::ComplexNum FractalBitmap::GetCenterFromOrigin(ComplexNum orig, ComplexT z, wxSize s, ComplexT H){
     ComplexT st = H/z/(ComplexT)s.y;
     return orig + ComplexNum(+0.5L*(ComplexT)s.x*st, -0.5L*(ComplexT)s.y*st);
 }
 
-bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
+bool FractalBitmap::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
     wxBitmap::SaveFile(name, type, palette);
     std::ofstream ostrm(name.ToStdString() + ".txt");
     ostrm << "timedate\t"    << wxDateTime::Now().Format("%d-%b-%Y %H:%M:%S").c_str() << "\n"

@@ -9,8 +9,8 @@ private:
     FractalFrame *parent;
     wxTextCtrl *ReCtrl, *ImCtrl, *ZoomCtrl, *ItCtrl, *TimeCtrl, *DiamCtrl;
     InfoPanel(FractalFrame *p);
-    void Update(const mb::ComplexNum& MousePosC, const mb::ComplexT& zoom      ,
-                const mb::IterationT& numIt    , const long double& secPerIt, const mb::ComplexT& W);
+    void Update(const FractalBitmap::ComplexNum& MousePosC, const FractalBitmap::ComplexT& zoom      ,
+                const FractalBitmap::IterationT& numIt    , const long double& secPerIt, const FractalBitmap::ComplexT& W);
 
     wxDECLARE_EVENT_TABLE();
 };

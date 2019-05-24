@@ -6,18 +6,12 @@
 
 using namespace std;
 
-class mb: public wxBitmap{
+class FractalBitmap: public wxBitmap{
 public:
     ///PUBLIC TYPEDEFS
     typedef long double ComplexT;
     typedef int IterationT;
     typedef std::complex<ComplexT> ComplexNum; ///std::complex is decently fast only if compiled with flag -ffast-math
-    ///PUBLIC STATIC FUNCTIONS
-    static inline bool isCardioid_isPeriod2Bulb(const ComplexNum& c){
-        mb::ComplexT q = (c.real()-0.25)*(c.real()-0.25) + c.imag()*c.imag();    ///isCardioid
-        return (4.0*q*(q+(c.real()-0.25)) < c.imag()*c.imag())||       ///isCardioid
-               ((c.real()+1.0)*(c.real()+1.0) + c.imag()*c.imag() < 0.0625); ///isPeriod2Bulb
-    }
 private:
     ///PRIVATE TYPEDEFS
     typedef float ColorT;
@@ -63,15 +57,22 @@ private:
 
     static ColorT CycleFun(ColorT x);
 
+    ///PRIVATE STATIC FUNCTIONS
+    static inline bool isCardioid_isPeriod2Bulb(const ComplexNum& c){
+        FractalBitmap::ComplexT q = (c.real()-0.25)*(c.real()-0.25) + c.imag()*c.imag();    ///isCardioid
+        return (4.0*q*(q+(c.real()-0.25)) < c.imag()*c.imag())||       ///isCardioid
+               ((c.real()+1.0)*(c.real()+1.0) + c.imag()*c.imag() < 0.0625); ///isPeriod2Bulb
+    }
+
 public:
     /**
      * Constructor
      */
-    mb(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
+    FractalBitmap(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
     /**
      * Destructor
      */
-    ~mb();
+    ~FractalBitmap();
 
     ///CALCULATIONS ==================================================
     /**

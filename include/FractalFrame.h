@@ -7,7 +7,7 @@
 #include "FractalPanel.h"
 #include "InfoPanel.h"
 
-const mb::ComplexT    FractalHeight = 2.5L;        ///vertical height of the fractal at zoom==1
+const FractalBitmap::ComplexT    FractalHeight = 2.5L;        ///vertical height of the fractal at zoom==1
 
 ///=========================================================
 ///FRACTALFRAME
@@ -20,7 +20,7 @@ private:
 
     wxThread::ExitCode Entry();
 
-    mb *f;
+    FractalBitmap *f;
 
     void OnZoomEvent(const wxMouseEvent& evt);
     void OnSizeEvent();

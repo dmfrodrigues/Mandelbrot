@@ -2,7 +2,7 @@
 #include "myConversions.h"
 
 ///Constructor
-HDPrintscreenDialog::HDPrintscreenDialog(wxWindow *p, mb::ComplexNum *c, mb::ComplexT *z, wxSize *s, mb::IterationT *it)
+HDPrintscreenDialog::HDPrintscreenDialog(wxWindow *p, FractalBitmap::ComplexNum *c, FractalBitmap::ComplexT *z, wxSize *s, FractalBitmap::IterationT *it)
     :wxDialog(p, wxID_ANY, "Set printscreen settings"), center(c), zoom(z), sz(s), numIt(it){
     ///Text
     wxStaticText*   ReStat = new wxStaticText(this, wxID_ANY,                  "Real part:", wxDefaultPosition,  wxDefaultSize, wxALIGN_RIGHT);
@@ -47,9 +47,9 @@ HDPrintscreenDialog::HDPrintscreenDialog(wxWindow *p, mb::ComplexNum *c, mb::Com
     this->SetSizer(globalSizer);
 }
 void HDPrintscreenDialog::OnOK(wxCommandEvent& event){
-    *center =       {str2float<mb::ComplexT>(ReCtrl->GetLineText(0).ToStdString()),
-                     str2float<mb::ComplexT>(ImCtrl->GetLineText(0).ToStdString())};
-    *zoom   =        str2float<mb::ComplexT>(ZoomCtrl->GetLineText(0).ToStdString());
+    *center =       {str2float<FractalBitmap::ComplexT>(ReCtrl->GetLineText(0).ToStdString()),
+                     str2float<FractalBitmap::ComplexT>(ImCtrl->GetLineText(0).ToStdString())};
+    *zoom   =        str2float<FractalBitmap::ComplexT>(ZoomCtrl->GetLineText(0).ToStdString());
     *sz     = wxSize(std::stoul(SzXCtrl->GetLineText(0).ToStdString()),
                      std::stoul(SzYCtrl->GetLineText(0).ToStdString()));
     *numIt  =        std::stoul(ItCtrl->GetLineText(0).ToStdString());

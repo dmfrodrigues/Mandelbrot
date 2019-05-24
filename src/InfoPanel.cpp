@@ -50,8 +50,8 @@ InfoPanel::InfoPanel(FractalFrame* p):wxPanel(p), parent(p){
     this->SetSizer(StatBoxSizer);
 }
 
-void InfoPanel::Update(const mb::ComplexNum& MousePosC, const mb::ComplexT& zoom,
-                       const mb::IterationT& numIt    , const long double& secPerIt, const mb::ComplexT& W){
+void InfoPanel::Update(const FractalBitmap::ComplexNum& MousePosC, const FractalBitmap::ComplexT& zoom,
+                       const FractalBitmap::IterationT& numIt    , const long double& secPerIt, const FractalBitmap::ComplexT& W){
     ReCtrl  ->ChangeValue(float2str(MousePosC.real(), 20));
     ImCtrl  ->ChangeValue(float2str(MousePosC.imag(), 20));
     ZoomCtrl->ChangeValue(mysprintf((long double) zoom    , "%.8Lg"  ));

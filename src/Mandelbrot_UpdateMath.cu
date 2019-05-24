@@ -2,7 +2,6 @@
 
 #include <thread>
 
-const unsigned NThreads = 8;
 void mb::UpdateMath(IterationT addIt){
     std::thread *ArrThreads[NThreads];
     for(unsigned long L, R, i = 0; i < NThreads; ++i){
@@ -16,7 +15,12 @@ void mb::UpdateMath(IterationT addIt){
     numIt += addIt;
 }
 
-void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
+void mb::UpdateMathLim(IterationT addIt){
+    unsigned long i = threadIdx.x;
+    unsigned long NThreads = blockDim.x;
+    unsigned long N = GetSize().x*GetSize().y;
+    unsigned long L =  i   *N/NThreads;
+    unsigned long R = (i+1)*N/NThreads;
     for(unsigned long i = L; i < R; ++i){
         if(!Check[i]) continue;
         IterationT it;

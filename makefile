@@ -13,8 +13,10 @@ LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new\lib\gcc_dll_UNICODE_MONO
 
 all: $(BDIR)\main.exe
 
-$(BDIR)\main.exe: $(ODIR)\Mandelbrot.o $(ODIR)\FractalFrame.o $(ODIR)\FractalPanel.o $(ODIR)\InfoPanel.o $(ODIR)\HDPrintscreenDialog.o $(ODIR)\main.o
-	$(CC) $(LFLAGS) -o $(BDIR)\main.exe $(ODIR)\Mandelbrot.o $(ODIR)\FractalFrame.o $(ODIR)\FractalPanel.o $(ODIR)\InfoPanel.o $(ODIR)\HDPrintscreenDialog.o $(ODIR)\main.o -s -mthreads -lwxmsw30u -mwindows
+$(BDIR)\main.exe: $(ODIR)\Mandelbrot_UpdateMath.o $(ODIR)\Mandelbrot.o $(ODIR)\FractalFrame.o $(ODIR)\FractalPanel.o $(ODIR)\InfoPanel.o $(ODIR)\HDPrintscreenDialog.o $(ODIR)\main.o
+	$(CC) $(LFLAGS) -o $(BDIR)\main.exe $(ODIR)\Mandelbrot_UpdateMath.o $(ODIR)\Mandelbrot.o $(ODIR)\FractalFrame.o $(ODIR)\FractalPanel.o $(ODIR)\InfoPanel.o $(ODIR)\HDPrintscreenDialog.o $(ODIR)\main.o -s -mthreads -lwxmsw30u -mwindows
+$(ODIR)\Mandelbrot_UpdateMath.o: $(SDIR)\Mandelbrot_UpdateMath.cpp
+	$(CC) $(CFLAGS) $(SDIR)\Mandelbrot_UpdateMath.cpp   -o $(ODIR)\Mandelbrot_UpdateMath.o
 $(ODIR)\Mandelbrot.o: $(SDIR)\Mandelbrot.cpp
 	$(CC) $(CFLAGS) $(SDIR)\Mandelbrot.cpp   -o $(ODIR)\Mandelbrot.o
 $(ODIR)\FractalFrame.o: $(SDIR)\FractalFrame.cpp

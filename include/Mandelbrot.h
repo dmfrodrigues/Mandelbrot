@@ -24,7 +24,7 @@ private:
 
     ///PRIVATE STATIC CONSTANTS
     static constexpr ColorT cycle = 100.0; /*100.0*/                 ///number of colors in a cycle (for coloring)
-    static constexpr ColorT pi = acos(-1.0);
+    static constexpr ColorT pi = 3.1415926535897L; //acos(-1.0L);
     static constexpr ColorT pi_2 = pi*0.5;
     static constexpr ColorT pi2 = 2.0*pi;
     static constexpr ColorT pi2_cycle = pi2/cycle;
@@ -36,8 +36,8 @@ private:
     //static const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
     static constexpr ComplexT bailout = 8.0L; // 2.0 // 8.0
     static constexpr ComplexT bailout_sqr = bailout*bailout;
-    static constexpr ColorT log10N = log10(bailout);
-    static constexpr ColorT log2_log10N = std::log2(log10N);
+    static constexpr ColorT log10N = 0.90308998699; //log10(bailout);
+    static constexpr ColorT log2_log10N = -0.14705834492L; //std::log2(log10N);
 
     ///MEMBER VARIABLES
     const ComplexT              zoom;   ///Relative measure of zoom, 1 for initial zoom
@@ -59,7 +59,7 @@ private:
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
-    inline void UpdatePixel(const unsigned long& i);
+    void UpdatePixel(const unsigned long& i);
 
     static ColorT CycleFun(ColorT x);
 

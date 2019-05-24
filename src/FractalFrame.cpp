@@ -16,10 +16,8 @@ enum{
 FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"){
     /**Menu*/{
         wxMenu* menuFile      = new wxMenu;
-        wxMenuItem* menuItem_Printscreen   = new wxMenuItem(menuFile, ID_PRINTSCREEN  , wxT("Save printscreen\tCtrl+S"));
-                    //menuItem_Printscreen  ->SetBitmap(FILESAVEAS);
+        wxMenuItem* menuItem_Printscreen   = new wxMenuItem(menuFile, ID_PRINTSCREEN  , wxT("Save printscreen"));
         wxMenuItem* menuItem_HDPrintscreen = new wxMenuItem(menuFile, ID_HDPRINTSCREEN, wxT("Save HD printscreen"));
-                    //menuItem_HDPrintscreen->SetBitmap(FILESAVEAS);
         menuFile->Append(menuItem_Printscreen  );
         menuFile->Append(menuItem_HDPrintscreen);
 
@@ -46,14 +44,11 @@ FractalFrame::FractalFrame():wxFrame(nullptr, wxID_ANY, "Mandelbrot set plotter"
     }
     /**Create fractal thread*/{
         if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR){
-            wxLogError("Could not create main thread");
-            return;
+            wxLogError("Could not create main thread"); return;
         }
         if (GetThread()->Run() != wxTHREAD_NO_ERROR){
-            wxLogError("Could not run main thread");
-            return;
+            wxLogError("Could not run main thread"   ); return;
         }
-        //fthread = new std::thread(Entry, this);
     }
 }
 
@@ -76,7 +71,7 @@ wxThread::ExitCode FractalFrame::Entry(){
         if(!fpanel->is_mouseevt_handled){ OnZoomEvent(fpanel->mouseevt); fpanel->is_mouseevt_handled = true; }
         if(!fpanel->is_sizeevt_handled ){ OnSizeEvent();                 fpanel->is_sizeevt_handled  = true; }
         if(!is_prtscevt_handled  ){ OnPrintscreenEvent();   is_prtscevt_handled   = true; }
-        if(!is_hdprtscevt_handled){ CallAfter(OnHDPrintscreenEvent); is_hdprtscevt_handled = true; }
+        if(!is_hdprtscevt_handled){ CallAfter(&FractalFrame::OnHDPrintscreenEvent); is_hdprtscevt_handled = true; }
     }
     return (wxThread::ExitCode)0;
 }

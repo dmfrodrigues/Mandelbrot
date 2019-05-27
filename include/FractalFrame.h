@@ -27,10 +27,12 @@ private:
 
     bool is_prtscevt_handled = true;
     void OnPrintscreenCallback(wxCommandEvent& event){ is_prtscevt_handled = false; }
-    void OnPrintscreenEvent() const;
+    void OnPrintscreenEvent();
     bool is_hdprtscevt_handled = true;
     void OnHDPrintscreenCallback(wxCommandEvent& event){ is_hdprtscevt_handled = false; }
     void OnHDPrintscreenEvent();
+
+    void UpdateInfoPanel(const long double& secPerIt);
 
     wxDECLARE_EVENT_TABLE();
 };

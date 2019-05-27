@@ -1,6 +1,7 @@
 *.o
 *.a
 *.exe
+*.app
 *.jpg
 *.png
 *.bmp

@@ -3,6 +3,9 @@
 
 #include "FractalBitmap.h"
 
+#include <deque>
+#include <vector>
+
 class mb: public FractalBitmap{
 private:
     ///PRIVATE TYPEDEFS
@@ -40,11 +43,11 @@ private:
     /**
      * Update pixels in [L,R) by making an additional addIt iterations
      */
-    void UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt);
+    void UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt, std::deque<unsigned long>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
-    void UpdatePixel(const unsigned long& i);
+    void UpdatePixels(const std::deque<unsigned long>& v);
 
     static ColorT CycleFun(ColorT x);
 

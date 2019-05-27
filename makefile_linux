@@ -1,0 +1,4 @@
+all: $(BDIR)/main.app
+
+$(BDIR)/main.app: ./src/*.cpp
+	g++ -I./include/ ./src/*.cpp `wx-config --cxxflags --libs` -o main.app

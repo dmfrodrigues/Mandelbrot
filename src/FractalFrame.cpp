@@ -39,9 +39,6 @@ FractalFrame::FractalFrame(FractalBitmap *p):wxFrame(nullptr, wxID_ANY, "Mandelb
         sizer->SetSizeHints(this);
         this->SetSizer(sizer);
     }
-    /**Create fractal*/{
-        f->New({-1.25L,0.0L}, 1.0L, fpanel->GetSize(), FractalHeight, true);
-    }
     /**Create fractal thread*/{
         if (CreateThread(wxTHREAD_JOINABLE) != wxTHREAD_NO_ERROR){
             wxLogError("Could not create main thread"); return;
@@ -54,6 +51,9 @@ FractalFrame::FractalFrame(FractalBitmap *p):wxFrame(nullptr, wxID_ANY, "Mandelb
 
 typedef std::chrono::high_resolution_clock hrclock;
 wxThread::ExitCode FractalFrame::Entry(){
+    /**Create fractal*/{
+        f->New({-1.25L,0.0L}, 1.0L, fpanel->GetSize(), FractalHeight, true);
+    }
     while(true){
         ///Update the fractal
         auto t1 = hrclock::now();
@@ -64,16 +64,21 @@ wxThread::ExitCode FractalFrame::Entry(){
         dc.DrawBitmap(*((wxBitmap*)f), 0, 0, true);
         ///Update the InfoPanel
         auto dt = std::chrono::duration<long double>(t2-t1);
-        wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
-        FractalBitmap::ComplexNum c = f->GetOrigin() + FractalBitmap::ComplexNum(+(FractalBitmap::ComplexT)p.x*f->GetStep(),-(FractalBitmap::ComplexT)p.y*f->GetStep());
-        ipanel->Update(c, f->GetZoom(), f->GetNumIt(), dt.count()/(long double)addIt, f->GetHorizontalSize());
+        CallAfter(&FractalFrame::UpdateInfoPanel, dt.count()/(long double)addIt);
         ///Process events
         if(!fpanel->is_mouseevt_handled){ OnZoomEvent(fpanel->mouseevt); fpanel->is_mouseevt_handled = true; }
         if(!fpanel->is_sizeevt_handled ){ OnSizeEvent();                 fpanel->is_sizeevt_handled  = true; }
         if(!is_prtscevt_handled  ){ OnPrintscreenEvent();   is_prtscevt_handled   = true; }
+        if(!is_prtscevt_handled  ){ CallAfter(&FractalFrame::OnPrintscreenEvent);   is_prtscevt_handled   = true; }
         if(!is_hdprtscevt_handled){ CallAfter(&FractalFrame::OnHDPrintscreenEvent); is_hdprtscevt_handled = true; }
     }
     return (wxThread::ExitCode)0;
+}
+
+void FractalFrame::UpdateInfoPanel(const long double& secPerIt){
+    wxPoint p = wxGetMousePosition() - fpanel->GetScreenPosition();
+    FractalBitmap::ComplexNum c = f->GetOrigin() + FractalBitmap::ComplexNum(+(FractalBitmap::ComplexT)p.x*f->GetStep(),-(FractalBitmap::ComplexT)p.y*f->GetStep());
+    ipanel->Update(c, f->GetZoom(), f->GetNumIt(), secPerIt, f->GetHorizontalSize());
 }
 
 void FractalFrame::OnZoomEvent(const wxMouseEvent& evt){
@@ -81,8 +86,7 @@ void FractalFrame::OnZoomEvent(const wxMouseEvent& evt){
     FractalBitmap::ComplexNum newcenter = f->GetOrigin() + FractalBitmap::ComplexNum(
         p.x*f->GetStep(), -p.y*f->GetStep()
     );
-    //FractalBitmap::ComplexT newzoom = f->GetZoom()*std::pow(3.16227766017L, (long double)evt.GetWheelRotation()/evt.GetWheelDelta());
-    FractalBitmap::ComplexT newzoom = f->GetZoom()*(evt.GetWheelRotation() < 0 ? 3.16227766017L : 1.0L/3.16227766017L);
+    FractalBitmap::ComplexT newzoom = f->GetZoom()*(evt.GetWheelRotation() < 0 ? 1.0L/3.16227766017L : 3.16227766017L);
     f->New(newcenter, newzoom, fpanel->GetSize(), FractalHeight, true);
 }
 
@@ -102,7 +106,7 @@ void NewImageName(const char* format, char* name){
     }
     throw std::logic_error("no available names");
 }
-void FractalFrame::OnPrintscreenEvent() const{
+void FractalFrame::OnPrintscreenEvent(){
     char new_path[256];
     NewImageName(".\\Printscreens\\Image_%04d.png", new_path);
     if(f->SaveFile(new_path, wxBITMAP_TYPE_PNG))

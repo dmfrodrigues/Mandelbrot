@@ -1,6 +1,6 @@
 #include "FractalBitmap.h"
 
-FractalBitmap::FractalBitmap():wxBitmap(){}
+FractalBitmap::FractalBitmap():wxBitmap(1,1,24){}
 
 FractalBitmap::ComplexNum FractalBitmap::GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H){
     ComplexT st = H/z/(ComplexT)s.y;

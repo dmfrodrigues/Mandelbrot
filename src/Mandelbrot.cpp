@@ -2,16 +2,20 @@
 
 #include <fstream>
 #include <iomanip>
-#include <iostream>
 #include <thread>
-#include <wx/log.h>
 
 ///Constructor
-FractalBitmap::FractalBitmap(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter):
-        wxBitmap(s, 24), px(*((wxBitmap*)this)),
-        zoom(z), N(GetSize().x*GetSize().y), step(H/zoom/(ComplexT)GetSize().y),
-        origin(IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o),
-        center(GetCenterFromOrigin(origin, zoom, GetSize(), H)){
+mb::mb():px(*((wxBitmap*)this)){}
+
+///New
+void mb::New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
+    Create(s, 24);
+    px = wxNativePixelData(*((wxBitmap*)this)),
+    zoom = z;
+    step = H/zoom/(ComplexT)GetSize().y;
+    origin = (IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o);
+    center = GetCenterFromOrigin(origin, zoom, GetSize(), H);
+    unsigned long long N = GetSize().x*GetSize().y;
     C     = new ComplexNum[N];
     Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(0.0L,0.0L));
     IT    = new IterationT[N]; std::fill(IT,IT+N,0);
@@ -27,21 +31,29 @@ FractalBitmap::FractalBitmap(ComplexNum o, ComplexT z, wxSize s, ComplexT H, boo
         }
     }
 }
-FractalBitmap::~FractalBitmap(){
+
+///CreateNew
+mb* mb::CreateNew(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
+    mb *ret = new mb();
+    ret->New(o,z,s,H,IsCenter);
+    return ret;
+}
+
+mb::~mb(){
     delete[] C;
     delete[] Z;
     delete[] IT;
     delete[] Check;
 }
 
-
 const unsigned NThreads = 8;
-void FractalBitmap::UpdateMath(IterationT addIt){
+void mb::UpdateMath(IterationT addIt){
     std::thread *ArrThreads[NThreads];
+    unsigned long long N = GetSize().x*GetSize().y;
     for(unsigned long L, R, i = 0; i < NThreads; ++i){
         L =  i   *N/NThreads;
         R = (i+1)*N/NThreads;
-        ArrThreads[i] = new std::thread(&FractalBitmap::UpdateMathLim, this, L, R, addIt);
+        ArrThreads[i] = new std::thread(&mb::UpdateMathLim, this, L, R, addIt);
     }
     for(unsigned long i = 0; i < NThreads; ++i){
         ArrThreads[i]->join();
@@ -49,7 +61,7 @@ void FractalBitmap::UpdateMath(IterationT addIt){
     numIt += addIt;
 }
 
-void FractalBitmap::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
+void mb::UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt){
     for(unsigned long i = L; i < R; ++i){
         if(!Check[i]) continue;
         IterationT it;
@@ -70,13 +82,14 @@ void FractalBitmap::UpdateMathLim(unsigned long L, unsigned long R, IterationT a
     }
 }
 
-FractalBitmap::ColorT FractalBitmap::CycleFun(FractalBitmap::ColorT x){
+mb::ColorT mb::CycleFun(mb::ColorT x){
     x = remainderf(x, pi2);
     if(x < -pi_2) x = -pi-x;
     if(+pi_2 < x) x =  pi-x;
     return x/pi_2;                                ///Linear
 }
-void FractalBitmap::UpdatePixel(const unsigned long& i){
+
+void mb::UpdatePixel(const unsigned long& i){
     wxNativePixelData::Iterator p(px);
     p.MoveTo(px, i%GetSize().x, i/GetSize().x);
 
@@ -91,16 +104,7 @@ void FractalBitmap::UpdatePixel(const unsigned long& i){
     p.Blue()  = AMP[2]*y + INIT[2];
 }
 
-FractalBitmap::ComplexNum FractalBitmap::GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H){
-    ComplexT st = H/z/(ComplexT)s.y;
-    return cent + ComplexNum(-0.5L*(ComplexT)s.x*st, +0.5L*(ComplexT)s.y*st);
-}
-FractalBitmap::ComplexNum FractalBitmap::GetCenterFromOrigin(ComplexNum orig, ComplexT z, wxSize s, ComplexT H){
-    ComplexT st = H/z/(ComplexT)s.y;
-    return orig + ComplexNum(+0.5L*(ComplexT)s.x*st, -0.5L*(ComplexT)s.y*st);
-}
-
-bool FractalBitmap::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
+bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
     wxBitmap::SaveFile(name, type, palette);
     std::ofstream ostrm(name.ToStdString() + ".txt");
     ostrm << "timedate\t"    << wxDateTime::Now().Format("%d-%b-%Y %H:%M:%S").c_str() << "\n"

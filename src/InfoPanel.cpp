@@ -54,10 +54,10 @@ void InfoPanel::Update(const FractalBitmap::ComplexNum& MousePosC, const Fractal
                        const FractalBitmap::IterationT& numIt    , const long double& secPerIt, const FractalBitmap::ComplexT& W){
     ReCtrl  ->ChangeValue(float2str(MousePosC.real(), 20));
     ImCtrl  ->ChangeValue(float2str(MousePosC.imag(), 20));
-    ZoomCtrl->ChangeValue(mysprintf((long double) zoom    , "%.8Lg"  ));
+    ZoomCtrl->ChangeValue(mysprintf((double) zoom    , "%.8lg" ));
     ItCtrl  ->ChangeValue(std::to_string(numIt));
-    TimeCtrl->ChangeValue(mysprintf((long double) secPerIt, "%.12Lf" ));
-    DiamCtrl->ChangeValue(mysprintf((long double) W       , "%.6Lg"  ));
+    TimeCtrl->ChangeValue(mysprintf((double) secPerIt, "%.12lf"));
+    DiamCtrl->ChangeValue(mysprintf((double) W       , "%.6lg" ));
 }
 
 BEGIN_EVENT_TABLE(InfoPanel, wxPanel)

@@ -1,17 +1,9 @@
 #ifndef MANDELBROT_H_INCLUDED
 #define MANDELBROT_H_INCLUDED
 
-#include <complex>
-#include <wx/rawbmp.h>
+#include "FractalBitmap.h"
 
-using namespace std;
-
-class FractalBitmap: public wxBitmap{
-public:
-    ///PUBLIC TYPEDEFS
-    typedef long double ComplexT;
-    typedef int IterationT;
-    typedef std::complex<ComplexT> ComplexNum; ///std::complex is decently fast only if compiled with flag -ffast-math
+class mb: public FractalBitmap{
 private:
     ///PRIVATE TYPEDEFS
     typedef float ColorT;
@@ -34,11 +26,10 @@ private:
     static constexpr ColorT log2_log10N = -0.14705834492L; //std::log2(log10N);
 
     ///MEMBER VARIABLES
-    const ComplexT              zoom;   ///Relative measure of zoom, 1 for initial zoom
-    const unsigned long long    N;      ///Total size of the fractal (=sz.x*sz.y)
-    const ComplexT              step;   ///Difference between consecutive pixels
-    const ComplexNum            origin; ///Upper-left corner
-    const ComplexNum            center; ///Center of the fractal
+    ComplexT              zoom;   ///Relative measure of zoom, 1 for initial zoom
+    ComplexT              step;   ///Difference between consecutive pixels
+    ComplexNum            origin; ///Upper-left corner
+    ComplexNum            center; ///Center of the fractal
     IterationT                  numIt=0;///Total number of iterations performed over the fractal
     ComplexNum                  *C, *Z; ///Point in complex space, current value of z
     IterationT                  *IT;    ///Number of iterations
@@ -68,11 +59,19 @@ public:
     /**
      * Constructor
      */
-    FractalBitmap(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
+    mb();
+    /**
+     * New
+     */
+    void New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
+    /**
+     * CreateNew
+     */
+    mb* CreateNew(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
     /**
      * Destructor
      */
-    ~FractalBitmap();
+    ~mb();
 
     ///CALCULATIONS ==================================================
     /**
@@ -88,15 +87,8 @@ public:
     const IterationT&   GetNumIt()          const{ return numIt;  }
     ComplexT            GetHorizontalSize() const{ return step*(ComplexT)GetSize().x; }
 
-    ///STATIC FUNCTIONS ==============================================
-    /**
-     * Get origin of fractal from the provided center, and vice-versa
-     */
-    static ComplexNum GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H);
-    static ComplexNum GetCenterFromOrigin(ComplexNum orig, ComplexT z, wxSize s, ComplexT H);
-
     ///OTHER UTILITIES
-    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const;
+    bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const;
 };
 
-#endif // MANDELBROT_H_INCLUDED
+#endif

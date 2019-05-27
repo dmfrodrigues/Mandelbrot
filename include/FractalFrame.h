@@ -2,7 +2,7 @@
 #define FRACTALFRAME_H_INCLUDED
 
 #include <wx/wx.h>
-#include "Mandelbrot.h"
+#include "FractalBitmap.h"
 
 #include "FractalPanel.h"
 #include "InfoPanel.h"
@@ -13,7 +13,7 @@ const FractalBitmap::ComplexT    FractalHeight = 2.5L;        ///vertical height
 ///FRACTALFRAME
 class FractalFrame: public wxFrame, public wxThreadHelper {
 public:
-    FractalFrame();
+    FractalFrame(FractalBitmap *p);
 private:
     FractalPanel* fpanel;
     InfoPanel*    ipanel;

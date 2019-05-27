@@ -68,7 +68,6 @@ wxThread::ExitCode FractalFrame::Entry(){
         ///Process events
         if(!fpanel->is_mouseevt_handled){ OnZoomEvent(fpanel->mouseevt); fpanel->is_mouseevt_handled = true; }
         if(!fpanel->is_sizeevt_handled ){ OnSizeEvent();                 fpanel->is_sizeevt_handled  = true; }
-        if(!is_prtscevt_handled  ){ OnPrintscreenEvent();   is_prtscevt_handled   = true; }
         if(!is_prtscevt_handled  ){ CallAfter(&FractalFrame::OnPrintscreenEvent);   is_prtscevt_handled   = true; }
         if(!is_hdprtscevt_handled){ CallAfter(&FractalFrame::OnHDPrintscreenEvent); is_hdprtscevt_handled = true; }
     }

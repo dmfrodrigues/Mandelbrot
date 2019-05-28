@@ -29,25 +29,25 @@ private:
     static constexpr ColorT log2_log10N = -0.14705834492L; //std::log2(log10N);
 
     ///MEMBER VARIABLES
-    ComplexT              zoom;   ///Relative measure of zoom, 1 for initial zoom
-    ComplexT              step;   ///Difference between consecutive pixels
-    ComplexNum            origin; ///Upper-left corner
-    ComplexNum            center; ///Center of the fractal
-    IterationT                  numIt=0;///Total number of iterations performed over the fractal
-    ComplexNum                  *C, *Z; ///Point in complex space, current value of z
-    IterationT                  *IT;    ///Number of iterations
-    bool                        *Check; ///True if more iterations should be performed (not diverged yet)
-    wxNativePixelData           px;     ///PixelData, to access bmp
+    ComplexT          zoom;   ///Relative measure of zoom, 1 for initial zoom
+    ComplexT          step;   ///Difference between consecutive pixels
+    ComplexNum        origin; ///Upper-left corner
+    ComplexNum        center; ///Center of the fractal
+    IterationT        numIt=0;///Total number of iterations performed over the fractal
+    ComplexNum        *C=NULL, *Z=NULL; ///Point in complex space, current value of z
+    IterationT        *IT=NULL;    ///Number of iterations
+    bool              *CHK=NULL; ///True if more iterations should be performed (not diverged yet)
+    wxNativePixelData px;     ///PixelData, to access bmp
 
     ///PRIVATE FUNCTIONS
     /**
      * Update pixels in [L,R) by making an additional addIt iterations
      */
-    void UpdateMathLim(unsigned long L, unsigned long R, IterationT addIt, std::deque<unsigned long>* changed);
+    void UpdateMathLim(unsigned L, unsigned R, IterationT addIt, std::deque<unsigned>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
-    void UpdatePixels(const std::deque<unsigned long>& v);
+    void UpdatePixels(const std::deque<unsigned>& v);
 
     static ColorT CycleFun(ColorT x);
 

@@ -52,7 +52,7 @@ FractalFrame::FractalFrame(FractalBitmap *p):wxFrame(nullptr, wxID_ANY, "Mandelb
 typedef std::chrono::high_resolution_clock hrclock;
 wxThread::ExitCode FractalFrame::Entry(){
     /**Create fractal*/{
-        f->New({-1.25L,0.0L}, 1.0L, fpanel->GetSize(), FractalHeight, true);
+        f->New({-1.375,0.0L}, 20.0L, fpanel->GetSize(), FractalHeight, true);
     }
     while(true){
         ///Update the fractal

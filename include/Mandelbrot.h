@@ -13,10 +13,10 @@ private:
     typedef float ColorT;
 
     ///PRIVATE STATIC CONSTANTS
-    static constexpr ColorT cycle = 100.0; /*100.0*/                 ///number of colors in a cycle (for coloring)
+    static constexpr ColorT cycle = 100.0L; /*100.0*/                 ///number of colors in a cycle (for coloring)
     static constexpr ColorT pi = 3.1415926535897L; //acos(-1.0L);
-    static constexpr ColorT pi_2 = pi*0.5;
-    static constexpr ColorT pi2 = 2.0*pi;
+    static constexpr ColorT pi_2 = pi*0.5L;
+    static constexpr ColorT pi2 = 2.0L*pi;
     static constexpr ColorT pi2_cycle = pi2/cycle;
     static constexpr ColorT omega = pi2_cycle;
     static constexpr ColorT phi = 1.2L*pi_2;
@@ -31,16 +31,16 @@ private:
     static constexpr unsigned NThreads = 8;
 
     ///MEMBER VARIABLES
-    ComplexT          zoom;   ///Relative measure of zoom, 1 for initial zoom
-    ComplexT          step;   ///Difference between consecutive pixels
-    ComplexNum        origin; ///Upper-left corner
-    ComplexNum        center; ///Center of the fractal
-    IterationT        numIt=0;///Total number of iterations performed over the fractal
-    ComplexNum        *C=NULL, *Z=NULL; ///Point in complex space, current value of z
-    IterationT        *IT=NULL;    ///Number of iterations
-    bool              *CHK=NULL; ///True if more iterations should be performed (not diverged yet)
+    ComplexT            zoom;   ///Relative measure of zoom, 1 for initial zoom
+    ComplexT            step;   ///Difference between consecutive pixels
+    ComplexNum          origin; ///Upper-left corner
+    ComplexNum          center; ///Center of the fractal
+    IterationT          numIt=0;///Total number of iterations performed over the fractal
+    ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
+    IterationT          *IT=NULL;    ///Number of iterations
+    bool                *CHK=NULL; ///True if more iterations should be performed (not diverged yet)
     std::list<unsigned> *LCHK=NULL;
-    wxNativePixelData px;     ///PixelData, to access bmp
+    wxNativePixelData   px;     ///PixelData, to access bmp
 
     ///PRIVATE FUNCTIONS
     /**
@@ -60,9 +60,9 @@ private:
 
     ///PRIVATE STATIC FUNCTIONS
     static inline bool isCardioid_isPeriod2Bulb(const ComplexNum& c){
-        FractalBitmap::ComplexT q = (c.real()-0.25)*(c.real()-0.25) + c.imag()*c.imag();    ///isCardioid
-        return (4.0*q*(q+(c.real()-0.25)) < c.imag()*c.imag())||       ///isCardioid
-               ((c.real()+1.0)*(c.real()+1.0) + c.imag()*c.imag() < 0.0625); ///isPeriod2Bulb
+        FractalBitmap::ComplexT q = (c.real()-0.25L)*(c.real()-0.25L) + c.imag()*c.imag();    ///isCardioid
+        return (4.0L*q*(q+(c.real()-0.25L)) < c.imag()*c.imag())||       ///isCardioid
+               ((c.real()+1.0L)*(c.real()+1.0L) + c.imag()*c.imag() < 0.0625L); ///isPeriod2Bulb
     }
 
 public:

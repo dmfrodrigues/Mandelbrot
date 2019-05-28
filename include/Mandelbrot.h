@@ -5,6 +5,7 @@
 
 #include <deque>
 #include <vector>
+#include <list>
 
 class mb: public FractalBitmap{
 private:
@@ -27,6 +28,7 @@ private:
     static constexpr ComplexT bailout_sqr = bailout*bailout;
     static constexpr ColorT log10N = 0.90308998699; //log10(bailout);
     static constexpr ColorT log2_log10N = -0.14705834492L; //std::log2(log10N);
+    static constexpr unsigned NThreads = 8;
 
     ///MEMBER VARIABLES
     ComplexT          zoom;   ///Relative measure of zoom, 1 for initial zoom
@@ -37,17 +39,22 @@ private:
     ComplexNum        *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     IterationT        *IT=NULL;    ///Number of iterations
     bool              *CHK=NULL; ///True if more iterations should be performed (not diverged yet)
+    std::list<unsigned> *LCHK=NULL;
     wxNativePixelData px;     ///PixelData, to access bmp
 
     ///PRIVATE FUNCTIONS
     /**
      * Update pixels in [L,R) by making an additional addIt iterations
      */
-    void UpdateMathLim(unsigned L, unsigned R, IterationT addIt, std::deque<unsigned>* changed);
+    void UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
     void UpdatePixels(const std::deque<unsigned>& v);
+    /**
+     * Balance lists
+     */
+    void BalanceLists();
 
     static ColorT CycleFun(ColorT x);
 

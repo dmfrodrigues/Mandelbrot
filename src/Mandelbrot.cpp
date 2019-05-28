@@ -15,11 +15,12 @@ void mb::New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
     origin = (IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o);
     center = GetCenterFromOrigin(origin, zoom, GetSize(), H);
     numIt = 0;
-    const unsigned long long N = GetSize().x*GetSize().y;
+    const unsigned N = GetSize().x*GetSize().y;
     if(C ) delete[] C ; C     = new ComplexNum[N];
     if(Z ) delete[] Z ; Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(0.0L,0.0L));
     if(IT) delete[] IT; IT    = new IterationT[N]; std::fill(IT,IT+N,0);
     if(CHK) delete[] CHK; CHK = new bool[N]; std::fill(CHK,CHK+N,true);
+    if(LCHK) delete[] LCHK; LCHK = new std::list<unsigned>[NThreads];
     px = wxNativePixelData(*((wxBitmap*)this));
     ///Fill 'C', 'CHK' with new information
     unsigned long i = 0;
@@ -28,7 +29,8 @@ void mb::New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
         c.real(origin.real());
         for(unsigned x = 0; x < GetSize().x; ++x, c.real(c.real()+step), ++i){
             C[i] = c;
-            CHK[i] = !isCardioid_isPeriod2Bulb(c);
+            //CHK[i] = !isCardioid_isPeriod2Bulb(c);
+            if(!isCardioid_isPeriod2Bulb(c)) LCHK[i*NThreads/N].push_back(i);
         }
     }
 }
@@ -45,43 +47,61 @@ mb::~mb(){
     delete[] Z;
     delete[] IT;
     delete[] CHK;
+    delete[] LCHK;
 }
 
-const unsigned NThreads = 8;
 void mb::UpdateMath(IterationT addIt){
     std::thread *ArrThreads[NThreads];
     std::deque<unsigned> vchanged[NThreads];
     unsigned long long N = GetSize().x*GetSize().y;
     for(unsigned long L, R, i = 0; i < NThreads; ++i){
-        L =  i   *N/NThreads;
-        R = (i+1)*N/NThreads;
-        ArrThreads[i] = new std::thread(&mb::UpdateMathLim, this, L, R, addIt, &(vchanged[i]));
+        ArrThreads[i] = new std::thread(&mb::UpdateMathLim, this, i, addIt, &(vchanged[i]));
     }
     for(unsigned long i = 0; i < NThreads; ++i) ArrThreads[i]->join();
     for(unsigned long i = 0; i < NThreads; ++i) delete ArrThreads[i];
     for(const auto& d:vchanged) UpdatePixels(d);
 
     numIt += addIt;
+
+    BalanceLists();
 }
 
-void mb::UpdateMathLim(unsigned L, unsigned R, IterationT addIt, std::deque<unsigned>* changed){
+void mb::BalanceLists(){
+    for(unsigned i = 0; i < NThreads-1; ++i){
+        auto &L = LCHK[i], &R = LCHK[i+1];
+        while(!R.empty() && L.size() < R.size()){
+            L.push_back(R.front()); R.pop_front();
+        }
+        while(!L.empty() && L.size() > R.size()){
+            R.push_front(L.back()); L.pop_back();
+        }
+    }
+}
+
+void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* changed){
     changed->clear();
-    for(unsigned i = L; i < R; ++i){
-        if(!CHK[i]) continue;
-        IterationT it;
-        ComplexNum z = Z[i], c = C[i];
+    auto& L = LCHK[index];
+    auto j = L.begin();
+    bool ESCAPED;
+    IterationT it;
+    ComplexNum z, c;
+    while(j != L.end()){
+        ESCAPED = false;
+        z = Z[*j], c = C[*j];
         for(it = 0; it < addIt; ++it){
             z = z*z + c;
             if(std::norm(z) > bailout_sqr){
-                Z[i] = z; IT[i] += it;
-                CHK[i] = false;
-                changed->push_back(i);
+                Z[*j] = z; IT[*j] += it;
+                ESCAPED = true;
+                changed->push_back(*j);
+                j = L.erase(j);
                 break;
             }
         }
-        if(CHK[i]){
-            Z[i] = z;
-            IT[i] += it;
+        if(!ESCAPED){
+            Z[*j] = z;
+            IT[*j] += it;
+            ++j;
         }
     }
 }

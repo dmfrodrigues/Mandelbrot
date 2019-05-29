@@ -31,7 +31,6 @@ private:
     static constexpr unsigned NThreads = 8;
 
     ///MEMBER VARIABLES
-    ComplexT            zoom;   ///Relative measure of zoom, 1 for initial zoom
     ComplexT            step;   ///Difference between consecutive pixels
     ComplexNum          origin; ///Upper-left corner
     ComplexNum          center; ///Center of the fractal
@@ -73,11 +72,11 @@ public:
     /**
      * New
      */
-    void New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
+    void New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false);
     /**
      * CreateNew
      */
-    mb* CreateNew(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false);
+    mb* CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false);
     /**
      * Destructor
      */
@@ -91,11 +90,11 @@ public:
 
     ///GET FUNCTION ==================================================
     const ComplexNum&   GetOrigin()         const{ return origin; }
-    const ComplexT&     GetZoom()           const{ return zoom;   }
     const ComplexNum&   GetCenter()         const{ return center; }
     const ComplexT&     GetStep()           const{ return step;   }
     const IterationT&   GetNumIt()          const{ return numIt;  }
     ComplexT            GetHorizontalSize() const{ return step*(ComplexT)GetSize().x; }
+    unsigned            GetNotEscaped()     const;
 
     ///OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const;

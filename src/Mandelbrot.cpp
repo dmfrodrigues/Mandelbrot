@@ -8,12 +8,11 @@
 mb::mb():px(*((wxBitmap*)this)){}
 
 ///New
-void mb::New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
+void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     Create(s, 24);
-    zoom = z;
-    step = H/zoom/(ComplexT)GetSize().y;
-    origin = (IsCenter? GetOriginFromCenter(o, zoom, GetSize(), H) : o);
-    center = GetCenterFromOrigin(origin, zoom, GetSize(), H);
+    step = st;
+    origin = (IsCenter? GetOriginFromCenter(o, step, GetSize()) : o);
+    center = GetCenterFromOrigin(origin, step, GetSize());
     numIt = 0;
     const unsigned N = GetSize().x*GetSize().y;
     if(C ) delete[] C ; C     = new ComplexNum[N];
@@ -29,16 +28,15 @@ void mb::New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
         c.real(origin.real());
         for(unsigned x = 0; x < GetSize().x; ++x, c.real(c.real()+step), ++i){
             C[i] = c;
-            //CHK[i] = !isCardioid_isPeriod2Bulb(c);
             if(!isCardioid_isPeriod2Bulb(c)) LCHK[i*NThreads/N].push_back(i);
         }
     }
 }
 
 ///CreateNew
-mb* mb::CreateNew(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter){
+mb* mb::CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     mb *ret = new mb();
-    ret->New(o,z,s,H,IsCenter);
+    ret->New(o,st,s,IsCenter);
     return ret;
 }
 
@@ -83,15 +81,16 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
     auto& L = LCHK[index];
     auto j = L.begin();
     bool ESCAPED;
-    IterationT it;
+    IterationT nit;
     ComplexNum z, c;
     while(j != L.end()){
         ESCAPED = false;
-        z = Z[*j], c = C[*j];
-        for(it = 0; it < addIt; ++it){
+        z = Z[*j];
+        c = C[*j];
+        for(nit = addIt; --nit;){
             z = z*z + c;
             if(std::norm(z) > bailout_sqr){
-                Z[*j] = z; IT[*j] += it;
+                Z[*j] = z; IT[*j] += addIt-nit;
                 ESCAPED = true;
                 changed->push_back(*j);
                 j = L.erase(j);
@@ -100,7 +99,7 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
         }
         if(!ESCAPED){
             Z[*j] = z;
-            IT[*j] += it;
+            IT[*j] += addIt-nit;
             ++j;
         }
     }
@@ -137,10 +136,17 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
           << "timeelapsed\t" << std::setprecision( 8) << 0.0                          << "\n"
           << "re(c)\t"       << std::setprecision(20) << center.real()                << "\n"
           << "im(c)\t"       << std::setprecision(20) << center.imag()                << "\n"
-          << "zoom\t"        << std::setprecision(20) << zoom                         << "\n"
+          << "step\t"        << std::setprecision(20) << step                         << "\n"
           << "size.x\t"      << GetSize().x                                           << "\n"
           << "size.y\t"      << GetSize().y                                           << "\n"
           << "NumIt\t"       << numIt                                                 << "\n" << std::flush;
     ostrm.close();
     return true;
+}
+
+unsigned mb::GetNotEscaped() const{
+    unsigned ret = 0;
+    for(unsigned i = 0; i < NThreads; ++i)
+        ret += LCHK[i].size();
+    return ret;
 }

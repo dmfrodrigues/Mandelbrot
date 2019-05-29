@@ -24,8 +24,8 @@ private:
     //static const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
     //static const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
     //static const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
-    static constexpr ComplexT bailout = 8.0L; // 2.0 // 8.0
-    static constexpr ComplexT bailout_sqr = bailout*bailout;
+    static const ComplexT bailout;
+    static const ComplexT bailout_sqr;
     static constexpr ColorT log10N = 0.90308998699; //log10(bailout);
     static constexpr ColorT log2_log10N = -0.14705834492L; //std::log2(log10N);
     static constexpr unsigned NThreads = 8;
@@ -59,9 +59,9 @@ private:
 
     ///PRIVATE STATIC FUNCTIONS
     static inline bool isCardioid_isPeriod2Bulb(const ComplexNum& c){
-        FractalBitmap::ComplexT q = (c.real()-0.25L)*(c.real()-0.25L) + c.imag()*c.imag();    ///isCardioid
-        return (4.0L*q*(q+(c.real()-0.25L)) < c.imag()*c.imag())||       ///isCardioid
-               ((c.real()+1.0L)*(c.real()+1.0L) + c.imag()*c.imag() < 0.0625L); ///isPeriod2Bulb
+        ComplexT q = (c.real()-ComplexT(0.25L))*(c.real()-ComplexT(0.25L)) + c.imag()*c.imag();    ///isCardioid
+        return (ComplexT(4.0L)*q*(q+(c.real()-ComplexT(0.25L))) < c.imag()*c.imag())||       ///isCardioid
+               ((c.real()+ComplexT(1.0L))*(c.real()+ComplexT(1.0L)) + c.imag()*c.imag() < ComplexT(0.0625L)); ///isPeriod2Bulb
     }
 
 public:

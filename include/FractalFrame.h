@@ -7,7 +7,7 @@
 #include "FractalPanel.h"
 #include "InfoPanel.h"
 
-const FractalBitmap::ComplexT    FractalHeight = 2.5L;        ///vertical height of the fractal at zoom==1
+const FractalBitmap::ComplexT    FractalHeight(2.5L);        ///vertical height of the fractal at zoom==1
 
 ///=========================================================
 ///FRACTALFRAME

@@ -47,8 +47,8 @@ HDPrintscreenDialog::HDPrintscreenDialog(wxWindow *p, FractalBitmap::ComplexNum 
     this->SetSizer(globalSizer);
 }
 void HDPrintscreenDialog::OnOK(wxCommandEvent& event){
-    *center =       {str2float<FractalBitmap::ComplexT>(ReCtrl->GetLineText(0).ToStdString()),
-                     str2float<FractalBitmap::ComplexT>(ImCtrl->GetLineText(0).ToStdString())};
+    *center = FractalBitmap::ComplexNum(str2float<FractalBitmap::ComplexT>(ReCtrl->GetLineText(0).ToStdString()),
+                                        str2float<FractalBitmap::ComplexT>(ImCtrl->GetLineText(0).ToStdString()));
     *step   =        str2float<FractalBitmap::ComplexT>(StepCtrl->GetLineText(0).ToStdString());
     *sz     = wxSize(std::stoul(SzXCtrl->GetLineText(0).ToStdString()),
                      std::stoul(SzYCtrl->GetLineText(0).ToStdString()));

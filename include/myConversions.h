@@ -13,7 +13,7 @@ inline std::string float2str(T n, int no_digits){
 }
 
 template<class T>
-inline long double str2float(const std::string& in){
+inline T str2float(const std::string& in){
     T ret;
     std::istringstream convert(in);
     //convert.flags();

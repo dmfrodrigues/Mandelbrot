@@ -4,6 +4,10 @@
 #include <iomanip>
 #include <thread>
 
+///Constants
+const mb::ComplexT mb::bailout(8.0L); // 2.0 // 8.0
+const mb::ComplexT mb::bailout_sqr = mb::bailout*mb::bailout;
+
 ///Constructor
 mb::mb():px(*((wxBitmap*)this)){}
 
@@ -16,7 +20,7 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     numIt = 0;
     const unsigned N = GetSize().x*GetSize().y;
     if(C ) delete[] C ; C     = new ComplexNum[N];
-    if(Z ) delete[] Z ; Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(0.0L,0.0L));
+    if(Z ) delete[] Z ; Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(ComplexT(0.0L),ComplexT(0.0L)));
     if(IT) delete[] IT; IT    = new IterationT[N]; std::fill(IT,IT+N,0);
     if(CHK) delete[] CHK; CHK = new bool[N]; std::fill(CHK,CHK+N,true);
     if(LCHK) delete[] LCHK; LCHK = new std::list<unsigned>[NThreads];
@@ -119,7 +123,7 @@ void mb::UpdatePixels(const std::deque<unsigned>& v){
 
         //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
         //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
-        ColorT x = (ColorT)IT[i]-(0.5L*log10(std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
+        ColorT x = (ColorT)IT[i]-(0.5L*log10((long double)std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
         //x = (ColorT)IT[i]; ///discrete pattern
 
         ColorT y = CycleFun(omega*x + phi);

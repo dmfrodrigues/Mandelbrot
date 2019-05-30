@@ -21,11 +21,11 @@ public:
     /**
      * New
      */
-    virtual void New(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false) = 0;
+    virtual void New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false) = 0;
     /**
      * CreateNew
      */
-    virtual FractalBitmap* CreateNew(ComplexNum o, ComplexT z, wxSize s, ComplexT H, bool IsCenter = false) = 0;
+    virtual FractalBitmap* CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false) = 0;
     /**
      * Destructor
      */
@@ -39,7 +39,6 @@ public:
 
     ///GET FUNCTION ==================================================
     virtual const ComplexNum&   GetOrigin()         const = 0;
-    virtual const ComplexT&     GetZoom()           const = 0;
     virtual const ComplexNum&   GetCenter()         const = 0;
     virtual const ComplexT&     GetStep()           const = 0;
     virtual const IterationT&   GetNumIt()          const = 0;
@@ -49,8 +48,8 @@ public:
     /**
      * Get origin of fractal from the provided center, and vice-versa
      */
-    static ComplexNum GetOriginFromCenter(ComplexNum cent, ComplexT z, wxSize s, ComplexT H);
-    static ComplexNum GetCenterFromOrigin(ComplexNum orig, ComplexT z, wxSize s, ComplexT H);
+    static ComplexNum GetOriginFromCenter(ComplexNum cent, ComplexT st, wxSize s);
+    static ComplexNum GetCenterFromOrigin(ComplexNum orig, ComplexT st, wxSize s);
 
 };
 

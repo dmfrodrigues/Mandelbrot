@@ -12,9 +12,9 @@ InfoPanel::InfoPanel(FractalFrame* p):wxPanel(p), parent(p){
     ImCtrl                 = new wxTextCtrl  (this, wxID_ANY,     "-0.00998877665544332211e+321", wxDefaultPosition, wxSize(250,27), wxALIGN_RIGHT);
     ImCtrl                 ->SetEditable(false);
 
-    wxStaticText* ZoomStat = new wxStaticText(this, wxID_ANY,                           "Zoom: ", wxDefaultPosition,  wxDefaultSize, wxALIGN_RIGHT);
-    ZoomCtrl               = new wxTextCtrl  (this, wxID_ANY,                   "0.1234567e-123", wxDefaultPosition, wxSize(120,27), wxALIGN_RIGHT);
-    ZoomCtrl               ->SetEditable(false);
+    wxStaticText* StepStat = new wxStaticText(this, wxID_ANY,                           "Step: ", wxDefaultPosition,  wxDefaultSize, wxALIGN_RIGHT);
+    StepCtrl               = new wxTextCtrl  (this, wxID_ANY,                   "0.1234567e-123", wxDefaultPosition, wxSize(120,27), wxALIGN_RIGHT);
+    StepCtrl               ->SetEditable(false);
 
     wxStaticText* ItStat   = new wxStaticText(this, wxID_ANY,           "Total no. iterations: ", wxDefaultPosition,  wxDefaultSize, wxALIGN_RIGHT);
     ItCtrl                 = new wxTextCtrl  (this, wxID_ANY,                           "123456", wxDefaultPosition, wxSize(100,27), wxALIGN_RIGHT);
@@ -36,12 +36,13 @@ InfoPanel::InfoPanel(FractalFrame* p):wxPanel(p), parent(p){
     ///1st line
     wxBoxSizer* sizerLine1 = new wxBoxSizer(wxHORIZONTAL);
     sizerLine1->Add(  ReStat, 0, wxLEFT,  3); sizerLine1->Add(  ReCtrl, 0, 0, 0);
-    sizerLine1->Add(ZoomStat, 0, wxLEFT, 20); sizerLine1->Add(ZoomCtrl, 0, 0, 0);
+
     sizerLine1->Add(  ItStat, 0, wxLEFT, 20); sizerLine1->Add(  ItCtrl, 0, 0, 0);
     sizerLine1->Add(TimeStat, 0, wxLEFT, 20); sizerLine1->Add(TimeCtrl, 0, 0, 0);
     ///2nd line
     wxBoxSizer* sizerLine2 = new wxBoxSizer(wxHORIZONTAL);
     sizerLine2->Add(  ImStat, 0, wxLEFT,  3); sizerLine2->Add(  ImCtrl, 0, 0, 0);
+    sizerLine2->Add(StepStat, 0, wxLEFT, 20); sizerLine2->Add(StepCtrl, 0, 0, 0);
     sizerLine2->Add(DiamStat, 0, wxLEFT, 20); sizerLine2->Add(DiamCtrl, 0, 0, 0);
     ///Add stuff together
     StatBoxSizer->Add(sizerLine1, 1, wxLEFT | wxBOTTOM | wxRIGHT, 6);
@@ -50,11 +51,11 @@ InfoPanel::InfoPanel(FractalFrame* p):wxPanel(p), parent(p){
     this->SetSizer(StatBoxSizer);
 }
 
-void InfoPanel::Update(const FractalBitmap::ComplexNum& MousePosC, const FractalBitmap::ComplexT& zoom,
+void InfoPanel::Update(const FractalBitmap::ComplexNum& MousePosC, const FractalBitmap::ComplexT& step,
                        const FractalBitmap::IterationT& numIt    , const long double& secPerIt, const FractalBitmap::ComplexT& W){
     ReCtrl  ->ChangeValue(float2str(MousePosC.real(), 20));
     ImCtrl  ->ChangeValue(float2str(MousePosC.imag(), 20));
-    ZoomCtrl->ChangeValue(mysprintf((double) zoom    , "%.8lg" ));
+    StepCtrl->ChangeValue(float2str(step            ,  4));
     ItCtrl  ->ChangeValue(std::to_string(numIt));
     TimeCtrl->ChangeValue(mysprintf((double) secPerIt, "%.12lf"));
     DiamCtrl->ChangeValue(mysprintf((double) W       , "%.6lg" ));

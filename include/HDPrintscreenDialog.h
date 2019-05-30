@@ -10,9 +10,9 @@ public:
 private:
     ///================================
     ///VARIABLES
-    wxTextCtrl *ReCtrl, *ImCtrl, *ZoomCtrl, *SzXCtrl, *SzYCtrl, *ItCtrl;
+    wxTextCtrl *ReCtrl, *ImCtrl, *StepCtrl, *SzXCtrl, *SzYCtrl, *ItCtrl;
     FractalBitmap::ComplexNum *center;
-    FractalBitmap::ComplexT *zoom;
+    FractalBitmap::ComplexT *step;
     wxSize *sz;
     FractalBitmap::IterationT* numIt;
     ///================================

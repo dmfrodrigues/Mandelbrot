@@ -3,7 +3,7 @@
 #include "Mandelbrot.h"
 
 ///MyApp will be our inherited wxApp
-class MyApp: public wxApp{
+class FractalApp: public wxApp{
 private:
     FractalFrame *fractalFrame;
     mb *f;
@@ -18,4 +18,4 @@ public:
 };
 ///MACRO - "main" function
 ///creates an instance of MyApp and starts the program
-wxIMPLEMENT_APP(MyApp);
+wxIMPLEMENT_APP(FractalApp);

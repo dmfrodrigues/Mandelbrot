@@ -4,14 +4,12 @@
 #include <complex>
 #include <wx/rawbmp.h>
 
-#include "mc_float.h"
-
 using namespace std;
 
 class FractalBitmap: public wxBitmap{
 public:
     ///PUBLIC TYPEDEFS
-    typedef mc_float<unsigned long long, 2> ComplexT;
+    typedef long double ComplexT;
     typedef unsigned long long IterationT;
     typedef std::complex<ComplexT> ComplexNum; ///std::complex is decently fast only if compiled with flag -ffast-math
 

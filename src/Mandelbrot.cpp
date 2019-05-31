@@ -9,7 +9,7 @@ const mb::ComplexT mb::bailout(8.0L); // 2.0 // 8.0
 const mb::ComplexT mb::bailout_sqr = mb::bailout*mb::bailout;
 
 ///Constructor
-mb::mb():px(*((wxBitmap*)this)){}
+mb::mb(IterationT addIter):addIt(addIter),px(*((wxBitmap*)this)){}
 
 ///New
 void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
@@ -22,10 +22,9 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     if(C ) delete[] C ; C     = new ComplexNum[N];
     if(Z ) delete[] Z ; Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(ComplexT(0.0L),ComplexT(0.0L)));
     if(IT) delete[] IT; IT    = new IterationT[N]; std::fill(IT,IT+N,0);
-    if(CHK) delete[] CHK; CHK = new bool[N]; std::fill(CHK,CHK+N,true);
     if(LCHK) delete[] LCHK; LCHK = new std::list<unsigned>[NThreads];
     px = wxNativePixelData(*((wxBitmap*)this));
-    ///Fill 'C', 'CHK' with new information
+    ///Fill 'C', 'LCHK' with new information
     unsigned long i = 0;
     ComplexNum c = origin;
     for(unsigned y = 0; y < GetSize().y; ++y, c.imag(c.imag()-step)){
@@ -39,7 +38,7 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
 
 ///CreateNew
 mb* mb::CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
-    mb *ret = new mb();
+    mb *ret = new mb(addIt);
     ret->New(o,st,s,IsCenter);
     return ret;
 }
@@ -48,11 +47,10 @@ mb::~mb(){
     delete[] C;
     delete[] Z;
     delete[] IT;
-    delete[] CHK;
     delete[] LCHK;
 }
 
-void mb::UpdateMath(IterationT addIt){
+void mb::UpdateMath(){
     std::thread *ArrThreads[NThreads];
     std::deque<unsigned> vchanged[NThreads];
     unsigned long long N = GetSize().x*GetSize().y;
@@ -148,7 +146,7 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
     return true;
 }
 
-unsigned mb::GetNotEscaped() const{
+mb::IterationT mb::GetNotEscaped() const{
     unsigned ret = 0;
     for(unsigned i = 0; i < NThreads; ++i)
         ret += LCHK[i].size();

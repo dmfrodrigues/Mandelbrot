@@ -35,9 +35,9 @@ private:
     ComplexNum          origin; ///Upper-left corner
     ComplexNum          center; ///Center of the fractal
     IterationT          numIt=0;///Total number of iterations performed over the fractal
+    const IterationT    addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     IterationT          *IT=NULL;    ///Number of iterations
-    bool                *CHK=NULL; ///True if more iterations should be performed (not diverged yet)
     std::list<unsigned> *LCHK=NULL;
     wxNativePixelData   px;     ///PixelData, to access bmp
 
@@ -68,7 +68,7 @@ public:
     /**
      * Constructor
      */
-    mb();
+    mb(IterationT addIter);
     /**
      * New
      */
@@ -86,15 +86,16 @@ public:
     /**
      * Update all pixels by making an additional addIt iterations
      */
-    void UpdateMath(IterationT addIt);
+    void UpdateMath();
 
     ///GET FUNCTION ==================================================
-    const ComplexNum&   GetOrigin()         const{ return origin; }
-    const ComplexNum&   GetCenter()         const{ return center; }
-    const ComplexT&     GetStep()           const{ return step;   }
-    const IterationT&   GetNumIt()          const{ return numIt;  }
-    ComplexT            GetHorizontalSize() const{ return step*(ComplexT)GetSize().x; }
-    unsigned            GetNotEscaped()     const;
+    ComplexNum GetOrigin()         const{ return origin; }
+    ComplexNum GetCenter()         const{ return center; }
+    ComplexT   GetStep()           const{ return step;   }
+    ComplexT   GetHorizontalSize() const{ return step*(ComplexT)GetSize().x; }
+    IterationT GetNum()            const{ return numIt; }
+    IterationT GetTimeUnit()       const{ return addIt; }
+    IterationT GetNotEscaped()     const;
 
     ///OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const;

@@ -10,7 +10,7 @@ private:
 public:
     virtual bool OnInit(){
         wxInitAllImageHandlers();
-        f = new mb();
+        f = new mb(100);
         fractalFrame = new FractalFrame(f);
         fractalFrame->Show(true);
         return true;

@@ -90,7 +90,7 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
         z = Z[*j];
         c = C[*j];
         for(nit = addIt; --nit;){
-            z = z*z + c;
+            z*= z; z += c;
             if(std::norm(z) > bailout_sqr){
                 Z[*j] = z; IT[*j] += addIt-nit;
                 ESCAPED = true;

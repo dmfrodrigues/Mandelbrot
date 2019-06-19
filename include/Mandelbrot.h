@@ -94,7 +94,7 @@ public:
     ComplexT   GetStep()           const{ return step;   }
     ComplexT   GetHorizontalSize() const{ return step*(ComplexT)GetSize().x; }
     IterationT GetNum()            const{ return numIt; }
-    IterationT GetTimeUnit()       const{ return addIt; }
+    IterationT GetCyclesPerRun()   const{ return addIt; }
     IterationT GetNotEscaped()     const;
 
     ///OTHER UTILITIES

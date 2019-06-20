@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <thread>
 
+
 ///Constants
 const mb::ComplexT mb::bailout(8.0L); // 2.0 // 8.0
 const mb::ComplexT mb::bailout_sqr = mb::bailout*mb::bailout;
@@ -54,11 +55,11 @@ void mb::UpdateMath(){
     std::thread *ArrThreads[NThreads];
     std::deque<unsigned> vchanged[NThreads];
     unsigned long long N = GetSize().x*GetSize().y;
-    for(unsigned long L, R, i = 0; i < NThreads; ++i){
+    for(unsigned i = 0; i < NThreads; ++i){
         ArrThreads[i] = new std::thread(&mb::UpdateMathLim, this, i, addIt, &(vchanged[i]));
     }
-    for(unsigned long i = 0; i < NThreads; ++i) ArrThreads[i]->join();
-    for(unsigned long i = 0; i < NThreads; ++i) delete ArrThreads[i];
+    for(unsigned i = 0; i < NThreads; ++i) ArrThreads[i]->join();
+    for(unsigned i = 0; i < NThreads; ++i) delete ArrThreads[i];
     for(const auto& d:vchanged) UpdatePixels(d);
 
     numIt += addIt;

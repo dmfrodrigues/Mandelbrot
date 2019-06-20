@@ -1,13 +1,15 @@
 #include "Mandelbrot.h"
 
+
 #include <fstream>
 #include <iomanip>
 #include <thread>
 
-
 ///Constants
 const mb::ComplexT mb::bailout(8.0L); // 2.0 // 8.0
 const mb::ComplexT mb::bailout_sqr = mb::bailout*mb::bailout;
+
+
 
 ///Constructor
 mb::mb(IterationT addIter):addIt(addIter),px(*((wxBitmap*)this)){}
@@ -67,29 +69,19 @@ void mb::UpdateMath(){
     BalanceLists();
 }
 
-void mb::BalanceLists(){
-    for(unsigned i = 0; i < NThreads-1; ++i){
-        auto &L = LCHK[i], &R = LCHK[i+1];
-        while(!R.empty() && L.size() < R.size()){
-            L.push_back(R.front()); R.pop_front();
-        }
-        while(!L.empty() && L.size() > R.size()){
-            R.push_front(L.back()); L.pop_back();
-        }
-    }
-}
-
 void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* changed){
     changed->clear();
     auto& L = LCHK[index];
     auto j = L.begin();
     bool ESCAPED;
-    IterationT nit;
-    ComplexNum z, c;
+    ComplexNum c;
+    ComplexNum z;
     while(j != L.end()){
         ESCAPED = false;
-        z = Z[*j];
         c = C[*j];
+
+        z = Z[*j];
+        IterationT nit;
         for(nit = addIt; --nit;){
             z*= z; z += c;
             if(std::norm(z) > bailout_sqr){
@@ -104,19 +96,23 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
             Z[*j] = z;
             IT[*j] += addIt-nit;
             ++j;
+
+
+
+
+
         }
     }
-}
 
-mb::ColorT mb::CycleFun(mb::ColorT x){
-    x = remainderf(x, pi2);
-    if(x < -pi_2) x = -pi-x;
-    if(+pi_2 < x) x =  pi-x;
-    return x/pi_2;                                ///Linear
 }
 
 void mb::UpdatePixels(const std::deque<unsigned>& v){
     wxNativePixelData::Iterator p(px);
+
+
+
+
+
     for(const unsigned& i:v){
         p.MoveTo(px, i%GetSize().x, i/GetSize().x);
 
@@ -145,6 +141,25 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
           << "NumIt\t"       << numIt                                                 << "\n" << std::flush;
     ostrm.close();
     return true;
+}
+
+void mb::BalanceLists(){
+    for(unsigned i = 0; i < NThreads-1; ++i){
+        auto &L = LCHK[i], &R = LCHK[i+1];
+        while(!R.empty() && L.size() < R.size()){
+            L.push_back(R.front()); R.pop_front();
+        }
+        while(!L.empty() && L.size() > R.size()){
+            R.push_front(L.back()); L.pop_back();
+        }
+    }
+}
+
+mb::ColorT mb::CycleFun(mb::ColorT x){
+    x = remainderf(x, pi2);
+    if(x < -pi_2) x = -pi-x;
+    if(+pi_2 < x) x =  pi-x;
+    return x/pi_2;                                ///Linear
 }
 
 mb::IterationT mb::GetNotEscaped() const{

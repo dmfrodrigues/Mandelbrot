@@ -77,7 +77,7 @@ public:
     /**
      * CreateNew
      */
-    mb* CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false);
+    mb* CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false) const;
     /**
      * Destructor
      */

@@ -40,7 +40,7 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
 }
 
 ///CreateNew
-mb* mb::CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
+mb* mb::CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter) const{
     mb *ret = new mb(addIt);
     ret->New(o,st,s,IsCenter);
     return ret;

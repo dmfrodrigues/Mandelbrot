@@ -9,7 +9,7 @@ IFLAGS =$(IDIR) -I"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new\include" -I"D:\_
 CFLAGS =-MMD -std=c++11 -ffast-math -O3 $(IFLAGS) -c
 
 #LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4\lib\gcc_dll_SHARED_RELEASE_MONOLITHIC_UNICODE"
-LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new\lib\gcc_dll_UNICODE_MONOLITHIC_RELEASE" -L"D:\dmfro\ProgProjects\cpp\fractal-app\lib" -lfractalapp
+LFLAGS =-L"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new\lib\gcc_dll_UNICODE_MONOLITHIC_RELEASE" -L"../fractal-app/lib" -lfractalapp
 
 all: makefolders $(BDIR)/main.exe
 

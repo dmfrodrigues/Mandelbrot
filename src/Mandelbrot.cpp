@@ -37,12 +37,9 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     ///Fill 'C', 'LCHK' with new information
     unsigned long i = 0;
     ComplexNum c = origin;
-    //std::cout << "Height=" << GetHeight() << std::endl;
-    //std::cout << "Width =" << GetWidth() << std::endl;
     for(int y = 0; y < GetHeight(); ++y, c.imag(c.imag()-step)){
         c.real(origin.real());
         for(int x = 0; x < GetWidth(); ++x, c.real(c.real()+step), ++i){
-            //std::cout << "i=" << i << std::endl;
             C[i] = c;
             if(!isCardioid_isPeriod2Bulb(c)) LCHK[i*NThreads/N].push_back(i);
         }
@@ -127,7 +124,7 @@ void mb::UpdatePixels(const std::deque<unsigned>& v){
 
         //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
         //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
-        ColorT x = (ColorT)IT[i]-(0.5L*log10((long double)std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
+        ColorT x = (ColorT)IT[i]-(0.5L*log10((double)std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
         //x = (ColorT)IT[i]; ///discrete pattern
 
         ColorT y = CycleFun(omega*x + phi);

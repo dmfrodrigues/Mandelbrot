@@ -1,6 +1,6 @@
-
-IFLAGS =$(IDIR) -I"/media/dmfr/DATA/_ProgrammingLibraries/mcap"
-LFLAGS =`wx-config --libs` -L"../fractal-app/lib" -lfractalapp
+GMPARITH=/media/dmfr/DATA/_ProgrammingLibraries/gmp-arith
+IFLAGS =$(IDIR) -I$(GMPARITH)
+LFLAGS =`wx-config --libs` -L"../fractal-app/lib" -lfractalapp -lgmp -lgmpxx
 
 CC     =g++
 

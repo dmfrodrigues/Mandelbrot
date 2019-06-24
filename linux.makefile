@@ -1,5 +1,5 @@
 
-IFLAGS =$(IDIR) -I"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new\include" -I"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new" -I"D:\_ProgrammingLibraries\wxWidgets-3.0.4-new\lib\gcc_dll_UNICODE_MONOLITHIC_RELEASE\mswu" -I"D:\_ProgrammingLibraries\mcap"
+IFLAGS =$(IDIR) -I"/media/dmfr/DATA/_ProgrammingLibraries/mcap"
 LFLAGS =`wx-config --libs` -L"../fractal-app/lib" -lfractalapp
 
 CC     =g++

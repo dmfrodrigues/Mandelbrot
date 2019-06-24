@@ -80,26 +80,41 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
     auto& L = LCHK[index];
     auto j = L.begin();
     bool ESCAPED;
-    ComplexNum c;
-    ComplexNum z;
+    ComplexT cr, ci;
+    ComplexT zr, zi, zi_;
+    ComplexT t, n;
     while(j != L.end()){
         ESCAPED = false;
-        c = C[*j];
+        cr = C[*j].real(); ci = C[*j].imag();
 
-        z = Z[*j];
+        zr = Z[*j].real(); zi = Z[*j].imag();
         IterationT nit;
-        for(nit = addIt; --nit;){
-            z*= z; z += c;
-            if(std::norm(z) > bailout_sqr){
-                Z[*j] = z; IT[*j] += addIt-nit;
-                ESCAPED = true;
+        for(nit = addIt+1; --nit;){
+            mpf_set(zi_.n, zi.n);
+
+            mpf_mul(zi.n, zr.n, zi.n);
+            mpf_mul_ui(zi.n, zi.n, 2);
+            mpf_add(zi.n, zi.n, ci.n);
+
+            mpf_mul(zr.n, zr.n, zr.n);
+            mpf_mul(t.n, zi_.n, zi_.n);
+            mpf_sub(zr.n, zr.n, t.n);
+            mpf_add(zr.n, zr.n, cr.n);
+
+            mpf_mul(n.n, zr.n, zr.n);
+            mpf_mul(t.n, zi.n, zi.n);
+            mpf_add(n.n, n.n, t.n);
+            if(mpf_cmp(n.n, bailout_sqr.n) > 0){
+                Z[*j].real(zr); Z[*j].imag(zi);
+                IT[*j] += addIt-nit;
                 changed->push_back(*j);
                 j = L.erase(j);
+                ESCAPED = true;
                 break;
             }
         }
         if(!ESCAPED){
-            Z[*j] = z;
+            Z[*j].real(zr); Z[*j].imag(zi);
             IT[*j] += addIt-nit;
             ++j;
 

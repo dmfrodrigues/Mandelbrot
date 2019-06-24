@@ -12,27 +12,37 @@ const mb::ComplexT mb::bailout_sqr = mb::bailout*mb::bailout;
 
 
 ///Constructor
-mb::mb(IterationT addIter):addIt(addIter),px(*((wxBitmap*)this)){}
-
+mb::mb(IterationT addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
+#include <iostream>
 ///New
 void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     Create(s, 24);
+    px = wxNativePixelData(*((wxBitmap*)this));
+
+    const unsigned N = GetWidth()*GetHeight();
+    wxNativePixelData::Iterator p = px.GetPixels();
+    for(unsigned i = 0; i < N; ++i, ++p){
+        p.Red() = p.Green() = p.Blue() = 0;
+    }
+
     step = st;
     origin = (IsCenter? GetOriginFromCenter(o, step, GetSize()) : o);
     center = GetCenterFromOrigin(origin, step, GetSize());
     numIt = 0;
-    const unsigned N = GetSize().x*GetSize().y;
-    if(C ) delete[] C ; C     = new ComplexNum[N];
-    if(Z ) delete[] Z ; Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(ComplexT(0.0L),ComplexT(0.0L)));
-    if(IT) delete[] IT; IT    = new IterationT[N]; std::fill(IT,IT+N,0);
-    if(LCHK) delete[] LCHK; LCHK = new std::list<unsigned>[NThreads];
-    px = wxNativePixelData(*((wxBitmap*)this));
+    if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
+    if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(ComplexT(0.0L),ComplexT(0.0L)));
+    if(IT  !=NULL){ delete[] IT;   } IT    = new IterationT[N]; std::fill(IT,IT+N,0);
+    if(LCHK!=NULL){ delete[] LCHK; } LCHK = new std::list<unsigned>[NThreads];
+
     ///Fill 'C', 'LCHK' with new information
     unsigned long i = 0;
     ComplexNum c = origin;
-    for(unsigned y = 0; y < GetSize().y; ++y, c.imag(c.imag()-step)){
+    //std::cout << "Height=" << GetHeight() << std::endl;
+    //std::cout << "Width =" << GetWidth() << std::endl;
+    for(int y = 0; y < GetHeight(); ++y, c.imag(c.imag()-step)){
         c.real(origin.real());
-        for(unsigned x = 0; x < GetSize().x; ++x, c.real(c.real()+step), ++i){
+        for(int x = 0; x < GetWidth(); ++x, c.real(c.real()+step), ++i){
+            //std::cout << "i=" << i << std::endl;
             C[i] = c;
             if(!isCardioid_isPeriod2Bulb(c)) LCHK[i*NThreads/N].push_back(i);
         }
@@ -56,7 +66,6 @@ mb::~mb(){
 void mb::UpdateMath(){
     std::thread *ArrThreads[NThreads];
     std::deque<unsigned> vchanged[NThreads];
-    unsigned long long N = GetSize().x*GetSize().y;
     for(unsigned i = 0; i < NThreads; ++i){
         ArrThreads[i] = new std::thread(&mb::UpdateMathLim, this, i, addIt, &(vchanged[i]));
     }

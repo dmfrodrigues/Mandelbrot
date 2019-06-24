@@ -31,6 +31,7 @@ private:
     static constexpr unsigned NThreads = 8;
 
     ///MEMBER VARIABLES
+    wxNativePixelData   px;     ///PixelData, to access bmp
     ComplexT            step;   ///Difference between consecutive pixels
     ComplexNum          origin; ///Upper-left corner
     ComplexNum          center; ///Center of the fractal
@@ -39,8 +40,6 @@ private:
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     IterationT          *IT=NULL;    ///Number of iterations
     std::list<unsigned> *LCHK=NULL;
-
-    wxNativePixelData   px;     ///PixelData, to access bmp
 
     ///PRIVATE FUNCTIONS
     /**

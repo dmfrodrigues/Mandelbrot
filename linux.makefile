@@ -1,6 +1,6 @@
-GMPARITH=/media/dmfr/DATA/_ProgrammingLibraries/gmp-arith
-IFLAGS =$(IDIR) -I$(GMPARITH)
-LFLAGS =`wx-config --libs` -L"../fractal-app/lib" -lfractalapp -lgmp -lgmpxx
+MCAP=/media/dmfr/DATA/_ProgrammingLibraries/mcap
+IFLAGS =$(IDIR) -I$(MCAP)
+LFLAGS =`wx-config --libs` -L"../fractal-app/lib" -lfractalapp
 
 CC     =g++
 
@@ -17,7 +17,7 @@ makefolders:
 	mkdir -p obj
 	mkdir -p bin
 
-$(BDIR)/main.app:              $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
+$(BDIR)/main.app:             $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
 	$(CC) -o $(BDIR)/main.app $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o $(LFLAGS)
 
 $(ODIR)/%.o:          $(SDIR)/%.cpp

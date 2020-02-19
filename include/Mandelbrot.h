@@ -7,6 +7,7 @@
 #include <vector>
 #include <list>
 
+
 class mb: public FractalBitmap{
 private:
     ///PRIVATE TYPEDEFS
@@ -40,6 +41,8 @@ private:
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     IterationT          *IT=NULL;    ///Number of iterations
     std::list<unsigned> *LCHK=NULL;
+
+
 
     ///PRIVATE FUNCTIONS
     /**

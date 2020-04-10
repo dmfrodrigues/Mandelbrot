@@ -1,7 +1,7 @@
 PROG=mandelbrot
 
-MCAP=/media/DATA/dmfro/projects/mcap
-IFLAGS =$(IDIR) -I$(MCAP)
+#MCAP=../mcap
+IFLAGS =$(IDIR) #-I$(MCAP)
 LFLAGS =`wx-config --libs` -L"fractal-app/lib" -lfractalapp
 
 CC     =g++
@@ -26,5 +26,6 @@ $(ODIR)/%.o:          $(SDIR)/%.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
-	rm -rf lib
+	make -C fractal-app clean
+	rm -rf bin
 	rm -rf obj

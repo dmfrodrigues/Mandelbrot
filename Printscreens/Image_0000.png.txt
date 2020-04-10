@@ -1,8 +1,0 @@
-timedate	31-May-2019 15:58:50
-timeelapsed	0
-re(c)	-0.75
-im(c)	0
-step	0.00455539359
-size.x	1150
-size.y	500
-NumIt	17600

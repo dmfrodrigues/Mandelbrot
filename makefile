@@ -1,3 +1,20 @@
+ifeq ($(OS),Windows_NT) 
+    detected_OS := Windows
+else
+    detected_OS := $(shell sh -c 'uname 2>/dev/null || echo Unknown')
+endif
+
+ifeq ($(detected_OS),Windows)
+	MKDIR=mkdir -p --
+	RM   =rm -f
+	RMDIR=rm -rf
+endif
+ifeq ($(detected_OS),Linux)
+	MKDIR=mkdir -p
+	RM   =rm -f
+	RMDIR=rm -rf
+endif
+
 PROG=mandelbrot
 
 #MCAP=../mcap
@@ -19,23 +36,21 @@ CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors 
     -Wvolatile-register-var  -Wwrite-strings# -Wunsafe-loop-optimizations -Winline -Weffc++ -Wpadded
 CFLAGS =$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE) `wx-config --cxxflags`
 
-all: makefolders $(PROG)
+all: $(PROG)
 
-makefolders:
-	mkdir -p obj
-	mkdir -p bin
-
-$(PROG):             $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
+$(PROG): $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
 	make -C fractal-app
 	$(CC) $(CFLAGS) -o $(PROG) $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o $(LFLAGS)
 
-$(ODIR)/%.o:          $(SDIR)/%.cpp
+$(ODIR)/%.o: $(SDIR)/%.cpp | $(ODIR)
 	$(CC) $(CFLAGS) -c $^ -o $@
 
-clean:
-	rm -rf bin
-	rm -rf obj
+$(ODIR):
+	$(MKDIR) $@
 
-cleanall:
-	git clean -dfX
-	make -C fractal-app cleanall
+clean:
+	$(RMDIR) $(ODIR)
+	$(RM) $(PROG)
+
+cleanall: clean
+	make -C fractal-app clean

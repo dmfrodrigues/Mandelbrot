@@ -33,7 +33,6 @@ private:
 
     ///MEMBER VARIABLES
     wxNativePixelData   px;     ///PixelData, to access bmp
-    complex_t            step;   ///Difference between consecutive pixels
     IterationT          numIt=0;///Total number of iterations performed over the fractal
     const IterationT    addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
@@ -90,8 +89,6 @@ public:
     void UpdateMath();
 
     ///GET FUNCTION ==================================================
-    complex_t   GetStep()           const override{ return step;   }
-    void        SetStep(const complex_t &stp) override { this->step = stp; }
     IterationT GetNum()            const override{ return numIt; }
     IterationT GetCyclesPerRun()   const override{ return addIt; }
     IterationT GetNotEscaped()     const;

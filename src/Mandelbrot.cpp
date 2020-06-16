@@ -27,7 +27,7 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
 
     step = st;
     origin = (IsCenter? GetOriginFromCenter(o, step, GetSize()) : o);
-    center = GetCenterFromOrigin(origin, step, GetSize());
+    // center = GetCenterFromOrigin(origin, step, GetSize());
     numIt = 0;
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
     if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
@@ -139,8 +139,8 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
     std::ofstream ostrm(name.ToStdString() + ".txt");
     ostrm << "timedate\t"    << wxDateTime::Now().Format("%d-%b-%Y %H:%M:%S").c_str() << "\n"
           << "timeelapsed\t" << std::setprecision( 8) << 0.0                          << "\n"
-          << "re(c)\t"       << std::setprecision(20) << center.real()                << "\n"
-          << "im(c)\t"       << std::setprecision(20) << center.imag()                << "\n"
+          << "re(c)\t"       << std::setprecision(20) << GetCenter().real()           << "\n"
+          << "im(c)\t"       << std::setprecision(20) << GetCenter().imag()           << "\n"
           << "step\t"        << std::setprecision(20) << step                         << "\n"
           << "size.x\t"      << GetSize().x                                           << "\n"
           << "size.y\t"      << GetSize().y                                           << "\n"

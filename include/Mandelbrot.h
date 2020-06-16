@@ -35,7 +35,6 @@ private:
     wxNativePixelData   px;     ///PixelData, to access bmp
     complex_t            step;   ///Difference between consecutive pixels
     ComplexNum          origin; ///Upper-left corner
-    ComplexNum          center; ///Center of the fractal
     IterationT          numIt=0;///Total number of iterations performed over the fractal
     const IterationT    addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
@@ -93,7 +92,7 @@ public:
 
     ///GET FUNCTION ==================================================
     ComplexNum GetOrigin()         const{ return origin; }
-    ComplexNum GetCenter()         const{ return center; }
+    ComplexNum GetCenter()         const{ return GetCenterFromOrigin(GetOrigin(), GetStep(), GetSize()); }
     complex_t   GetStep()           const{ return step;   }
     complex_t   GetHorizontalSize() const{ return step*(complex_t)GetSize().x; }
     IterationT GetNum()            const{ return numIt; }

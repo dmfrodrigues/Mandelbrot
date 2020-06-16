@@ -26,7 +26,7 @@ void mb::Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     
     {
         wxBitmap::Create(s, 24);
-        px = wxNativePixelData(*((wxBitmap*)this));
+        wxNativePixelData px(*((wxBitmap*)this));
         const unsigned N = GetWidth()*GetHeight();
         wxNativePixelData::Iterator p = px.GetPixels();
         for(unsigned i = 0; i < N; ++i, ++p){
@@ -36,6 +36,8 @@ void mb::Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
         SetStep(st);
         if(IsCenter) SetCenter(o); else SetOrigin(o);
     }
+
+    px = wxNativePixelData(*((wxBitmap*)this));
 
     const unsigned N = GetWidth()*GetHeight();
 

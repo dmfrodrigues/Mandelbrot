@@ -24,18 +24,7 @@ mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),addIt(p.addIt){
 void mb::Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     std::lock_guard<std::mutex> lock(Mutex);
     
-    {
-        wxBitmap::Create(s, 24);
-        wxNativePixelData px(*((wxBitmap*)this));
-        const unsigned N = GetWidth()*GetHeight();
-        wxNativePixelData::Iterator p = px.GetPixels();
-        for(unsigned i = 0; i < N; ++i, ++p){
-            p.Red() = p.Green() = p.Blue() = 0;
-        }
-
-        SetStep(st);
-        if(IsCenter) SetCenter(o); else SetOrigin(o);
-    }
+    FractalBitmap::Create(o, st, s, IsCenter);
 
     px = wxNativePixelData(*((wxBitmap*)this));
 

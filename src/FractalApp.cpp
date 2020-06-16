@@ -14,7 +14,7 @@ public:
         return true;
     }
     int OnExit(){
-        if(f!=NULL) delete f;
+        delete f;
         return wxApp::OnExit();
     }
 };

@@ -72,31 +72,25 @@ public:
     mb(iter_t addIter);
 
     mb(const mb &p);
-    /**
-     * Create
-     */
-    void Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter) override;
-    /**
-     * Clone
-     */
+
+    void Create(ComplexNum o, complex_t st, wxSize s) override;
+
     mb* Clone() const override;
-    /**
-     * Destructor
-     */
+
     ~mb();
 
-    ///CALCULATIONS ==================================================
+    // CALCULATIONS ==================================================
     /**
      * Update all pixels by making an additional addIt iterations
      */
     void Update();
 
-    ///GET FUNCTION ==================================================
+    // GET FUNCTION ==================================================
     iter_t GetNum()            const override{ return numIt; }
     iter_t GetCyclesPerRun()   const override{ return addIt; }
     iter_t GetNotEscaped()     const;
 
-    ///OTHER UTILITIES
+    // OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const override;
 };
 

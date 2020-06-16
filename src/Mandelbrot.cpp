@@ -11,7 +11,7 @@ mb::mb(iter_t addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),addIt(p.addIt){
     std::lock_guard<std::mutex> lock(Mutex);
 
-    Create(p.GetCenter(), p.GetStep(), p.GetSize(), true);
+    Create(p.GetCenter(), p.GetStep(), p.GetSize());
     numIt = p.numIt;
     const size_t N = GetWidth()*GetHeight();
     std::copy(p.C , p.C +N, C );
@@ -21,10 +21,10 @@ mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),addIt(p.addIt){
 }
 
 ///Create
-void mb::Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
+void mb::Create(ComplexNum o, complex_t st, wxSize s){
     std::lock_guard<std::mutex> lock(Mutex);
     
-    FractalBitmap::Create(o, st, s, IsCenter);
+    FractalBitmap::Create(o, st, s);
 
     px = wxNativePixelData(*((wxBitmap*)this));
 

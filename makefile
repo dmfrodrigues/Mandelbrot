@@ -10,7 +10,14 @@ SDIR   =./src
 IDIR   =-I./include -I./fractal-app/include
 ODIR   =./obj
 
-CFLAGS =-std=c++11 -g $(IFLAGS) `wx-config --cxxflags` # -ffast-math -O3
+CFLAGS_OPTIMIZE=-ffast-math -O3
+CFLAGS_PARANOID=-pthread -g -O -Wall -pedantic -Wunused-result -pedantic-errors -Wextra -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wdisabled-optimization \
+    -Wfloat-equal  -Wformat  -Wformat=2 -Wformat-nonliteral -Wformat-security -Wformat-y2k -Wimport  -Winit-self  -Winline -Winvalid-pch -Wunsafe-loop-optimizations -Wmissing-braces \
+    -Wmissing-field-initializers -Wmissing-format-attribute -Wmissing-include-dirs -Wmissing-noreturn -Wpacked -Wparentheses  -Wpointer-arith -Wredundant-decls -Wreturn-type \
+    -Wsequence-point  -Wshadow -Wsign-compare  -Wstack-protector -Wstrict-aliasing -Wstrict-aliasing=2 -Wswitch  -Wswitch-default -Wswitch-enum -Wtrigraphs  -Wuninitialized \
+    -Wunknown-pragmas  -Wunreachable-code -Wunused -Wunused-function  -Wunused-label  -Wunused-parameter -Wunused-value  -Wunused-variable  -Wvariadic-macros \
+    -Wvolatile-register-var  -Wwrite-strings# -Weffc++ -Wpadded
+CFLAGS =$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE) `wx-config --cxxflags`
 
 all: makefolders $(PROG)
 
@@ -20,13 +27,13 @@ makefolders:
 
 $(PROG):             $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
 	make -C fractal-app
-	$(CC) -o $(PROG) $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o $(LFLAGS)
+	$(CC) $(CFLAGS) -o $(PROG) $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o $(LFLAGS)
 
 $(ODIR)/%.o:          $(SDIR)/%.cpp
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
-	make -C fractal-app clean
+	# make -C fractal-app clean
 	rm -rf bin
 	rm -rf obj
 

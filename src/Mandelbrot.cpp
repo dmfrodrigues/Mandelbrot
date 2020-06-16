@@ -5,12 +5,6 @@
 #include <iomanip>
 #include <thread>
 
-///Constants
-const mb::complex_t mb::bailout(8.0L); // 2.0 // 8.0
-const mb::complex_t mb::bailout_sqr = mb::bailout*mb::bailout;
-
-
-
 ///Constructor
 mb::mb(IterationT addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 #include <iostream>

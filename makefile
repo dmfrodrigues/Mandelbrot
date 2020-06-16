@@ -29,3 +29,6 @@ clean:
 	make -C fractal-app clean
 	rm -rf bin
 	rm -rf obj
+
+cleanall:
+	git clean -dfX

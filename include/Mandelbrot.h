@@ -75,7 +75,7 @@ public:
     /**
      * Create
      */
-    void Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) override;
+    void Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter) override;
     /**
      * Clone
      */

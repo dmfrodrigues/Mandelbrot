@@ -10,7 +10,7 @@ SDIR   =./src
 IDIR   =-I./include -I./fractal-app/include
 ODIR   =./obj
 
-CFLAGS =-std=c++11 -g -ffast-math -O3 $(IFLAGS) `wx-config --cxxflags` -c
+CFLAGS =-std=c++11 -ffast-math -O3 $(IFLAGS) `wx-config --cxxflags` -c
 
 all: makefolders $(PROG)
 

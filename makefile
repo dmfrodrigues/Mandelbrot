@@ -10,7 +10,7 @@ SDIR   =./src
 IDIR   =-I./include -I./fractal-app/include
 ODIR   =./obj
 
-CFLAGS =-std=c++11 -ffast-math -O3 $(IFLAGS) `wx-config --cxxflags` -c
+CFLAGS =-std=c++11 -g $(IFLAGS) `wx-config --cxxflags` # -ffast-math -O3
 
 all: makefolders $(PROG)
 
@@ -23,7 +23,7 @@ $(PROG):             $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
 	$(CC) -o $(PROG) $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o $(LFLAGS)
 
 $(ODIR)/%.o:          $(SDIR)/%.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 clean:
 	make -C fractal-app clean

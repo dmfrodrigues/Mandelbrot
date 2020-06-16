@@ -35,9 +35,9 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
 
     ///Fill 'C', 'LCHK' with new information
     unsigned long i = 0;
-    ComplexNum c = origin;
+    ComplexNum c = GetOrigin();
     for(int y = 0; y < GetHeight(); ++y, c.imag(c.imag()-GetStep())){
-        c.real(origin.real());
+        c.real(GetOrigin().real());
         for(int x = 0; x < GetWidth(); ++x, c.real(c.real()+GetStep()), ++i){
             C[i] = c;
             if(!isCardioid_isPeriod2Bulb(c)) LCHK[i*NThreads/N].push_back(i);

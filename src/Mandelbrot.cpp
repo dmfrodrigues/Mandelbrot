@@ -6,16 +6,16 @@
 #include <thread>
 
 ///Constants
-const mb::ComplexT mb::bailout(8.0L); // 2.0 // 8.0
-const mb::ComplexT mb::bailout_sqr = mb::bailout*mb::bailout;
+const mb::complex_t mb::bailout(8.0L); // 2.0 // 8.0
+const mb::complex_t mb::bailout_sqr = mb::bailout*mb::bailout;
 
 
 
 ///Constructor
 mb::mb(IterationT addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 #include <iostream>
-///New
-void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
+///reset
+void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     Create(s, 24);
     px = wxNativePixelData(*((wxBitmap*)this));
 
@@ -30,7 +30,7 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     center = GetCenterFromOrigin(origin, step, GetSize());
     numIt = 0;
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
-    if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(ComplexT(0.0L),ComplexT(0.0L)));
+    if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
     if(IT  !=NULL){ delete[] IT;   } IT    = new IterationT[N]; std::fill(IT,IT+N,0);
     if(LCHK!=NULL){ delete[] LCHK; } LCHK = new std::list<unsigned>[NThreads];
 
@@ -46,10 +46,10 @@ void mb::New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter){
     }
 }
 
-///CreateNew
-mb* mb::CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter) const{
+///clone
+mb* mb::clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter) const{
     mb *ret = new mb(addIt);
-    ret->New(o,st,s,IsCenter);
+    ret->reset(o,st,s,IsCenter);
     return ret;
 }
 

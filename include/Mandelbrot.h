@@ -25,15 +25,15 @@ private:
     //static const ColorT AMP[] = {-100.0, -100.0, +  0.0}, INIT[] = {+101.0, +101.0, +  0.0}; ///YELLOW&BLACK
     //static const ColorT AMP[] = {-107.0, +  0.0, +  0.0}, INIT[] = {+128.0, + 10.0, + 10.0}; ///RED&BLACK
     //static const ColorT AMP[] = {-113.0, -113.0, -113.0}, INIT[] = {+140.0, +140.0, +140.0}; ///BLACK&WHITE
-    static const ComplexT bailout;
-    static const ComplexT bailout_sqr;
+    static const complex_t bailout;
+    static const complex_t bailout_sqr;
     static constexpr ColorT log10N = 0.90308998699; //log10(bailout);
     static constexpr ColorT log2_log10N = -0.14705834492L; //std::log2(log10N);
     static constexpr unsigned NThreads = 8;
 
     ///MEMBER VARIABLES
     wxNativePixelData   px;     ///PixelData, to access bmp
-    ComplexT            step;   ///Difference between consecutive pixels
+    complex_t            step;   ///Difference between consecutive pixels
     ComplexNum          origin; ///Upper-left corner
     ComplexNum          center; ///Center of the fractal
     IterationT          numIt=0;///Total number of iterations performed over the fractal
@@ -62,9 +62,9 @@ private:
 
     ///PRIVATE STATIC FUNCTIONS
     static inline bool isCardioid_isPeriod2Bulb(const ComplexNum& c){
-        ComplexT q = (c.real()-ComplexT(0.25L))*(c.real()-ComplexT(0.25L)) + c.imag()*c.imag();    ///isCardioid
-        return (ComplexT(4.0L)*q*(q+(c.real()-ComplexT(0.25L))) < c.imag()*c.imag())||       ///isCardioid
-               ((c.real()+ComplexT(1.0L))*(c.real()+ComplexT(1.0L)) + c.imag()*c.imag() < ComplexT(0.0625L)); ///isPeriod2Bulb
+        complex_t q = (c.real()-complex_t(0.25L))*(c.real()-complex_t(0.25L)) + c.imag()*c.imag();    ///isCardioid
+        return (complex_t(4.0L)*q*(q+(c.real()-complex_t(0.25L))) < c.imag()*c.imag())||       ///isCardioid
+               ((c.real()+complex_t(1.0L))*(c.real()+complex_t(1.0L)) + c.imag()*c.imag() < complex_t(0.0625L)); ///isPeriod2Bulb
     }
 
 public:
@@ -73,13 +73,13 @@ public:
      */
     mb(IterationT addIter);
     /**
-     * New
+     * reset
      */
-    void New(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false);
+    void reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false);
     /**
-     * CreateNew
+     * clone
      */
-    mb* CreateNew(ComplexNum o, ComplexT st, wxSize s, bool IsCenter = false) const;
+    mb* clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const;
     /**
      * Destructor
      */
@@ -94,8 +94,8 @@ public:
     ///GET FUNCTION ==================================================
     ComplexNum GetOrigin()         const{ return origin; }
     ComplexNum GetCenter()         const{ return center; }
-    ComplexT   GetStep()           const{ return step;   }
-    ComplexT   GetHorizontalSize() const{ return step*(ComplexT)GetSize().x; }
+    complex_t   GetStep()           const{ return step;   }
+    complex_t   GetHorizontalSize() const{ return step*(complex_t)GetSize().x; }
     IterationT GetNum()            const{ return numIt; }
     IterationT GetCyclesPerRun()   const{ return addIt; }
     IterationT GetNotEscaped()     const;

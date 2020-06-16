@@ -74,11 +74,11 @@ public:
     /**
      * reset
      */
-    void reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false);
+    void reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) override;
     /**
      * clone
      */
-    mb* clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const;
+    mb* clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const override;
     /**
      * Destructor
      */
@@ -91,16 +91,16 @@ public:
     void UpdateMath();
 
     ///GET FUNCTION ==================================================
-    ComplexNum GetOrigin()         const{ return origin; }
-    ComplexNum GetCenter()         const{ return GetCenterFromOrigin(GetOrigin(), GetStep(), GetSize()); }
-    complex_t   GetStep()           const{ return step;   }
+    ComplexNum GetOrigin()         const override{ return origin; }
+    ComplexNum GetCenter()         const override{ return GetCenterFromOrigin(GetOrigin(), GetStep(), GetSize()); }
+    complex_t   GetStep()           const override{ return step;   }
     void        SetStep(const complex_t &step){ this->step = step; }
-    IterationT GetNum()            const{ return numIt; }
-    IterationT GetCyclesPerRun()   const{ return addIt; }
+    IterationT GetNum()            const override{ return numIt; }
+    IterationT GetCyclesPerRun()   const override{ return addIt; }
     IterationT GetNotEscaped()     const;
 
     ///OTHER UTILITIES
-    bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const;
+    bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const override;
 };
 
 #endif

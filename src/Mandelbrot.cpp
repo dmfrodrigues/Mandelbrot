@@ -6,7 +6,7 @@
 #include <thread>
 
 ///Constructor
-mb::mb(IterationT addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
+mb::mb(iter_t addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 
 ///reset
 void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
@@ -24,7 +24,7 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     numIt = 0;
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
     if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
-    if(IT  !=NULL){ delete[] IT;   } IT    = new IterationT[N]; std::fill(IT,IT+N,0);
+    if(IT  !=NULL){ delete[] IT;   } IT    = new iter_t[N]; std::fill(IT,IT+N,0);
     if(LCHK!=NULL){ delete[] LCHK; } LCHK = new std::list<uint32_t>[NThreads];
 
     ///Fill 'C', 'LCHK' with new information
@@ -68,7 +68,7 @@ void mb::UpdateMath(){
     BalanceLists();
 }
 
-void mb::UpdateMathLim(unsigned index, IterationT addIter, std::deque<unsigned>* changed){
+void mb::UpdateMathLim(unsigned index, iter_t addIter, std::deque<unsigned>* changed){
     changed->clear();
     auto& L = LCHK[index];
     auto j = L.begin();
@@ -80,7 +80,7 @@ void mb::UpdateMathLim(unsigned index, IterationT addIter, std::deque<unsigned>*
         c = C[*j];
 
         z = Z[*j];
-        IterationT nit;
+        iter_t nit;
         for(nit = addIter; --nit;){
             z*= z; z += c;
             if(std::norm(z) > bailout_sqr){
@@ -166,7 +166,7 @@ mb::ColorT mb::CycleFun(mb::ColorT x){
     return x/pi_2;                                ///Linear
 }
 
-mb::IterationT mb::GetNotEscaped() const{
+mb::iter_t mb::GetNotEscaped() const{
     size_t ret = 0;
     for(unsigned i = 0; i < NThreads; ++i)
         ret += LCHK[i].size();

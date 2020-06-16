@@ -33,10 +33,10 @@ private:
 
     ///MEMBER VARIABLES
     wxNativePixelData   px;     ///PixelData, to access bmp
-    IterationT          numIt=0;///Total number of iterations performed over the fractal
-    const IterationT    addIt;
+    iter_t          numIt=0;///Total number of iterations performed over the fractal
+    const iter_t    addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
-    IterationT          *IT=NULL;    ///Number of iterations
+    iter_t          *IT=NULL;    ///Number of iterations
     std::list<uint32_t> *LCHK=NULL;
 
 
@@ -45,7 +45,7 @@ private:
     /**
      * Update pixels in [L,R) by making an additional addIt iterations
      */
-    void UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* changed);
+    void UpdateMathLim(unsigned index, iter_t addIt, std::deque<unsigned>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
@@ -68,7 +68,7 @@ public:
     /**
      * Constructor
      */
-    mb(IterationT addIter);
+    mb(iter_t addIter);
     /**
      * reset
      */
@@ -89,9 +89,9 @@ public:
     void UpdateMath();
 
     ///GET FUNCTION ==================================================
-    IterationT GetNum()            const override{ return numIt; }
-    IterationT GetCyclesPerRun()   const override{ return addIt; }
-    IterationT GetNotEscaped()     const;
+    iter_t GetNum()            const override{ return numIt; }
+    iter_t GetCyclesPerRun()   const override{ return addIt; }
+    iter_t GetNotEscaped()     const;
 
     ///OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const override;

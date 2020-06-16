@@ -10,6 +10,8 @@ mb::mb(iter_t addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 
 ///reset
 void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
+    std::lock_guard<std::mutex> lock(Mutex);
+
     Create(s, 24);
     px = wxNativePixelData(*((wxBitmap*)this));
 
@@ -54,6 +56,8 @@ mb::~mb(){
 }
 
 void mb::UpdateMath(){
+    std::lock_guard<std::mutex> lock(Mutex);
+
     std::thread *ArrThreads[NThreads];
     std::deque<unsigned> vchanged[NThreads];
     for(unsigned i = 0; i < NThreads; ++i){
@@ -128,6 +132,8 @@ void mb::UpdatePixels(const std::deque<unsigned>& v){
 }
 
 bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
+    std::lock_guard<std::mutex> lock(Mutex);
+
     wxBitmap::SaveFile(name, type, palette);
     std::ofstream ostrm(name.ToStdString() + ".txt");
 

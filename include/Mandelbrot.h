@@ -38,6 +38,7 @@ private:
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     iter_t          *IT=NULL;    ///Number of iterations
     std::list<uint32_t> *LCHK=NULL;
+    mutable std::mutex Mutex;
 
 
 

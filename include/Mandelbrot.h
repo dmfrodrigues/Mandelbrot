@@ -75,9 +75,9 @@ public:
      */
     void reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) override;
     /**
-     * clone
+     * Clone
      */
-    mb* clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const override;
+    mb* Clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const override;
     /**
      * Destructor
      */
@@ -87,7 +87,7 @@ public:
     /**
      * Update all pixels by making an additional addIt iterations
      */
-    void UpdateMath();
+    void Update();
 
     ///GET FUNCTION ==================================================
     iter_t GetNum()            const override{ return numIt; }

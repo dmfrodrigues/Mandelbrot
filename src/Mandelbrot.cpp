@@ -41,8 +41,8 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     }
 }
 
-///clone
-mb* mb::clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter) const{
+///Clone
+mb* mb::Clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter) const{
     mb *ret = new mb(addIt);
     ret->reset(o,st,s,IsCenter);
     return ret;
@@ -55,7 +55,7 @@ mb::~mb(){
     delete[] LCHK;
 }
 
-void mb::UpdateMath(){
+void mb::Update(){
     std::lock_guard<std::mutex> lock(Mutex);
 
     std::thread *ArrThreads[NThreads];

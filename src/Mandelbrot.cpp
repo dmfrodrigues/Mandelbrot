@@ -25,10 +25,10 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
     if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
     if(IT  !=NULL){ delete[] IT;   } IT    = new IterationT[N]; std::fill(IT,IT+N,0);
-    if(LCHK!=NULL){ delete[] LCHK; } LCHK = new std::list<unsigned>[NThreads];
+    if(LCHK!=NULL){ delete[] LCHK; } LCHK = new std::list<uint32_t>[NThreads];
 
     ///Fill 'C', 'LCHK' with new information
-    unsigned long i = 0;
+    uint32_t i = 0;
     ComplexNum c = GetOrigin();
     for(int y = 0; y < GetHeight(); ++y, c.imag(c.imag()-GetStep())){
         c.real(GetOrigin().real());
@@ -68,7 +68,7 @@ void mb::UpdateMath(){
     BalanceLists();
 }
 
-void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* changed){
+void mb::UpdateMathLim(unsigned index, IterationT addIter, std::deque<unsigned>* changed){
     changed->clear();
     auto& L = LCHK[index];
     auto j = L.begin();
@@ -81,10 +81,10 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
 
         z = Z[*j];
         IterationT nit;
-        for(nit = addIt; --nit;){
+        for(nit = addIter; --nit;){
             z*= z; z += c;
             if(std::norm(z) > bailout_sqr){
-                Z[*j] = z; IT[*j] += addIt-nit;
+                Z[*j] = z; IT[*j] += addIter-nit;
                 ESCAPED = true;
                 changed->push_back(*j);
                 j = L.erase(j);
@@ -93,7 +93,7 @@ void mb::UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* c
         }
         if(!ESCAPED){
             Z[*j] = z;
-            IT[*j] += addIt-nit;
+            IT[*j] += addIter-nit;
             ++j;
 
 
@@ -117,19 +117,22 @@ void mb::UpdatePixels(const std::deque<unsigned>& v){
 
         //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
         //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
-        ColorT x = (ColorT)IT[i]-(0.5L*log10((double)std::norm(Z[i]))/log10N-1.0L); ///continuous pattern, original formula
+        ColorT x = (ColorT)(IT[i]-(0.5L*log10((double)std::norm(Z[i]))/log10N-1.0L)); ///continuous pattern, original formula
         //x = (ColorT)IT[i]; ///discrete pattern
 
         ColorT y = CycleFun(omega*x + phi);
-        p.Red()   = AMP[0]*y + INIT[0];
-        p.Green() = AMP[1]*y + INIT[1];
-        p.Blue()  = AMP[2]*y + INIT[2];
+        p.Red()   = (unsigned char)(AMP[0]*y + INIT[0]);
+        p.Green() = (unsigned char)(AMP[1]*y + INIT[1]);
+        p.Blue()  = (unsigned char)(AMP[2]*y + INIT[2]);
     }
 }
 
 bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
     wxBitmap::SaveFile(name, type, palette);
     std::ofstream ostrm(name.ToStdString() + ".txt");
+
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Winline"
     ostrm << "timedate\t"    << wxDateTime::Now().Format("%d-%b-%Y %H:%M:%S").c_str() << "\n"
           << "timeelapsed\t" << std::setprecision( 8) << 0.0                          << "\n"
           << "re(c)\t"       << std::setprecision(20) << GetCenter().real()           << "\n"
@@ -138,6 +141,8 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
           << "size.x\t"      << GetSize().x                                           << "\n"
           << "size.y\t"      << GetSize().y                                           << "\n"
           << "NumIt\t"       << numIt                                                 << "\n" << std::flush;
+    #pragma GCC diagnostic pop
+
     ostrm.close();
     return true;
 }
@@ -162,7 +167,7 @@ mb::ColorT mb::CycleFun(mb::ColorT x){
 }
 
 mb::IterationT mb::GetNotEscaped() const{
-    unsigned ret = 0;
+    size_t ret = 0;
     for(unsigned i = 0; i < NThreads; ++i)
         ret += LCHK[i].size();
     return ret;

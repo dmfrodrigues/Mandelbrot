@@ -1,4 +1,3 @@
-#include <wx/wx.h>
 #include "FractalFrame.h"
 #include "Mandelbrot.h"
 

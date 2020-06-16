@@ -39,7 +39,7 @@ private:
     const IterationT    addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     IterationT          *IT=NULL;    ///Number of iterations
-    std::list<unsigned> *LCHK=NULL;
+    std::list<uint32_t> *LCHK=NULL;
 
 
 
@@ -92,10 +92,10 @@ public:
 
     ///GET FUNCTION ==================================================
     ComplexNum GetOrigin()         const override{ return origin; }
-    void SetOrigin(const ComplexNum &origin) { this->origin = origin; }
+    void SetOrigin(const ComplexNum &orig) { this->origin = orig; }
     ComplexNum GetCenter()         const override{ return GetCenterFromOrigin(GetOrigin(), GetStep(), GetSize()); }
     complex_t   GetStep()           const override{ return step;   }
-    void        SetStep(const complex_t &step){ this->step = step; }
+    void        SetStep(const complex_t &stp){ this->step = stp; }
     IterationT GetNum()            const override{ return numIt; }
     IterationT GetCyclesPerRun()   const override{ return addIt; }
     IterationT GetNotEscaped()     const;

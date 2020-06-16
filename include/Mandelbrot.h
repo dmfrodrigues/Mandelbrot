@@ -91,7 +91,7 @@ public:
 
     ///GET FUNCTION ==================================================
     complex_t   GetStep()           const override{ return step;   }
-    void        SetStep(const complex_t &stp){ this->step = stp; }
+    void        SetStep(const complex_t &stp) override { this->step = stp; }
     IterationT GetNum()            const override{ return numIt; }
     IterationT GetCyclesPerRun()   const override{ return addIt; }
     IterationT GetNotEscaped()     const;

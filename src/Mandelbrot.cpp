@@ -26,7 +26,7 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     }
 
     SetStep(st);
-    origin = (IsCenter? GetOriginFromCenter(o, GetStep(), GetSize()) : o);
+    SetOrigin(IsCenter? GetOriginFromCenter(o, GetStep(), GetSize()) : o);
     numIt = 0;
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
     if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));

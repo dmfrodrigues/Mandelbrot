@@ -92,6 +92,7 @@ public:
 
     ///GET FUNCTION ==================================================
     ComplexNum GetOrigin()         const override{ return origin; }
+    void SetOrigin(const ComplexNum &origin) { this->origin = origin; }
     ComplexNum GetCenter()         const override{ return GetCenterFromOrigin(GetOrigin(), GetStep(), GetSize()); }
     complex_t   GetStep()           const override{ return step;   }
     void        SetStep(const complex_t &step){ this->step = step; }

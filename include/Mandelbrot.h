@@ -33,13 +33,13 @@ private:
 
     ///MEMBER VARIABLES
     wxNativePixelData   px;     ///PixelData, to access bmp
-    complex_t           step;   ///Difference between consecutive pixels
+    complex_t            step;   ///Difference between consecutive pixels
     ComplexNum          origin; ///Upper-left corner
     ComplexNum          center; ///Center of the fractal
-    iter_t          numIt=0;///Total number of iterations performed over the fractal
-    const iter_t    addIt;
+    IterationT          numIt=0;///Total number of iterations performed over the fractal
+    const IterationT    addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
-    iter_t          *IT=NULL;    ///Number of iterations
+    IterationT          *IT=NULL;    ///Number of iterations
     std::list<unsigned> *LCHK=NULL;
 
 
@@ -48,7 +48,7 @@ private:
     /**
      * Update pixels in [L,R) by making an additional addIt iterations
      */
-    void UpdateMathLim(unsigned index, iter_t addIt, std::deque<unsigned>* changed);
+    void UpdateMathLim(unsigned index, IterationT addIt, std::deque<unsigned>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
@@ -71,17 +71,15 @@ public:
     /**
      * Constructor
      */
-    mb(iter_t addIter);
-
-    mb(const mb *p);
+    mb(IterationT addIter);
     /**
-     * init
+     * reset
      */
-    void init(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false);
+    void reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false);
     /**
      * clone
      */
-    mb* clone() const;
+    mb* clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const;
     /**
      * Destructor
      */
@@ -91,16 +89,16 @@ public:
     /**
      * Update all pixels by making an additional addIt iterations
      */
-    void update();
+    void UpdateMath();
 
     ///GET FUNCTION ==================================================
-    ComplexNum getOrigin()         const{ return origin; }
-    ComplexNum getCenter()         const{ return center; }
-    complex_t   getStep()           const{ return step;   }
+    ComplexNum GetOrigin()         const{ return origin; }
+    ComplexNum GetCenter()         const{ return center; }
+    complex_t   GetStep()           const{ return step;   }
     complex_t   GetHorizontalSize() const{ return step*(complex_t)GetSize().x; }
-    iter_t getNum()            const{ return numIt; }
-    iter_t GetCyclesPerRun()   const{ return addIt; }
-    iter_t GetNotEscaped()     const;
+    IterationT GetNum()            const{ return numIt; }
+    IterationT GetCyclesPerRun()   const{ return addIt; }
+    IterationT GetNotEscaped()     const;
 
     ///OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const;

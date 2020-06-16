@@ -94,7 +94,8 @@ public:
     ComplexNum GetOrigin()         const{ return origin; }
     ComplexNum GetCenter()         const{ return GetCenterFromOrigin(GetOrigin(), GetStep(), GetSize()); }
     complex_t   GetStep()           const{ return step;   }
-    complex_t   GetHorizontalSize() const{ return step*(complex_t)GetSize().x; }
+    void        SetStep(const complex_t &step){ this->step = step; }
+    complex_t   GetHorizontalSize() const{ return GetStep()*(complex_t)GetSize().x; }
     IterationT GetNum()            const{ return numIt; }
     IterationT GetCyclesPerRun()   const{ return addIt; }
     IterationT GetNotEscaped()     const;

@@ -25,9 +25,8 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
         p.Red() = p.Green() = p.Blue() = 0;
     }
 
-    step = st;
-    origin = (IsCenter? GetOriginFromCenter(o, step, GetSize()) : o);
-    // center = GetCenterFromOrigin(origin, step, GetSize());
+    SetStep(st);
+    origin = (IsCenter? GetOriginFromCenter(o, GetStep(), GetSize()) : o);
     numIt = 0;
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
     if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
@@ -37,9 +36,9 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     ///Fill 'C', 'LCHK' with new information
     unsigned long i = 0;
     ComplexNum c = origin;
-    for(int y = 0; y < GetHeight(); ++y, c.imag(c.imag()-step)){
+    for(int y = 0; y < GetHeight(); ++y, c.imag(c.imag()-GetStep())){
         c.real(origin.real());
-        for(int x = 0; x < GetWidth(); ++x, c.real(c.real()+step), ++i){
+        for(int x = 0; x < GetWidth(); ++x, c.real(c.real()+GetStep()), ++i){
             C[i] = c;
             if(!isCardioid_isPeriod2Bulb(c)) LCHK[i*NThreads/N].push_back(i);
         }
@@ -141,7 +140,7 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
           << "timeelapsed\t" << std::setprecision( 8) << 0.0                          << "\n"
           << "re(c)\t"       << std::setprecision(20) << GetCenter().real()           << "\n"
           << "im(c)\t"       << std::setprecision(20) << GetCenter().imag()           << "\n"
-          << "step\t"        << std::setprecision(20) << step                         << "\n"
+          << "step\t"        << std::setprecision(20) << GetStep()                    << "\n"
           << "size.x\t"      << GetSize().x                                           << "\n"
           << "size.y\t"      << GetSize().y                                           << "\n"
           << "NumIt\t"       << numIt                                                 << "\n" << std::flush;

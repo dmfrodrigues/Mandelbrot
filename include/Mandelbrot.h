@@ -33,12 +33,12 @@ private:
 
     ///MEMBER VARIABLES
     wxNativePixelData   px;     ///PixelData, to access bmp
-    iter_t          numIt=0;///Total number of iterations performed over the fractal
-    const iter_t    addIt;
+    iter_t              numIt=0;///Total number of iterations performed over the fractal
+    const iter_t        addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
-    iter_t          *IT=NULL;    ///Number of iterations
+    iter_t              *IT=NULL;    ///Number of iterations
     std::list<uint32_t> *LCHK=NULL;
-    mutable std::mutex Mutex;
+    mutable std::mutex  Mutex;
 
 
 
@@ -70,14 +70,16 @@ public:
      * Constructor
      */
     mb(iter_t addIter);
+
+    mb(const mb &p);
     /**
-     * reset
+     * Create
      */
-    void reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) override;
+    void Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) override;
     /**
      * Clone
      */
-    mb* Clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter = false) const override;
+    mb* Clone() const override;
     /**
      * Destructor
      */

@@ -8,21 +8,37 @@
 ///Constructor
 mb::mb(iter_t addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 
-///reset
-void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
+mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),addIt(p.addIt){
     std::lock_guard<std::mutex> lock(Mutex);
 
-    Create(s, 24);
-    px = wxNativePixelData(*((wxBitmap*)this));
+    Create(p.GetCenter(), p.GetStep(), p.GetSize(), true);
+    numIt = p.numIt;
+    const size_t N = GetWidth()*GetHeight();
+    std::copy(p.C , p.C +N, C );
+    std::copy(p.Z , p.Z +N, Z );
+    std::copy(p.IT, p.IT+N, IT);
+    std::copy(p.LCHK, p.LCHK+NThreads, LCHK);
+}
 
-    const unsigned N = GetWidth()*GetHeight();
-    wxNativePixelData::Iterator p = px.GetPixels();
-    for(unsigned i = 0; i < N; ++i, ++p){
-        p.Red() = p.Green() = p.Blue() = 0;
+///Create
+void mb::Create(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
+    std::lock_guard<std::mutex> lock(Mutex);
+    
+    {
+        wxBitmap::Create(s, 24);
+        px = wxNativePixelData(*((wxBitmap*)this));
+        const unsigned N = GetWidth()*GetHeight();
+        wxNativePixelData::Iterator p = px.GetPixels();
+        for(unsigned i = 0; i < N; ++i, ++p){
+            p.Red() = p.Green() = p.Blue() = 0;
+        }
+
+        SetStep(st);
+        if(IsCenter) SetCenter(o); else SetOrigin(o);
     }
 
-    SetStep(st);
-    if(IsCenter) SetCenter(o); else SetOrigin(o);
+    const unsigned N = GetWidth()*GetHeight();
+
     numIt = 0;
     if(C   !=NULL){ delete[] C ;   } C     = new ComplexNum[N]; //std::cout << sizeof(C) << std::endl;
     if(Z   !=NULL){ delete[] Z ;   } Z     = new ComplexNum[N]; std::fill(Z,Z+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
@@ -42,10 +58,8 @@ void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
 }
 
 ///Clone
-mb* mb::Clone(ComplexNum o, complex_t st, wxSize s, bool IsCenter) const{
-    mb *ret = new mb(addIt);
-    ret->reset(o,st,s,IsCenter);
-    return ret;
+mb* mb::Clone() const{
+    return new mb(*this);
 }
 
 mb::~mb(){

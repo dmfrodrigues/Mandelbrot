@@ -7,7 +7,7 @@
 
 ///Constructor
 mb::mb(IterationT addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
-#include <iostream>
+
 ///reset
 void mb::reset(ComplexNum o, complex_t st, wxSize s, bool IsCenter){
     Create(s, 24);

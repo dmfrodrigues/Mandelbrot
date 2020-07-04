@@ -116,11 +116,7 @@ void mb::UpdateMathLim(unsigned index, iter_t addIter, std::deque<unsigned>* cha
 
 void mb::UpdatePixels(const std::deque<unsigned>& v){
     wxNativePixelData::Iterator p(px);
-
-
-
-
-
+    
     for(const unsigned& i:v){
         p.MoveTo(px, i%GetSize().x, i/GetSize().x);
 

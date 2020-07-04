@@ -17,7 +17,6 @@ endif
 
 PROG=mandelbrot
 
-#MCAP=../mcap
 IFLAGS =$(IDIR) #-I$(MCAP)
 LFLAGS =`wx-config --libs` -L"fractal-app/lib" -lfractalapp
 

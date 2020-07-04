@@ -35,10 +35,10 @@ private:
     ///MEMBER VARIABLES
     wxNativePixelData   px;     ///PixelData, to access bmp
     iter_t              numIt=0;///Total number of iterations performed over the fractal
-    const iter_t        addIt;
     ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
     iter_t              *IT=NULL;    ///Number of iterations
     std::list<uint32_t> *LCHK=NULL;
+    const iter_t        addIt;
     mutable std::mutex  Mutex;
 
 

@@ -118,7 +118,7 @@ void mb::UpdatePixels(const std::deque<unsigned>& v){
     wxNativePixelData::Iterator p(px);
     
     for(const unsigned& i:v){
-        p.MoveTo(px, i%GetSize().x, i/GetSize().x);
+        p.MoveTo(px, i%GetWidth(), i/GetWidth());
 
         //x = (ColorT)IT[i]-3.0*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous/wavy pattern
         //x = (ColorT)IT[i]-1.0L*(log2(0.5*log10(Z[i].absSqr()))-log2_log10N); ///continuous pattern, modified formula
@@ -145,8 +145,8 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
           << "re(c)\t"       << std::setprecision(20) << GetCenter().real()           << "\n"
           << "im(c)\t"       << std::setprecision(20) << GetCenter().imag()           << "\n"
           << "step\t"        << std::setprecision(20) << GetStep()                    << "\n"
-          << "size.x\t"      << GetSize().x                                           << "\n"
-          << "size.y\t"      << GetSize().y                                           << "\n"
+          << "size.x\t"      << GetWidth()                                            << "\n"
+          << "size.y\t"      << GetHeight()                                           << "\n"
           << "NumIt\t"       << numIt                                                 << "\n" << std::flush;
     #pragma GCC diagnostic pop
 

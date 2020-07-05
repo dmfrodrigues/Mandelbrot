@@ -38,7 +38,7 @@ CFLAGS =$(IFLAGS) $(CFLAGS_PARANOID) $(CFLAGS_OPTIMIZE) `wx-config --cxxflags`
 all: $(PROG)
 
 $(PROG): $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o
-	make -C fractal-app
+	cd fractal-app && mkdir -p build && cd build && cmake .. && make
 	$(CC) $(CFLAGS) -o $(PROG) $(ODIR)/Mandelbrot.o $(ODIR)/FractalApp.o $(LFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/%.cpp | $(ODIR)

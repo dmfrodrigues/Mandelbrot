@@ -33,7 +33,7 @@ jobs:
 
     - name: Zip
       run: |
-        zip -r LICENSE README.md mandelbrot mandelbrot.zip
+        zip mandelbrot.zip -r LICENSE README.md mandelbrot
     - name: Upload zip
       uses: actions/upload-artifact@v2
       with:

@@ -1,4 +1,4 @@
-name: ubuntu-gnu
+name: linux-i686
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
 
@@ -26,5 +26,14 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ..
+        cmake .. -DARCH=i686
         make
+
+    - name: Zip
+      run: |
+        zip -r LICENSE README.md mandelbrot mandelbrot.zip
+    - name: Upload zip
+      uses: actions/upload-artifact@v2
+      with:
+        name: mandelbrot-linux-32bit.zip
+        path: mandelbrot.zip

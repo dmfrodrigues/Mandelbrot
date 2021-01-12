@@ -30,4 +30,15 @@ set(CPP_COMPILER_WARNINGS -Wall -Wunused-result -pedantic-errors -Wextra -Wcast-
 
 set(CPP_COMPILER_OPTIMIZE -ffast-math -O3)
 
-target_compile_options(mandelbrot PRIVATE -g ${CPP_COMPILER_WARNINGS} ${CPP_COMPILER_OPTIMIZE})
+set(CPP_COMPILER_OPTIONS )
+
+message("Hello!")
+
+if(ARCH)
+    message("ARCH specified")
+    set(CPP_COMPILER_OPTIONS ${CPP_COMPILER_OPTIONS} -march=${ARCH})
+else()
+    message("ARCH not specified, using native")
+endif()
+
+target_compile_options(mandelbrot PRIVATE -g ${CPP_COMPILER_WARNINGS} ${CPP_COMPILER_OPTIMIZE} ${CPP_COMPILER_OPTIONS})

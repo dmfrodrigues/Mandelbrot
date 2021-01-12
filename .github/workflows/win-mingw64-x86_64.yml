@@ -53,3 +53,12 @@ jobs:
         cd build
         cmake .. -G "MinGW Makefiles" -DWX_ROOT_DIR:PATH=C:\wx\3.0.5 -DwxWidgets_LIB_DIR:PATH=C:\wx\3.0.5\lib\gcc810_x64_dll
         cmake --build . --config Release
+
+    - name: Zip
+      run: |
+        zip mandelbrot.zip -r LICENSE README.md mandelbrot
+    - name: Upload zip
+      uses: actions/upload-artifact@v2
+      with:
+        name: mandelbrot-win-64bit.zip
+        path: mandelbrot.zip

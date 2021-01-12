@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  wxwin: C:\wx\3.0.5
+
 jobs:
   build:
     runs-on: windows-latest
@@ -36,7 +39,6 @@ jobs:
         7z x wxWidgets-3.0.5-headers.7z -y
         7z x wxMSW-3.0.5_gcc810_x64_Dev.7z -y
         7z x wxMSW-3.0.5_gcc810_x64_ReleaseDLL.7z -y
-        echo "wxwin=C:\wx\3.0.5" >> $GITHUB_ENV
 
     - name: Checkout submodules
       shell: cmd

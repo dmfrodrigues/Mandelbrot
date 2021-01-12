@@ -56,7 +56,7 @@ jobs:
 
     - name: Zip
       run: |
-        7z a -tzip mandelbrot.zip LICENSE README.md mandelbrot.exe C:\wx\3.0.5\lib\gcc810_x64_dll\wxbase30u_gcc810_x64.dll C:\wx\3.0.5\lib\gcc810_x64_dll\wxmsw30u_core_gcc810_x64.dll
+        7z a -tzip mandelbrot.zip LICENSE README.md mandelbrot.exe C:\wx\3.0.5\lib\gcc810_x64_dll\*
     - name: Upload zip
       uses: actions/upload-artifact@v2
       with:

@@ -2,7 +2,7 @@ name: win-mingw64-x86_64
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master , add-dlls ]
   pull_request:
     branches: [ master ]
 
@@ -33,9 +33,9 @@ jobs:
         cd C:\
         mkdir wx\3.0.5
         cd wx\3.0.5
-        curl -L https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxWidgets-3.0.5-headers.7z           --output wxWidgets-3.0.5-headers.7z
-        curl -L https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxMSW-3.0.5_gcc810_x64_Dev.7z        --output wxMSW-3.0.5_gcc810_x64_Dev.7z
-        curl -L https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxMSW-3.0.5_gcc810_x64_ReleaseDLL.7z --output wxMSW-3.0.5_gcc810_x64_ReleaseDLL.7z
+        curl -L --insecure https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxWidgets-3.0.5-headers.7z           --output wxWidgets-3.0.5-headers.7z
+        curl -L --insecure https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxMSW-3.0.5_gcc810_x64_Dev.7z        --output wxMSW-3.0.5_gcc810_x64_Dev.7z
+        curl -L --insecure https://github.com/wxWidgets/wxWidgets/releases/download/v3.0.5/wxMSW-3.0.5_gcc810_x64_ReleaseDLL.7z --output wxMSW-3.0.5_gcc810_x64_ReleaseDLL.7z
         7z x wxWidgets-3.0.5-headers.7z -y
         7z x wxMSW-3.0.5_gcc810_x64_Dev.7z -y
         7z x wxMSW-3.0.5_gcc810_x64_ReleaseDLL.7z -y
@@ -56,7 +56,7 @@ jobs:
 
     - name: Zip
       run: |
-        7z a -tzip mandelbrot.zip LICENSE README.md mandelbrot.exe
+        7z a -tzip mandelbrot.zip LICENSE README.md mandelbrot.exe C:\wx\3.0.5\lib\gcc810_x64_dll\wxbase30u_gcc810_x64.dll
     - name: Upload zip
       uses: actions/upload-artifact@v2
       with:

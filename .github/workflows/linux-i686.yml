@@ -12,6 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Install libs required for cross-compiling
+      run: |
+        sudo apt install -y gcc-multilib g++-multilib
+
     - name: Install wxWidgets
       run: |
         sudo apt update

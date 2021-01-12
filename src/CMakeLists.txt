@@ -32,10 +32,11 @@ set(CPP_COMPILER_OPTIMIZE -ffast-math -O3)
 
 set(CPP_COMPILER_OPTIONS )
 
-message("Hello!")
-
 if(ARCH)
     message("ARCH specified")
+    if(ARCH STREQUAL "i686")
+        set(CPP_COMPILER_OPTIONS ${CPP_COMPILER_OPTIONS} -march=${ARCH})
+    endif()
     set(CPP_COMPILER_OPTIONS ${CPP_COMPILER_OPTIONS} -march=${ARCH})
 else()
     message("ARCH not specified, using native")

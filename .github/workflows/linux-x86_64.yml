@@ -28,7 +28,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DARCH=x86-64
+        cmake ..
         make
 
     - name: Zip

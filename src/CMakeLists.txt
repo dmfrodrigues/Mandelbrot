@@ -31,15 +31,15 @@ set(CPP_COMPILER_WARNINGS -Wall -Wunused-result -pedantic-errors -Wextra -Wcast-
 set(CPP_COMPILER_OPTIMIZE -ffast-math -O3)
 
 set(CPP_COMPILER_OPTIONS )
-
-if(ARCH)
-    message("ARCH specified")
-    if(ARCH STREQUAL "i686")
-        set(CPP_COMPILER_OPTIONS ${CPP_COMPILER_OPTIONS} -march=${ARCH})
+set(CPP_LINKER_OPTIONS )
+if(WIN32)
+    message(STATUS "GCC under Microsoft Windows")
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+        message(STATUS "Release mode: no console")
+        set(CPP_COMPILER_OPTIONS ${CPP_COMPILER_OPTIONS} -mwindows)
+        set(CPP_LINKER_OPTIONS ${CPP_LINKER_OPTIONS} -mwindows)
     endif()
-    set(CPP_COMPILER_OPTIONS ${CPP_COMPILER_OPTIONS} -march=${ARCH})
-else()
-    message("ARCH not specified, using native")
 endif()
 
 target_compile_options(mandelbrot PRIVATE -g ${CPP_COMPILER_WARNINGS} ${CPP_COMPILER_OPTIMIZE} ${CPP_COMPILER_OPTIONS})
+target_link_options(mandelbrot PRIVATE ${CPP_LINKER_OPTIONS})

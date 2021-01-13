@@ -31,11 +31,11 @@ jobs:
         cmake ..
         make
 
-    - name: Zip
-      run: |
-        zip mandelbrot.zip -r LICENSE README.md mandelbrot
     - name: Upload zip
       uses: actions/upload-artifact@v2
       with:
-        name: mandelbrot-linux-64bit.zip
-        path: mandelbrot.zip
+        name: mandelbrot-linux-64bit
+        path: |
+          LICENSE
+          README.md
+          mandelbrot

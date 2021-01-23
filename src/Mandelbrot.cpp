@@ -9,9 +9,8 @@
 mb::mb(iter_t addIter):FractalBitmap(),px(*((wxBitmap*)this)),addIt(addIter){}
 
 mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),addIt(p.addIt){
-    std::lock_guard<std::mutex> lock(Mutex);
-
     Create(p.GetCenter(), p.GetStep(), p.GetSize());
+    std::lock_guard<std::mutex> lock(Mutex);
     numIt = p.numIt;
     const size_t N = GetWidth()*GetHeight();
     std::copy(p.C , p.C +N, C );
@@ -135,7 +134,7 @@ void mb::UpdatePixels(const std::deque<unsigned>& v){
 bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette) const{
     std::lock_guard<std::mutex> lock(Mutex);
 
-    wxBitmap::SaveFile(name, type, palette);
+    wxBitmap::SaveFile(name+".png", type, palette);
     std::ofstream ostrm(name.ToStdString() + ".txt");
 
     #pragma GCC diagnostic push

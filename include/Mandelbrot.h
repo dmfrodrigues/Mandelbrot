@@ -33,21 +33,22 @@ private:
     static constexpr unsigned NThreads = 8;
 
     ///MEMBER VARIABLES
-    wxNativePixelData   px;     ///PixelData, to access bmp
-    iter_t              numIt=0;///Total number of iterations performed over the fractal
-    ComplexNum          *C=NULL, *Z=NULL; ///Point in complex space, current value of z
-    iter_t              *IT=NULL;    ///Number of iterations
-    std::list<uint32_t> *LCHK=NULL;
-    const iter_t        addIt;
+    wxNativePixelData   px;                ///@ PixelData, to access bmp
+    iter_t              numIt   = 0;       ///@ Total number of iterations performed over the fractal
+    ComplexNum          *c_arr  = nullptr; ///@ Point in complex space
+    ComplexNum          *z_arr  = nullptr; ///@ Current value of z
+    iter_t              *it_arr = nullptr; ///@ Number of iterations
+    std::list<uint32_t> *points_to_iterate = nullptr;
+    const iter_t        cycle_increment;
     mutable std::mutex  Mutex;
 
 
 
     ///PRIVATE FUNCTIONS
     /**
-     * Update pixels in [L,R) by making an additional addIt iterations
+     * Update pixels in [L,R) by making an additional cycle_increment iterations
      */
-    void UpdateMathLim(unsigned index, iter_t addIt, std::deque<unsigned>* changed);
+    void UpdateMathLim(unsigned index, iter_t cycle_increment, std::deque<unsigned>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
@@ -82,13 +83,13 @@ public:
 
     // CALCULATIONS ==================================================
     /**
-     * Update all pixels by making an additional addIt iterations
+     * Update all pixels by making an additional cycle_increment iterations
      */
     void Update();
 
     // GET FUNCTION ==================================================
     iter_t GetNum()            const override{ return numIt; }
-    iter_t GetCyclesPerRun()   const override{ return addIt; }
+    iter_t GetCyclesPerRun()   const override{ return cycle_increment; }
     iter_t GetNotEscaped()     const;
 
     // OTHER UTILITIES

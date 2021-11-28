@@ -1,11 +1,11 @@
 #include "Worker.h"
 
-Worker::Worker() : t(run) {}
+Worker::Worker() : t([this]{ run(); }) {}
 
-void Worker::submit(Job *job){
+void Worker::submit(Job *job_){
     {
         std::lock_guard<std::mutex> lock(m);
-        this->job = job;
+        job = job_;
         ready = true;
     }
     cv.notify_one();
@@ -17,7 +17,7 @@ void Worker::get(){
     ready = false;
 }
 
-void Worker::run(){
+void Worker::run(){ 
     while(true){
         std::unique_lock<std::mutex> lock(m);
         cv.wait(lock, [this]{ return ready; });

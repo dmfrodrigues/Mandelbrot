@@ -11,7 +11,7 @@ include_directories(${PROJECT_SOURCE_DIR}/../fractal-app/lib)
 include_directories(../include)
 include(${wxWidgets_USE_FILE})
 
-add_executable(mandelbrot FractalApp.cpp Mandelbrot.cpp)
+add_executable(mandelbrot FractalApp.cpp Mandelbrot.cpp Worker.cpp)
 
 target_link_libraries(
     ${PROJECT_NAME}

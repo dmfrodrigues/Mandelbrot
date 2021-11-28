@@ -15,31 +15,9 @@ private:
     Job *job = nullptr;         ///@ Job to be executed
 public:
     Worker();
-    void submit(Job *job){
-        {
-            std::lock_guard<std::mutex> lock(m);
-            this->job = job;
-            ready = true;
-        }
-        cv.notify_one();
-    }
-    void get(){
-        std::unique_lock<std::mutex> lock(m);
-        cv.wait(lock, [this]{ return !ready; });
-        ready = false;
-    }
+    void submit(Job *job_);
+    void get();
 private:
-    void run(){
-        while(true){
-            std::unique_lock<std::mutex> lock(m);
-            cv.wait(lock, [this]{ return ready; });
-
-            job->execute();
-            ready = true;
-
-            lock.unlock();
-            cv.notify_one();
-        }
-    }
+    void run() __attribute__((noreturn));
     std::thread t;
 };

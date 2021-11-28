@@ -7,6 +7,7 @@
 #include <vector>
 #include <list>
 
+#include "Job.h"
 
 class mb: public FractalBitmap{
 private:
@@ -94,6 +95,20 @@ public:
 
     // OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const override;
+
+    class MathJob : public Job {
+    public:
+        ComplexNum *c_arr;
+        ComplexNum *z_arr;
+        iter_t *it_arr;
+        const iter_t cycle_increment;
+        std::list<uint32_t> points_to_iterate;
+        std::deque<uint32_t> changed;
+    
+        MathJob(mb *fractal_);
+        virtual void execute();
+        const std::deque<uint32_t> &getChanged() const;
+    };
 };
 
 #endif

@@ -178,3 +178,38 @@ mb::iter_t mb::GetNotEscaped() const{
         ret += points_to_iterate[i].size();
     return ret;
 }
+
+mb::MathJob::MathJob(mb *fractal_) :
+    c_arr(fractal_->c_arr), z_arr(fractal_->z_arr), it_arr(fractal_->it_arr),
+    cycle_increment(fractal_->cycle_increment)   
+{}
+
+void mb::MathJob::execute(){
+    changed.clear();
+    auto j = points_to_iterate.begin();
+    bool ESCAPED;
+    ComplexNum c;
+    ComplexNum z;
+    while(j != points_to_iterate.end()){
+        ESCAPED = false;
+        c = c_arr[*j];
+
+        z = z_arr[*j];
+        iter_t nit;
+        for(nit = cycle_increment; --nit;){
+            z*= z; z += c;
+            if(std::norm(z) > bailout_sqr){
+                z_arr[*j] = z; it_arr[*j] += cycle_increment-nit;
+                ESCAPED = true;
+                changed.push_back(*j);
+                j = points_to_iterate.erase(j);
+                break;
+            }
+        }
+        if(!ESCAPED){
+            z_arr[*j] = z;
+            it_arr[*j] += cycle_increment-nit;
+            ++j;
+        }
+    }
+}

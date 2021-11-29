@@ -7,6 +7,7 @@
 #include <vector>
 #include <list>
 
+#include "Worker.h"
 #include "Job.h"
 
 class mb: public FractalBitmap{
@@ -39,7 +40,6 @@ private:
     ComplexNum          *c_arr  = nullptr; ///@ Point in complex space
     ComplexNum          *z_arr  = nullptr; ///@ Current value of z
     iter_t              *it_arr = nullptr; ///@ Number of iterations
-    std::list<uint32_t> *points_to_iterate = nullptr;
     const iter_t        cycle_increment;
     mutable std::mutex  Mutex;
 
@@ -49,7 +49,7 @@ private:
     /**
      * Update pixels in [L,R) by making an additional cycle_increment iterations
      */
-    void UpdateMathLim(unsigned index, iter_t cycle_increment, std::deque<unsigned>* changed);
+    // void UpdateMathLim(unsigned index, iter_t cycle_increment, std::deque<unsigned>* changed);
     /**
      * Update pixels whose indexes are in q, based on the information in the variables
      */
@@ -96,6 +96,7 @@ public:
     // OTHER UTILITIES
     bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *palette = NULL) const override;
 
+private:
     class MathJob : public Job {
     public:
         ComplexNum *c_arr;
@@ -109,6 +110,9 @@ public:
         virtual void execute();
         const std::deque<uint32_t> &getChanged() const;
     };
+
+    std::vector<Worker> workers;
+    std::vector<MathJob> jobs;
 };
 
 #endif

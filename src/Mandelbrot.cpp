@@ -6,9 +6,16 @@
 #include <thread>
 
 ///Constructor
-mb::mb(iter_t addIter):FractalBitmap(),px(*((wxBitmap*)this)),cycle_increment(addIter){}
+mb::mb(iter_t addIter):
+    FractalBitmap(),px(*((wxBitmap*)this)),cycle_increment(addIter),
+    workers(NThreads)
+{
+}
 
-mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),cycle_increment(p.cycle_increment){
+mb::mb(const mb &p):
+    FractalBitmap(),px(*((wxBitmap*)this)),cycle_increment(p.cycle_increment),
+    workers(NThreads)
+{
     Create(p.GetCenter(), p.GetStep(), p.GetSize());
     std::lock_guard<std::mutex> lock(Mutex);
     numIt = p.numIt;
@@ -16,7 +23,11 @@ mb::mb(const mb &p):FractalBitmap(),px(*((wxBitmap*)this)),cycle_increment(p.cyc
     std::copy(p.c_arr , p.c_arr +N, c_arr );
     std::copy(p.z_arr , p.z_arr +N, z_arr );
     std::copy(p.it_arr, p.it_arr+N, it_arr);
-    std::copy(p.points_to_iterate, p.points_to_iterate+NThreads, points_to_iterate);
+    jobs = std::vector<MathJob>(NThreads, this);
+    for(size_t i = 0; i < NThreads; ++i){
+        jobs[i].points_to_iterate = p.jobs[i].points_to_iterate;
+        jobs[i].changed = p.jobs[i].changed;
+    }
 }
 
 ///Create
@@ -33,7 +44,7 @@ void mb::Create(ComplexNum o, complex_t st, wxSize s){
     if(c_arr   !=NULL){ delete[] c_arr ;   } c_arr     = new ComplexNum[N]; //std::cout << sizeof(c_arr) << std::endl;
     if(z_arr   !=NULL){ delete[] z_arr ;   } z_arr     = new ComplexNum[N]; std::fill(z_arr,z_arr+N,ComplexNum(complex_t(0.0L),complex_t(0.0L)));
     if(it_arr  !=NULL){ delete[] it_arr;   } it_arr    = new iter_t[N]; std::fill(it_arr,it_arr+N,0);
-    if(points_to_iterate!=NULL){ delete[] points_to_iterate; } points_to_iterate = new std::list<uint32_t>[NThreads];
+    if(!jobs.empty()){ jobs.clear(); } jobs = std::vector<MathJob>(NThreads, this);
 
     ///Fill 'c_arr', 'points_to_iterate' with new information
     uint32_t i = 0;
@@ -42,7 +53,7 @@ void mb::Create(ComplexNum o, complex_t st, wxSize s){
         c.real(GetOrigin().real());
         for(int x = 0; x < GetWidth(); ++x, c.real(c.real()+GetStep()), ++i){
             c_arr[i] = c;
-            if(!isCardioid_isPeriod2Bulb(c)) points_to_iterate[i*NThreads/N].push_back(i);
+            if(!isCardioid_isPeriod2Bulb(c)) jobs[i*NThreads/N].points_to_iterate.push_back(i);
         }
     }
 }
@@ -56,12 +67,12 @@ mb::~mb(){
     delete[] c_arr;
     delete[] z_arr;
     delete[] it_arr;
-    delete[] points_to_iterate;
 }
 
-void mb::Update(){
-    std::lock_guard<std::mutex> lock(Mutex);
+void mb::Update(){ std::cout << "Started update" << std::endl;
+    std::lock_guard<std::mutex> lock(Mutex); //std::cout << "L73" << std::endl;
 
+    /*
     std::thread *ArrThreads[NThreads];
     std::deque<unsigned> vchanged[NThreads];
     for(unsigned i = 0; i < NThreads; ++i){
@@ -70,12 +81,20 @@ void mb::Update(){
     for(unsigned i = 0; i < NThreads; ++i) ArrThreads[i]->join();
     for(unsigned i = 0; i < NThreads; ++i) delete ArrThreads[i];
     for(const auto& d:vchanged) UpdatePixels(d);
+     */
 
-    numIt += cycle_increment;
+    //std::cout << "L86" << std::endl;
 
-    BalanceLists();
+    for(int i = 0; i < NThreads; ++i) workers[i].submit(&jobs[i]);  //std::cout << "L88" << std::endl;
+    for(int i = 0; i < NThreads; ++i) workers[i].get();             //std::cout << "L89" << std::endl;
+    for(const MathJob &j: jobs) UpdatePixels(j.changed);            //std::cout << "L90" << std::endl;
+
+    numIt += cycle_increment; //std::cout << "L92" << std::endl;
+
+    BalanceLists(); std::cout << "Ended update" << std::endl;
 }
 
+/*
 void mb::UpdateMathLim(unsigned index, iter_t addIter, std::deque<unsigned>* changed){
     changed->clear();
     auto& L = points_to_iterate[index];
@@ -112,6 +131,7 @@ void mb::UpdateMathLim(unsigned index, iter_t addIter, std::deque<unsigned>* cha
     }
 
 }
+*/
 
 void mb::UpdatePixels(const std::deque<unsigned>& v){
     wxNativePixelData::Iterator p(px);
@@ -155,7 +175,7 @@ bool mb::SaveFile(const wxString& name, wxBitmapType type, const wxPalette *pale
 
 void mb::BalanceLists(){
     for(unsigned i = 0; i < NThreads-1; ++i){
-        auto &L = points_to_iterate[i], &R = points_to_iterate[i+1];
+        auto &L = jobs[i].points_to_iterate, &R = jobs[i].points_to_iterate;
         while(!R.empty() && L.size() < R.size()){
             L.push_back(R.front()); R.pop_front();
         }
@@ -175,7 +195,7 @@ mb::ColorT mb::CycleFun(mb::ColorT x){
 mb::iter_t mb::GetNotEscaped() const{
     size_t ret = 0;
     for(unsigned i = 0; i < NThreads; ++i)
-        ret += points_to_iterate[i].size();
+        ret += jobs[i].points_to_iterate.size();
     return ret;
 }
 
@@ -185,6 +205,8 @@ mb::MathJob::MathJob(mb *fractal_) :
 {}
 
 void mb::MathJob::execute(){
+    std::cout << "Executing" << std::endl;
+
     changed.clear();
     auto j = points_to_iterate.begin();
     bool ESCAPED;
@@ -212,4 +234,6 @@ void mb::MathJob::execute(){
             ++j;
         }
     }
+
+    std::cout << "Done executing" << std::endl;
 }
